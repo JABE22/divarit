@@ -25,6 +25,49 @@ VALUES ('952-459-280-0', 'Vaarallinen juhannus', '');
 INSERT INTO teos (isbn, nimi, kuvaus, luokka, tyyppi) 
 VALUES ('978-951-0-42036-2', 'Moreeni', '');
 
+
+-- Jarnon teokset
+-- Maailma Albert Einsteinin silmin
+INSERT INTO teos (isbn, nimi, kuvaus, luokka, tyyppi) 
+VALUES ('9789522642608', 'Maailma Albert Einsteinin silmin', 'Kirjoituksia rauhasta, tieteestä ja yhteiskunnasta.', 'Tiede', 'Pokkari');
+
+-- Mustat Aukot
+INSERT INTO teos (isbn, nimi, kuvaus, luokka, tyyppi) 
+VALUES ('9789510423660', 'Mustat Aukot', 'BBC:n Reith-luennot', 'Tiede', 'Kovakantinen'); 
+
+-- Ajan lyhyt historia
+INSERT INTO teos (isbn, nimi, kuvaus, luokka, tyyppi) 
+VALUES ('9789510393741', 'Ajan lyhyt historia', 'Hawking johdattelee lukijan syvän avaruuden kaukaisiin galakseihin ja mustiin aukkoihin.', 'Tiede', 'Pokkari'); 
+
+-- Sisäinen sankari
+INSERT INTO teos (isbn, nimi, kuvaus, luokka, tyyppi) 
+VALUES ('951021244X', 'Sisäinen sankari', 'Uljaan elämän käsikirjoitus', 'Filosofia', 'Kovakantinen');
+
+-- Sapiens
+INSERT INTO teos (isbn, nimi, kuvaus, luokka, tyyppi) 
+VALUES ('9789522794703', 'Sapiens', 'Ihmisen lyhyt historia', 'Historia', 'Nidottu');
+
+-- Kvanttifysiikasta energiahoitoihin
+INSERT INTO teos (isbn, nimi, kuvaus, luokka, tyyppi) 
+VALUES ('9789522606563', 'Kvanttifysiikasta energiahoitoihin', 'Fyysikon matka mieleen ja paranemiseen', 'Terveys', 'Nidottu');
+
+-- Java -ohjelmointi
+INSERT INTO teos (isbn, nimi, kuvaus, luokka, tyyppi) 
+VALUES ('9525592758', 'Java -ohjelmointi', 'Algoritmit ja mallit', 'Tekniikka', 'Nidottu'); 
+
+-- Halut, arvot ja valta
+INSERT INTO teos (isbn, nimi, kuvaus, luokka, tyyppi) 
+VALUES ('9517961022', 'Halut, arvot ja valta', 'Arvojen ja vallan, yksilön ja yhteisön väliset suhteet', 'Filosofia', 'Kovakantinen');
+
+-- Liiketoiminta ja johtaminen
+INSERT INTO teos (isbn, nimi, kuvaus, luokka, tyyppi) 
+VALUES ('9529906006', 'Liiketoiminta ja johtaminen', 'Käsittelee liikkeenjohtamisen keskeistä kenttää', 'Talous', 'Nidottu');
+
+-- Ohjelmistotuotanto
+INSERT INTO teos (isbn, nimi, kuvaus, luokka, tyyppi) 
+VALUES ('9521404868', 'Ohjelmistotuotanto', 'Perustiedot kaikista tärkeimmistä ohjelmistotuotannon osa-alueista', 'Tekniikka', 'Nidottu');
+
+
 -- Tekijät
 INSERT INTO tekija (id ,etunimi, sukunimi, synt_vuosi, kansallisuus) VALUES (500, 'Juha', 'Seppälä', 1956, 'Suomi');
 
