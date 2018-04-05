@@ -68,6 +68,32 @@ INSERT INTO teos (isbn, nimi, kuvaus, luokka, tyyppi)
 VALUES ('9521404868', 'Ohjelmistotuotanto', 'Perustiedot kaikista t‰rkeimmist‰ ohjelmistotuotannon osa-alueista', 'Tekniikka', 'Nidottu');
 
 
+-- Teht‰v‰nannon teokset
+-- Elektran tyt‰r
+INSERT INTO teos (isbn, nimi, kuvaus, luokka, tyyppi) 
+VALUES ('9155430674', 'Elektran tyt‰r', 'Kuvaus puuttuu', 'romantiikka', 'romaani');
+
+-- Tuulentavoittelijan morsian
+INSERT INTO teos (isbn, nimi, kuvaus, luokka, tyyppi) 
+VALUES ('9156381451', 'Tuulentavoittelijan morsian', 'Kuvaus puuttuu', 'romantiikka', 'romaani'); 
+
+-- Turms kuolematon
+INSERT INTO teos (isbn, nimi, kuvaus, luokka, tyyppi) 
+VALUES ('9789510393444', 'Turms kuolematon', 'Kuvaus puuttuu', 'Historia', 'romaani'); 
+
+-- Komisario Palmun erehdys
+INSERT INTO teos (isbn, nimi, kuvaus, luokka, tyyppi) 
+VALUES ('9510212333', 'Komisario Palmun erehdys', 'Kuvaus puuttuu', 'dekkari', 'romaani');
+
+-- , Friikkil‰n pojat Mexicossa
+INSERT INTO teos (isbn, nimi, kuvaus, luokka, tyyppi) 
+VALUES ('9789522794111', ', Friikkil‰n pojat Mexicossa', 'Kuvaus puuttuu', 'huumori', 'sarjakuva');
+
+-- Miten saan yst‰vi‰, menestyst‰, vaikutusvaltaa
+INSERT INTO teos (isbn, nimi, kuvaus, luokka, tyyppi) 
+VALUES ('9789510396230', 'Miten saan yst‰vi‰, menestyst‰, vaikutusvaltaa', 'Kuvaus puuttuu', 'opas', 'tietokirja');
+
+
 -- Tekij‰t
 INSERT INTO tekija (id ,etunimi, sukunimi, synt_vuosi, kansallisuus) VALUES (500, 'Juha', 'Sepp‰l‰', 1956, 'Suomi');
 
@@ -165,51 +191,51 @@ VALUES (517, '9521404868');
 
 -- Kappaleet, Jarnon lis‰‰m‰t
 -- Maailma Albert Einsteinin silmin
-INSERT INTO kappale (divari_nimi, teos_isbn, paino, tila, sisosto_hinta, hinta, myynti_pvm) VALUES ("D1", "9789522642608", 146, 0, 5.85, 7.80, null);
+INSERT INTO kappale (divari_nimi, teos_isbn, paino, tila, sisosto_hinta, hinta, myynti_pvm) VALUES ('D1', '9789522642608', 146, 0, 5.85, 7.80, null);
 
 -- Mustat Aukot
 INSERT INTO kappale VALUES 
-("D1", "9789510423660", 150, 0, 18.68, 24.90, null);
+('D1', '9789510423660', 150, 0, 18.68, 24.90, null);
 
 -- Ajan lyhyt historia
 INSERT INTO kappale VALUES 
-("D1", "9789510393741", 160, 0, 5.93, 7.90, null);
+('D1', '9789510393741', 160, 0, 5.93, 7.90, null);
 
 -- Sis‰inen sankari
 INSERT INTO kappale VALUES 
-("D1", "951021244X", 570, 0, 11.63, 15.50, null);
+('D1', '951021244X', 570, 0, 11.63, 15.50, null);
 
 -- Sapiens
 INSERT INTO kappale VALUES 
-("D1", "9789522794703", 566, 0, 9.68, 12.90, null);
+('D1', '9789522794703', 566, 0, 9.68, 12.90, null);
 
 -- Kvanttifysiikasta energiahoitoihin
 INSERT INTO kappale VALUES 
-("D1", "9789522606563", 298, 0, 15.38, 20.50, null);
+('D1', '9789522606563', 298, 0, 15.38, 20.50, null);
 
 -- Java -ohjelmointi
 INSERT INTO kappale VALUES 
-("D2", "9525592758", 606, 0, 28.35, 37.80, null);
+('D2', '9525592758', 606, 0, 28.35, 37.80, null);
 
 -- Halut, arvot ja valta
 INSERT INTO kappale VALUES 
-("D2", "9517961022", 435, 0, 13.50, 18.00, null);
+('D2', '9517961022', 435, 0, 13.50, 18.00, null);
 
 -- Liiketoiminta ja johtaminen
 INSERT INTO kappale VALUES 
-("D2", "9529906006", 473, 0, 24.00, 32.00, null);
+('D2', '9529906006', 473, 0, 24.00, 32.00, null);
 
 -- Ohjelmistotuotanto
 INSERT INTO kappale VALUES 
-("D2", "9521404868", 551, 0, 21.68, 28.90, null);
+('D2', '9521404868', 551, 0, 21.68, 28.90, null);
 
 
 -- Divarit
 INSERT INTO divari VALUES
-("D1", "Tiitisenkatu 25 C, 12345 Turku");
+('D1', 'Tiitisenkatu 25 C, 12345 Turku');
 
 INSERT INTO divari VALUES
-("D2", "Korpimaantie 1230, 45435 Lemp‰‰l‰");
+('D2', 'Korpimaantie 1230, 45435 Lemp‰‰l‰');
 
 
 
