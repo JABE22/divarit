@@ -163,7 +163,7 @@ INSERT INTO teosten_tekijat
 VALUES (517, '9521404868');
 
 
--- Jarnon kappaleet
+-- Kappaleet, Jarnon lis‰‰m‰t
 -- Maailma Albert Einsteinin silmin
 INSERT INTO kappale (divari_nimi, teos_isbn, paino, tila, sisosto_hinta, hinta, myynti_pvm) VALUES ("D1", "9789522642608", 146, 0, 5.85, 7.80, null);
 
@@ -204,9 +204,12 @@ INSERT INTO kappale VALUES
 ("D2", "9521404868", 551, 0, 21.68, 28.90, null);
 
 
+-- Divarit
+INSERT INTO divari VALUES
+("D1", "Tiitisenkatu 25, 12345 Turku");
 
-
-
+INSERT INTO divari VALUES
+("D2", "Korpimaantie 1230, 45435 Lemp‰‰l‰");
 
 
 
