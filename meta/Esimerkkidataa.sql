@@ -121,25 +121,87 @@ INSERT INTO teosten_tekijat VALUES (504, '978-951-0-42036-2'); -- Moreeni (Viita
 -- Jarnon lis‰‰m‰t
 -- Tekijat <> Teokset
 INSERT INTO teosten_tekijat 
-VALUES (505, '951-0-21387-X');
+VALUES (505, '9789522642608');
 
 INSERT INTO teosten_tekijat 
-VALUES (506, '978-951-0-41779-9');
+VALUES (506, '9789510423660');
 
 INSERT INTO teosten_tekijat 
-VALUES (507, '978-951-851-350-9');
+VALUES (507, '9789510423660');
 
 INSERT INTO teosten_tekijat 
-VALUES (508, '978-951-851-684-5');
+VALUES (506, '9789510393741');
 
 INSERT INTO teosten_tekijat 
-VALUES (509, '952-459-280-0');
+VALUES (508, '951021244');
 
 INSERT INTO teosten_tekijat 
-VALUES (510, '978-951-0-42036-2');
+VALUES (509, '9789522794703');
+
+INSERT INTO teosten_tekijat 
+VALUES (510, '9789522606563');
+
+INSERT INTO teosten_tekijat 
+VALUES (511, '9525592758');
+
+INSERT INTO teosten_tekijat 
+VALUES (512, '9517961022');
+
+INSERT INTO teosten_tekijat 
+VALUES (513, '9529906006');
+
+INSERT INTO teosten_tekijat 
+VALUES (514, '9529906006');
+
+INSERT INTO teosten_tekijat 
+VALUES (515, '9529906006');
+
+INSERT INTO teosten_tekijat 
+VALUES (516, '9521404868');
+
+INSERT INTO teosten_tekijat 
+VALUES (517, '9521404868');
 
 
+-- Jarnon kappaleet
+-- Maailma Albert Einsteinin silmin
+INSERT INTO kappale (divari_nimi, teos_isbn, paino, tila, sisosto_hinta, hinta, myynti_pvm) VALUES ("D1", "9789522642608", 146, 0, 5.85, 7.80, null);
 
+-- Mustat Aukot
+INSERT INTO kappale VALUES 
+("D1", "9789510423660", 150, 0, 18.68, 24.90, null);
+
+-- Ajan lyhyt historia
+INSERT INTO kappale VALUES 
+("D1", "9789510393741", 160, 0, 5.93, 7.90, null);
+
+-- Sis‰inen sankari
+INSERT INTO kappale VALUES 
+("D1", "951021244X", 570, 0, 11.63, 15.50, null);
+
+-- Sapiens
+INSERT INTO kappale VALUES 
+("D1", "9789522794703", 566, 0, 9.68, 12.90, null);
+
+-- Kvanttifysiikasta energiahoitoihin
+INSERT INTO kappale VALUES 
+("D1", "9789522606563", 298, 0, 15.38, 20.50, null);
+
+-- Java -ohjelmointi
+INSERT INTO kappale VALUES 
+("D2", "9525592758", 606, 0, 28.35, 37.80, null);
+
+-- Halut, arvot ja valta
+INSERT INTO kappale VALUES 
+("D2", "9517961022", 435, 0, 13.50, 18.00, null);
+
+-- Liiketoiminta ja johtaminen
+INSERT INTO kappale VALUES 
+("D2", "9529906006", 473, 0, 24.00, 32.00, null);
+
+-- Ohjelmistotuotanto
+INSERT INTO kappale VALUES 
+("D2", "9521404868", 551, 0, 21.68, 28.90, null);
 
 
 
