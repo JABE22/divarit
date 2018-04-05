@@ -206,7 +206,7 @@ INSERT INTO kappale VALUES
 
 -- Divarit
 INSERT INTO divari VALUES
-("D1", "Tiitisenkatu 25, 12345 Turku");
+("D1", "Tiitisenkatu 25 C, 12345 Turku");
 
 INSERT INTO divari VALUES
 ("D2", "Korpimaantie 1230, 45435 Lemp‰‰l‰");
