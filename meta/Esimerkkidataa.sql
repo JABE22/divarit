@@ -1,35 +1,35 @@
 --- foo
 -- Teoksia
 
--- Juha Sepp‰l‰ 1996 fiktio
+-- Juha Sepp√§l√§ 1996 fiktio
 INSERT INTO teos (isbn, nimi, kuvaus, luokka, tyyppi) 
-VALUES ('951-0-21387-X', 'Jumala oli mies : romaani rakkaudesta', '');
+VALUES ('951021387X', 'Jumala oli mies : romaani rakkaudesta', 'Fiktio' , 'Romaani');
 
 -- Ilkka Remes 2018 fiktio
 INSERT INTO teos (isbn, nimi, kuvaus, luokka, tyyppi) 
-VALUES ('978-951-0-41779-9', 'Pedon syleily', ''); 
+VALUES ('9789510417799', 'Pedon syleily', 'Fantasia', 'Romaani'); 
 
 -- Johanna Sinisalo 2010 fiktio
 INSERT INTO teos (isbn, nimi, kuvaus, luokka, tyyppi) 
-VALUES ('978-951-851-350-9', 'K‰dettˆm‰t kuninkaat ja muita h‰iritsevi‰ tarinoita', ''); 
+VALUES ('9789518513509', 'K√§dett√∂m√§t kuninkaat ja muita h√§iritsevi√§ tarinoita', 'Fantasia' ,'Romaani'); 
 
 -- Johanna Sinisalo,2015 (2013), fiktio
 INSERT INTO teos (isbn, nimi, kuvaus, luokka, tyyppi) 
-VALUES ('978-951-851-684-5', 'Sankarit', '');
+VALUES ('9789518516845', 'Sankarit', 'Scifi' , 'Romaani');
 
 -- Tove Jansson 2003 fiktio
 INSERT INTO teos (isbn, nimi, kuvaus, luokka, tyyppi) 
-VALUES ('952-459-280-0', 'Vaarallinen juhannus', '');
+VALUES ('9524592800', 'Vaarallinen juhannus', 'Muumit', 'Romaani');
 
 -- Viita, Lauri, kirjoittaja 2016 (1950) fiktio
 INSERT INTO teos (isbn, nimi, kuvaus, luokka, tyyppi) 
-VALUES ('978-951-0-42036-2', 'Moreeni', '');
+VALUES ('9789510420362', 'Moreeni', 'Fiktio', 'Romaani');
 
 
 -- Jarnon teokset
 -- Maailma Albert Einsteinin silmin
 INSERT INTO teos (isbn, nimi, kuvaus, luokka, tyyppi) 
-VALUES ('9789522642608', 'Maailma Albert Einsteinin silmin', 'Kirjoituksia rauhasta, tieteest‰ ja yhteiskunnasta.', 'Tiede', 'Pokkari');
+VALUES ('9789522642608', 'Maailma Albert Einsteinin silmin', 'Kirjoituksia rauhasta, tieteest√§ ja yhteiskunnasta.', 'Tiede', 'Pokkari');
 
 -- Mustat Aukot
 INSERT INTO teos (isbn, nimi, kuvaus, luokka, tyyppi) 
@@ -37,11 +37,11 @@ VALUES ('9789510423660', 'Mustat Aukot', 'BBC:n Reith-luennot', 'Tiede', 'Kovaka
 
 -- Ajan lyhyt historia
 INSERT INTO teos (isbn, nimi, kuvaus, luokka, tyyppi) 
-VALUES ('9789510393741', 'Ajan lyhyt historia', 'Hawking johdattelee lukijan syv‰n avaruuden kaukaisiin galakseihin ja mustiin aukkoihin.', 'Tiede', 'Pokkari'); 
+VALUES ('9789510393741', 'Ajan lyhyt historia', 'Hawking johdattelee lukijan syv√§n avaruuden kaukaisiin galakseihin ja mustiin aukkoihin.', 'Tiede', 'Pokkari'); 
 
--- Sis‰inen sankari
+-- Sis√§inen sankari
 INSERT INTO teos (isbn, nimi, kuvaus, luokka, tyyppi) 
-VALUES ('951021244X', 'Sis‰inen sankari', 'Uljaan el‰m‰n k‰sikirjoitus', 'Filosofia', 'Kovakantinen');
+VALUES ('951021244X', 'Sis√§inen sankari', 'Uljaan el√§m√§n k√§sikirjoitus', 'Filosofia', 'Kovakantinen');
 
 -- Sapiens
 INSERT INTO teos (isbn, nimi, kuvaus, luokka, tyyppi) 
@@ -57,21 +57,21 @@ VALUES ('9525592758', 'Java -ohjelmointi', 'Algoritmit ja mallit', 'Tekniikka', 
 
 -- Halut, arvot ja valta
 INSERT INTO teos (isbn, nimi, kuvaus, luokka, tyyppi) 
-VALUES ('9517961022', 'Halut, arvot ja valta', 'Arvojen ja vallan, yksilˆn ja yhteisˆn v‰liset suhteet', 'Filosofia', 'Kovakantinen');
+VALUES ('9517961022', 'Halut, arvot ja valta', 'Arvojen ja vallan, yksil√∂n ja yhteis√∂n v√§liset suhteet', 'Filosofia', 'Kovakantinen');
 
 -- Liiketoiminta ja johtaminen
 INSERT INTO teos (isbn, nimi, kuvaus, luokka, tyyppi) 
-VALUES ('9529906006', 'Liiketoiminta ja johtaminen', 'K‰sittelee liikkeenjohtamisen keskeist‰ kentt‰‰', 'Talous', 'Nidottu');
+VALUES ('9529906006', 'Liiketoiminta ja johtaminen', 'K√§sittelee liikkeenjohtamisen keskeist√§ kentt√§√§', 'Talous', 'Nidottu');
 
 -- Ohjelmistotuotanto
 INSERT INTO teos (isbn, nimi, kuvaus, luokka, tyyppi) 
-VALUES ('9521404868', 'Ohjelmistotuotanto', 'Perustiedot kaikista t‰rkeimmist‰ ohjelmistotuotannon osa-alueista', 'Tekniikka', 'Nidottu');
+VALUES ('9521404868', 'Ohjelmistotuotanto', 'Perustiedot kaikista t√§rkeimmist√§ ohjelmistotuotannon osa-alueista', 'Tekniikka', 'Nidottu');
 
 
--- Teht‰v‰nannon teokset
--- Elektran tyt‰r
+-- Teht√§v√§nannon teokset
+-- Elektran tyt√§r
 INSERT INTO teos (isbn, nimi, kuvaus, luokka, tyyppi) 
-VALUES ('9155430674', 'Elektran tyt‰r', 'Kuvaus puuttuu', 'romantiikka', 'romaani');
+VALUES ('9155430674', 'Elektran tyt√§r', 'Kuvaus puuttuu', 'romantiikka', 'romaani');
 
 -- Tuulentavoittelijan morsian
 INSERT INTO teos (isbn, nimi, kuvaus, luokka, tyyppi) 
@@ -85,17 +85,17 @@ VALUES ('9789510393444', 'Turms kuolematon', 'Kuvaus puuttuu', 'Historia', 'roma
 INSERT INTO teos (isbn, nimi, kuvaus, luokka, tyyppi) 
 VALUES ('9510212333', 'Komisario Palmun erehdys', 'Kuvaus puuttuu', 'dekkari', 'romaani');
 
--- , Friikkil‰n pojat Mexicossa
+-- , Friikkil√§n pojat Mexicossa
 INSERT INTO teos (isbn, nimi, kuvaus, luokka, tyyppi) 
-VALUES ('9789522794111', ', Friikkil‰n pojat Mexicossa', 'Kuvaus puuttuu', 'huumori', 'sarjakuva');
+VALUES ('9789522794111', ', Friikkil√§n pojat Mexicossa', 'Kuvaus puuttuu', 'huumori', 'sarjakuva');
 
--- Miten saan yst‰vi‰, menestyst‰, vaikutusvaltaa
+-- Miten saan yst√§vi√§, menestyst√§, vaikutusvaltaa
 INSERT INTO teos (isbn, nimi, kuvaus, luokka, tyyppi) 
-VALUES ('9789510396230', 'Miten saan yst‰vi‰, menestyst‰, vaikutusvaltaa', 'Kuvaus puuttuu', 'opas', 'tietokirja');
+VALUES ('9789510396230', 'Miten saan yst√§vi√§, menestyst√§, vaikutusvaltaa', 'Kuvaus puuttuu', 'opas', 'tietokirja');
 
 
--- Tekij‰t
-INSERT INTO tekija (id ,etunimi, sukunimi, synt_vuosi, kansallisuus) VALUES (500, 'Juha', 'Sepp‰l‰', 1956, 'Suomi');
+-- Tekij√§t
+INSERT INTO tekija (id ,etunimi, sukunimi, synt_vuosi, kansallisuus) VALUES (500, 'Juha', 'Sepp√§l√§', 1956, 'Suomi');
 
 INSERT INTO tekija (id, etunimi, sukunimi, synt_vuosi, kansallisuus) VALUES (501, 'Ilkka', 'Remes', 1962, 'Suomi');
 
@@ -106,7 +106,7 @@ INSERT INTO tekija (id, etunimi, sukunimi, synt_vuosi, kansallisuus) VALUES (503
 INSERT INTO tekija (id, etunimi, sukunimi, synt_vuosi, kansallisuus) VALUES (504, 'Lauri', 'Viita', 1916, 'Suomi')
 
 
--- Jarnon lis‰‰m‰t
+-- Jarnon lis√§√§m√§t
 INSERT INTO tekija (id ,etunimi, sukunimi, synt_vuosi, kansallisuus) VALUES (505, 'Eva', 'Isakson', 1968, 'Suomi');
 
 INSERT INTO tekija (id, etunimi, sukunimi, synt_vuosi, kansallisuus) VALUES (506, 'Stephen', 'Hawking', 1959, 'USA');
@@ -131,20 +131,20 @@ INSERT INTO tekija (id, etunimi, sukunimi, synt_vuosi, kansallisuus) VALUES (515
 
 INSERT INTO tekija (id, etunimi, sukunimi, synt_vuosi, kansallisuus) VALUES (516, 'Ilkka', 'Haikala', 1977, 'Suomi');
 
-INSERT INTO tekija (id, etunimi, sukunimi, synt_vuosi, kansallisuus) VALUES (517, 'Jukka', 'M‰rij‰rvi', 1965, 'Intia');
+INSERT INTO tekija (id, etunimi, sukunimi, synt_vuosi, kansallisuus) VALUES (517, 'Jukka', 'M√§rij√§rvi', 1965, 'Intia');
 
 
 
 
 -- Tekijat <> Teokset
-INSERT INTO teosten_tekijat VALUES (500, '951-0-21387-X'); -- Jumala oli mies (Sepp‰l‰)
-INSERT INTO teosten_tekijat VALUES (501, '978-951-0-41779-9'); -- Pedon syleily (Remes)
-INSERT INTO teosten_tekijat VALUES (502, '978-951-851-350-9'); -- K‰detteˆm‰t kuninkaat ... (Sinisalo)
-INSERT INTO teosten_tekijat VALUES (502, '978-951-851-684-5'); -- Sankarit (Sinisalo)
-INSERT INTO teosten_tekijat VALUES (503, '952-459-280-0'); -- Vaarallinen juhannus (Jansson)
-INSERT INTO teosten_tekijat VALUES (504, '978-951-0-42036-2'); -- Moreeni (Viita)
+INSERT INTO teosten_tekijat VALUES (500, '951021387X'); -- Jumala oli mies (Sepp√§l√§)
+INSERT INTO teosten_tekijat VALUES (501, '9789510-417799'); -- Pedon syleily (Remes)
+INSERT INTO teosten_tekijat VALUES (502, '978951851-3509'); -- K√§dette√∂m√§t kuninkaat ... (Sinisalo)
+INSERT INTO teosten_tekijat VALUES (502, '978951851-6845'); -- Sankarit (Sinisalo)
+INSERT INTO teosten_tekijat VALUES (503, '9524592800'); -- Vaarallinen juhannus (Jansson)
+INSERT INTO teosten_tekijat VALUES (504, '9789510-420362'); -- Moreeni (Viita)
 
--- Jarnon lis‰‰m‰t
+-- Jarnon lis√§√§m√§t
 -- Tekijat <> Teokset
 INSERT INTO teosten_tekijat 
 VALUES (505, '9789522642608');
@@ -189,7 +189,7 @@ INSERT INTO teosten_tekijat
 VALUES (517, '9521404868');
 
 
--- Kappaleet, Jarnon lis‰‰m‰t
+-- Kappaleet, Jarnon lis√§√§m√§t
 -- Maailma Albert Einsteinin silmin
 INSERT INTO kappale (divari_nimi, teos_isbn, paino, tila, sisosto_hinta, hinta, myynti_pvm) VALUES ('D1', '9789522642608', 146, 0, 5.85, 7.80, null);
 
@@ -201,7 +201,7 @@ INSERT INTO kappale VALUES
 INSERT INTO kappale VALUES 
 ('D1', '9789510393741', 160, 0, 5.93, 7.90, null);
 
--- Sis‰inen sankari
+-- Sis√§inen sankari
 INSERT INTO kappale VALUES 
 ('D1', '951021244X', 570, 0, 11.63, 15.50, null);
 
@@ -235,7 +235,7 @@ INSERT INTO divari VALUES
 ('D1', 'Tiitisenkatu 25 C, 12345 Turku');
 
 INSERT INTO divari VALUES
-('D2', 'Korpimaantie 1230, 45435 Lemp‰‰l‰');
+('D2', 'Korpimaantie 1230, 45435 Lemp√§√§l√§');
 
 
 
