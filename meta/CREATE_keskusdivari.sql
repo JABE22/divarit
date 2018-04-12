@@ -3,7 +3,7 @@
 
 -- Muokannut @xaaria 2018-03-29
 
-DROP SCHEMA keskusdivari CASCADE;
+-- DROP SCHEMA keskusdivari CASCADE;
 CREATE SCHEMA keskusdivari;
 
 CREATE TABLE IF NOT EXISTS tekija (
