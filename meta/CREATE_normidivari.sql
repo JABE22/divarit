@@ -2,11 +2,14 @@
 
 -- Poistaa vanhan ja aloittaa puhtaalta pöydältä
 -- Vaihda nimi haluamaksesi DROP ja CREATE SCHEMA -riveille 
- 
-DROP SCHEMA d1 CASCADE;
-CREATE SCHEMA d1;
 
-CREATE TABLE IF NOT EXISTS tekija (
+-- Okko Pyssysalo - Muokattu viimeksi: 2018-04-12
+-- Vaihda d1 kaikista kohdista kun halaut luoda erinimisen skeemaan.
+
+-- DROP SCHEMA d1 CASCADE; -- Kommentoi rivi pois 1. ajokerralla
+CREATE SCHEMA d1; 
+
+CREATE TABLE IF NOT EXISTS d1.tekija (
   id SERIAL NOT NULL,
   etunimi VARCHAR(45) NOT NULL,
   sukunimi VARCHAR(45) NOT NULL,
@@ -15,7 +18,7 @@ CREATE TABLE IF NOT EXISTS tekija (
   PRIMARY KEY(id)
 );
 
-CREATE TABLE IF NOT EXISTS teos (
+CREATE TABLE IF NOT EXISTS d1.teos (
   isbn VARCHAR(20) NOT NULL,
   nimi VARCHAR(45),
   kuvaus VARCHAR(1000),
@@ -24,7 +27,7 @@ CREATE TABLE IF NOT EXISTS teos (
   PRIMARY KEY(isbn)
 );
 
-CREATE TABLE IF NOT EXISTS kappale (
+CREATE TABLE IF NOT EXISTS d1.kappale (
   divari_nimi VARCHAR(10),
   id SERIAL, -- Yksilöivä
   teos_isbn VARCHAR(20) NOT NULL,
@@ -38,7 +41,7 @@ CREATE TABLE IF NOT EXISTS kappale (
   CHECK(tila <= 2 AND tila >= 0)
 );
 
-CREATE TABLE IF NOT EXISTS teosten_tekijat (
+CREATE TABLE IF NOT EXISTS d1.teosten_tekijat (
   tekija_id INTEGER NOT NULL,
   teos_isbn VARCHAR(20) NOT NULL,
   PRIMARY KEY(tekija_id, teos_isbn),
