@@ -1,12 +1,12 @@
 -- Keskusdivari :: Kaikille samankaltaiset taulut
 -- Aloittaa kaiken alusta - Tuhoaa scheeman ja luo kokonaan uudestaan
+-- Tietokannan pitäisi olla 'divarit'
+-- Muokannut @xaaria 2018-04-12
 
--- Muokannut @xaaria 2018-03-29
-
--- DROP SCHEMA keskusdivari CASCADE;
+DROP SCHEMA keskusdivari CASCADE; -- Kommentoi pois 1. ajokerralla
 CREATE SCHEMA keskusdivari;
 
-CREATE TABLE IF NOT EXISTS tekija (
+CREATE TABLE IF NOT EXISTS keskusdivari.tekija (
   id SERIAL NOT NULL,
   etunimi VARCHAR(45) NOT NULL,
   sukunimi VARCHAR(45) NOT NULL,
@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS tekija (
   PRIMARY KEY(id)
 );
 
-CREATE TABLE IF NOT EXISTS teos (
+CREATE TABLE IF NOT EXISTS keskusdivari.teos (
   isbn VARCHAR(20) NOT NULL,
   nimi VARCHAR(45),
   kuvaus VARCHAR(1000),
@@ -24,7 +24,7 @@ CREATE TABLE IF NOT EXISTS teos (
   PRIMARY KEY(isbn)
 );
 
-CREATE TABLE IF NOT EXISTS kappale (
+CREATE TABLE IF NOT EXISTS keskusdivari.kappale (
   divari_nimi VARCHAR(10),
   id SERIAL, -- Yksilöivä
   teos_isbn VARCHAR(20) NOT NULL,
@@ -38,7 +38,7 @@ CREATE TABLE IF NOT EXISTS kappale (
   CHECK(tila <= 2 AND tila >= 0)
 );
 
-CREATE TABLE IF NOT EXISTS teosten_tekijat (
+CREATE TABLE IF NOT EXISTS keskusdivari.teosten_tekijat (
   tekija_id INTEGER NOT NULL,
   teos_isbn VARCHAR(20) NOT NULL,
   PRIMARY KEY(tekija_id, teos_isbn),
@@ -50,13 +50,13 @@ CREATE TABLE IF NOT EXISTS teosten_tekijat (
 
 -- Keskusdivari :: Vain keskusdivarin 
 
-CREATE TABLE IF NOT EXISTS divari (
+CREATE TABLE IF NOT EXISTS keskusdivari.divari (
   nimi VARCHAR(10) NOT NULL,
   osoite VARCHAR(60),
   PRIMARY KEY(nimi)
 );
 
-CREATE TABLE IF NOT EXISTS kayttaja (
+CREATE TABLE IF NOT EXISTS keskusdivari.kayttaja (
   email VARCHAR(255),
   etunimi VARCHAR(20) NOT NULL,
   sukunimi VARCHAR(45) NOT NULL,
@@ -67,7 +67,7 @@ CREATE TABLE IF NOT EXISTS kayttaja (
 );
 
 
-CREATE TABLE IF NOT EXISTS tilaus (
+CREATE TABLE IF NOT EXISTS keskusdivari.tilaus (
   id SERIAL,
   kayttaja_email VARCHAR(255) NOT NULL,
   pvm DATE NOT NULL,
@@ -77,7 +77,7 @@ CREATE TABLE IF NOT EXISTS tilaus (
   CHECK(tila <= 2 AND tila >= 0)
 );
 
-CREATE TABLE IF NOT EXISTS ostoskori (
+CREATE TABLE IF NOT EXISTS keskusdivari.ostoskori (
   kappale_id INTEGER,
   divari_nimi VARCHAR(10),
   tilaus_id INTEGER NOT NULL,
@@ -86,5 +86,4 @@ CREATE TABLE IF NOT EXISTS ostoskori (
   FOREIGN KEY (divari_nimi, kappale_id) REFERENCES kappale -- divari_nimi, id
 );
 
-
-
+-- END
