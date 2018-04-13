@@ -64,7 +64,7 @@ CREATE TABLE IF NOT EXISTS keskusdivari.kayttaja (
   etunimi VARCHAR(20) NOT NULL,
   sukunimi VARCHAR(45) NOT NULL,
   osoite VARCHAR(60) NOT NULL,
-  puhelin INTEGER,
+  puhelin VARCHAR(20), -- Ei helvetissäkään ole INTEGER, etunollat yms.=!=!=!???
   div_yllapitaja BOOLEAN DEFAULT(false), -- Ei oletuksena ylläpitäjä
   PRIMARY KEY(email)
 );

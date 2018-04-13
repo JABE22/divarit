@@ -200,43 +200,44 @@ VALUES (517, '9521404868');
 
 -- Kappaleet, Jarnon lisäämät
 -- Maailma Albert Einsteinin silmin
-INSERT INTO kappale (divari_nimi, teos_isbn, paino, tila, sisosto_hinta, hinta, myynti_pvm) VALUES ('D1', '9789522642608', 146, 0, 5.85, 7.80, null);
+INSERT INTO kappale (divari_nimi, id, teos_isbn, paino, tila, sisosto_hinta, hinta, myynti_pvm)
+VALUES ('D1', 1000, '9789522642608', 146, 0, 5.85, 7.80, null);
 
 -- Mustat Aukot
 INSERT INTO kappale VALUES 
-('D1', DEFAULT, '9789510423660', 150, 0, 18.68, 24.90, null);
+('D1', 1001, '9789510423660', 150, 0, 18.68, 24.90, null);
 
 -- Ajan lyhyt historia
 INSERT INTO kappale VALUES 
-('D1', DEFAULT, '9789510393741', 160, 0, 5.93, 7.90, null);
+('D1', 1002, '9789510393741', 160, 0, 5.93, 7.90, null);
 
 -- Sisäinen sankari
 INSERT INTO kappale VALUES 
-('D1', DEFAULT, '951021244X', 570, 0, 11.63, 15.50, null);
+('D1', 1003, '951021244X', 570, 0, 11.63, 15.50, null);
 
 -- Sapiens
 INSERT INTO kappale VALUES 
-('D1', DEFAULT, '9789522794703', 566, 0, 9.68, 12.90, null);
+('D1', 1004, '9789522794703', 566, 0, 9.68, 12.90, null);
 
 -- Kvanttifysiikasta energiahoitoihin
 INSERT INTO kappale VALUES 
-('D1', DEFAULT, '9789522606563', 298, 0, 15.38, 20.50, null);
+('D1', 1005, '9789522606563', 298, 0, 15.38, 20.50, null);
 
 -- Java -ohjelmointi
 INSERT INTO kappale VALUES 
-('D2', DEFAULT, '9525592758', 606, 0, 28.35, 37.80, null);
+('D2', 1006, '9525592758', 606, 0, 28.35, 37.80, null);
 
 -- Halut, arvot ja valta
 INSERT INTO kappale VALUES 
-('D2', DEFAULT, '9517961022', 435, 0, 13.50, 18.00, null);
+('D2', 1007, '9517961022', 435, 0, 13.50, 18.00, null);
 
 -- Liiketoiminta ja johtaminen
 INSERT INTO kappale VALUES 
-('D2', DEFAULT, '9529906006', 473, 0, 24.00, 32.00, null);
+('D2', 1008, '9529906006', 473, 0, 24.00, 32.00, null);
 
 -- Ohjelmistotuotanto
 INSERT INTO kappale VALUES 
-('D2', DEFAULT, '9521404868', 551, 0, 21.68, 28.90, null);
+('D2', 1009, '9521404868', 551, 0, 21.68, 28.90, null);
 
 
 -- Divarit
@@ -245,6 +246,36 @@ INSERT INTO divari VALUES
 
 INSERT INTO divari VALUES
 ('D2', 'Korpimaantie 1230, 45435 Lempäälä');
+
+-- kayttajat
+INSERT INTO kayttaja VALUES ('admin@divarit.fi', 'Admin', 'Divari', 'Divarikatu 600', '050 999 999', true);
+INSERT INTO kayttaja VALUES ('kalle@divarit.fi', 'Kalle', 'Kirjala', 'Kimmontie 4 A 16', '040012345', false);
+INSERT INTO kayttaja VALUES ('liisa@divarit.fi', 'Liisa', 'Lukutoukkala', 'Kirjakuja 1', null, false);
+
+-- Tilaus
+-- 0 rauennut/peruutttu, 1 aktiivinen, 2 tehty tilaus
+-- Kallella yksi akt. ja valmis tilaus, liisalla 1 aktiivisena oleva
+INSERT INTO tilaus VALUES (1, 'kalle@divarit.fi', NOW(), 1); 
+INSERT INTO tilaus VALUES (2, 'kalle@divarit.fi', NOW(), 2);
+INSERT INTO tilaus VALUES (3, 'liisa@divarit.fi', NOW(), 1); 
+
+-- ostoskori
+-- Juokseva numerointi (!!) kappaleissa
+INSERT INTO ostoskori VALUES (1000, 'D1', 1);
+INSERT INTO ostoskori VALUES (1001, 'D1', 1);
+INSERT INTO ostoskori VALUES (1002, 'D1', 1);
+INSERT INTO ostoskori VALUES (1007, 'D2', 1);
+
+INSERT INTO ostoskori VALUES (1001, 'D1', 2);
+
+INSERT INTO ostoskori VALUES (1001, 'D1', 3);
+INSERT INTO ostoskori VALUES (1006, 'D2', 3);
+
+
+
+
+
+
 
 
 
