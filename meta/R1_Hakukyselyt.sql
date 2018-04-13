@@ -1,8 +1,9 @@
 -- Hakukyselyt annettujen kriteerien perusteella
+-- Asetetaan oletus-skeema
+SET search_path TO keskusdivari;
 
 -- Teokset nimen perusteella
-SELECT * 
-FROM teos
+SELECT * FROM teos
 WHERE nimi LIKE '%Tekniikka%'
 
 UNION

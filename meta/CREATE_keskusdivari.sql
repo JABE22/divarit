@@ -9,6 +9,8 @@
 DROP SCHEMA keskusdivari CASCADE; -- Kommentoi pois 1. ajokerralla
 CREATE SCHEMA keskusdivari;
 
+SET search_path TO keskusdivari;
+
 CREATE TABLE IF NOT EXISTS keskusdivari.tekija (
   id SERIAL NOT NULL,
   etunimi VARCHAR(45) NOT NULL,
