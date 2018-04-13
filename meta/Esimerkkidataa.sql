@@ -11,6 +11,9 @@ TRUNCATE teos CASCADE;
 TRUNCATE teosten_tekijat CASCADE;
 TRUNCATE tilaus CASCADE;
 
+-- Asetetaan keskusdivari oletus-skeemaksi
+SET search_path TO keskusdivari;
+
 -- Juha Seppälä 1996 fiktio
 INSERT INTO teos (isbn, nimi, kuvaus, luokka, tyyppi) 
 VALUES ('951021387X', 'Jumala oli mies : romaani rakkaudesta', 'Kuvaus puuttuu', 'Fiktio' , 'Romaani');
