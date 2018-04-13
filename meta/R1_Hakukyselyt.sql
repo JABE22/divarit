@@ -3,21 +3,27 @@
 -- Teokset nimen perusteella
 SELECT * 
 FROM teos
-WHERE nimi LIKE '?';
+WHERE nimi LIKE '%Tekniikka%'
+
+UNION
 
 -- Teokset tekijän nimen perusteella
-SELECT * 
+SELECT t.isbn, t.nimi, t.kuvaus, t.luokka, t.tyyppi
 FROM teos t 
 	INNER JOIN teosten_tekijat tt ON t.isbn = tt.teos_isbn
 	INNER JOIN tekija ON tt.tekija_id = tekija.id
-WHERE tekija.etunimi LIKE '?' OR tekija.sukunimi LIKE '?';
+WHERE tekija.etunimi LIKE '%Tekniikka%' OR tekija.sukunimi LIKE '%Tekniikka%'
+
+UNION
 
 -- Teokset tyypin perusteella
 SELECT *
 FROM teos
-WHERE tyyppi LIKE '?';
+WHERE tyyppi LIKE '%Tekniikka%'
+
+UNION
 
 -- Teokset luokan perusteella
 SELECT *
 FROM teos
-WHERE luokka LIKE '?';
+WHERE luokka LIKE '%Tekniikka%';

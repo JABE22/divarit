@@ -2,6 +2,7 @@ package divarit;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.SQLException;
 
 /**
  *
@@ -32,15 +33,25 @@ public class DatabaseConnection {
      * 
      * @return Connection: palauttaa Connection-tyyppisen olion
      */
-    private Connection getConnection() throws Exception {
+    public Connection getConnection() {
     
         try {
             this.con = (Connection) DriverManager.getConnection(PROTOKOLLA + "//" + PALVELIN + ":" + PORTTI + "/" + TIETOKANTA, KAYTTAJA, SALASANA);
             return this.con;
-        } catch(Exception e) {
-            throw new Exception(e.getMessage());
+        } catch(SQLException e) {
+            System.out.println("Connection: " + e.getMessage());
         } 
-        
+        return null;
     }
     
+    public void closeConnection() {
+        // Vaihe 4: yhteyden sulkeminen 
+        if (con != null) {
+            try {     // jos yhteyden luominen ei onnistunut, con == null
+                con.close();
+            } catch (SQLException e) {
+                System.out.println("Yhteyden sulkeminen tietokantaan ei onnistunut. Lopetetaan ohjelman suoritus.");
+            }
+        }
+    }
 }
