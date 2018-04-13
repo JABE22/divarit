@@ -3,10 +3,12 @@
 -- Poistaa vanhan ja aloittaa puhtaalta pöydältä
 -- Vaihda nimi haluamaksesi DROP ja CREATE SCHEMA -riveille 
 
--- Okko Pyssysalo - Muokattu viimeksi: 2018-04-12
 -- Vaihda d1 kaikista kohdista kun halaut luoda erinimisen skeemaan.
 
--- DROP SCHEMA d1 CASCADE; -- Kommentoi rivi pois 1. ajokerralla
+-- Muokannut viimeksi: Pyssysalo 2018-04-13
+	-- Muutettu teos.nimi VARCHAR(45) --> 60
+
+DROP SCHEMA d1 CASCADE; -- Kommentoi rivi pois 1. ajokerralla
 CREATE SCHEMA d1; 
 
 CREATE TABLE IF NOT EXISTS d1.tekija (
@@ -20,7 +22,7 @@ CREATE TABLE IF NOT EXISTS d1.tekija (
 
 CREATE TABLE IF NOT EXISTS d1.teos (
   isbn VARCHAR(20) NOT NULL,
-  nimi VARCHAR(45),
+  nimi VARCHAR(60),
   kuvaus VARCHAR(1000),
   luokka VARCHAR(20),
   tyyppi VARCHAR(20),

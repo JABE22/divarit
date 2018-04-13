@@ -1,7 +1,10 @@
 -- Keskusdivari :: Kaikille samankaltaiset taulut
 -- Aloittaa kaiken alusta - Tuhoaa scheeman ja luo kokonaan uudestaan
 -- Tietokannan pitäisi olla 'divarit'
--- Muokannut @xaaria 2018-04-12
+
+-- Muokannut Pyssysalo 2018-04-13
+-- Muutokset:
+	-- Vaihdettu teos.nimi VARCHAR(45) --> 60. Sama muutos myös perusdivarn CREATE-tiedostoon.
 
 DROP SCHEMA keskusdivari CASCADE; -- Kommentoi pois 1. ajokerralla
 CREATE SCHEMA keskusdivari;
@@ -17,7 +20,7 @@ CREATE TABLE IF NOT EXISTS keskusdivari.tekija (
 
 CREATE TABLE IF NOT EXISTS keskusdivari.teos (
   isbn VARCHAR(20) NOT NULL,
-  nimi VARCHAR(45),
+  nimi VARCHAR(60),
   kuvaus VARCHAR(1000),
   luokka VARCHAR(20),
   tyyppi VARCHAR(20),

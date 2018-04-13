@@ -1,29 +1,39 @@
---- foo
 -- Teoksia
+
+-- TRUNCATE <> tyhjentää kys. taulun. Kommentoi pois rivit jos et halua tyhjentää
+
+TRUNCATE divari CASCADE;
+TRUNCATE kappale CASCADE;
+TRUNCATE kayttaja CASCADE;
+TRUNCATE ostoskori CASCADE;
+TRUNCATE tekija CASCADE;
+TRUNCATE teos CASCADE;
+TRUNCATE teosten_tekijat CASCADE;
+TRUNCATE tilaus CASCADE;
 
 -- Juha Seppälä 1996 fiktio
 INSERT INTO teos (isbn, nimi, kuvaus, luokka, tyyppi) 
-VALUES ('951021387X', 'Jumala oli mies : romaani rakkaudesta', 'Fiktio' , 'Romaani');
+VALUES ('951021387X', 'Jumala oli mies : romaani rakkaudesta', 'Kuvaus puuttuu', 'Fiktio' , 'Romaani');
 
 -- Ilkka Remes 2018 fiktio
 INSERT INTO teos (isbn, nimi, kuvaus, luokka, tyyppi) 
-VALUES ('9789510417799', 'Pedon syleily', 'Fantasia', 'Romaani'); 
+VALUES ('9789510417799', 'Pedon syleily', 'Kuvaus puuttuu', 'Fantasia', 'Romaani'); 
 
 -- Johanna Sinisalo 2010 fiktio
 INSERT INTO teos (isbn, nimi, kuvaus, luokka, tyyppi) 
-VALUES ('9789518513509', 'Kädettömät kuninkaat ja muita häiritseviä tarinoita', 'Fantasia' ,'Romaani'); 
+VALUES ('9789518513509', 'Kädettömät kuninkaat, ja muita tarinoita', 'Kuvaus puuttuu', 'Fantasia' ,'Romaani'); 
 
 -- Johanna Sinisalo,2015 (2013), fiktio
 INSERT INTO teos (isbn, nimi, kuvaus, luokka, tyyppi) 
-VALUES ('9789518516845', 'Sankarit', 'Scifi' , 'Romaani');
+VALUES ('9789518516845', 'Sankarit', 'Kuvaus puuttuu', 'Scifi', 'Romaani');
 
 -- Tove Jansson 2003 fiktio
 INSERT INTO teos (isbn, nimi, kuvaus, luokka, tyyppi) 
-VALUES ('9524592800', 'Vaarallinen juhannus', 'Muumit', 'Romaani');
+VALUES ('9524592800', 'Vaarallinen juhannus', 'Kuvaus puuttuu', 'Muumit', 'Romaani');
 
 -- Viita, Lauri, kirjoittaja 2016 (1950) fiktio
 INSERT INTO teos (isbn, nimi, kuvaus, luokka, tyyppi) 
-VALUES ('9789510420362', 'Moreeni', 'Fiktio', 'Romaani');
+VALUES ('9789510420362', 'Moreeni', 'Kuvaus puuttuu', 'Fiktio', 'Romaani');
 
 
 -- Jarnon teokset
@@ -87,7 +97,7 @@ VALUES ('9510212333', 'Komisario Palmun erehdys', 'Kuvaus puuttuu', 'dekkari', '
 
 -- , Friikkilän pojat Mexicossa
 INSERT INTO teos (isbn, nimi, kuvaus, luokka, tyyppi) 
-VALUES ('9789522794111', ', Friikkilän pojat Mexicossa', 'Kuvaus puuttuu', 'huumori', 'sarjakuva');
+VALUES ('9789522794111', 'Friikkilän pojat Mexicossa', 'Kuvaus puuttuu', 'huumori', 'sarjakuva');
 
 -- Miten saan ystäviä, menestystä, vaikutusvaltaa
 INSERT INTO teos (isbn, nimi, kuvaus, luokka, tyyppi) 
@@ -103,7 +113,7 @@ INSERT INTO tekija (id, etunimi, sukunimi, synt_vuosi, kansallisuus) VALUES (502
 
 INSERT INTO tekija (id, etunimi, sukunimi, synt_vuosi, kansallisuus) VALUES (503, 'Tove', 'Jansson', 1914, 'Suomi');
 
-INSERT INTO tekija (id, etunimi, sukunimi, synt_vuosi, kansallisuus) VALUES (504, 'Lauri', 'Viita', 1916, 'Suomi')
+INSERT INTO tekija (id, etunimi, sukunimi, synt_vuosi, kansallisuus) VALUES (504, 'Lauri', 'Viita', 1916, 'Suomi');
 
 
 -- Jarnon lisäämät
@@ -138,11 +148,11 @@ INSERT INTO tekija (id, etunimi, sukunimi, synt_vuosi, kansallisuus) VALUES (517
 
 -- Tekijat <> Teokset
 INSERT INTO teosten_tekijat VALUES (500, '951021387X'); -- Jumala oli mies (Seppälä)
-INSERT INTO teosten_tekijat VALUES (501, '9789510-417799'); -- Pedon syleily (Remes)
-INSERT INTO teosten_tekijat VALUES (502, '978951851-3509'); -- Kädetteömät kuninkaat ... (Sinisalo)
-INSERT INTO teosten_tekijat VALUES (502, '978951851-6845'); -- Sankarit (Sinisalo)
+INSERT INTO teosten_tekijat VALUES (501, '9789510417799'); -- Pedon syleily (Remes)
+INSERT INTO teosten_tekijat VALUES (502, '9789518513509'); -- Kädetteömät kuninkaat ... (Sinisalo)
+INSERT INTO teosten_tekijat VALUES (502, '9789518516845'); -- Sankarit (Sinisalo)
 INSERT INTO teosten_tekijat VALUES (503, '9524592800'); -- Vaarallinen juhannus (Jansson)
-INSERT INTO teosten_tekijat VALUES (504, '9789510-420362'); -- Moreeni (Viita)
+INSERT INTO teosten_tekijat VALUES (504, '9789510420362'); -- Moreeni (Viita)
 
 -- Jarnon lisäämät
 -- Tekijat <> Teokset
@@ -158,8 +168,7 @@ VALUES (507, '9789510423660');
 INSERT INTO teosten_tekijat 
 VALUES (506, '9789510393741');
 
-INSERT INTO teosten_tekijat 
-VALUES (508, '951021244');
+INSERT INTO teosten_tekijat VALUES (508, '951021244X');
 
 INSERT INTO teosten_tekijat 
 VALUES (509, '9789522794703');
@@ -195,39 +204,39 @@ INSERT INTO kappale (divari_nimi, teos_isbn, paino, tila, sisosto_hinta, hinta, 
 
 -- Mustat Aukot
 INSERT INTO kappale VALUES 
-('D1', '9789510423660', 150, 0, 18.68, 24.90, null);
+('D1', DEFAULT, '9789510423660', 150, 0, 18.68, 24.90, null);
 
 -- Ajan lyhyt historia
 INSERT INTO kappale VALUES 
-('D1', '9789510393741', 160, 0, 5.93, 7.90, null);
+('D1', DEFAULT, '9789510393741', 160, 0, 5.93, 7.90, null);
 
 -- Sisäinen sankari
 INSERT INTO kappale VALUES 
-('D1', '951021244X', 570, 0, 11.63, 15.50, null);
+('D1', DEFAULT, '951021244X', 570, 0, 11.63, 15.50, null);
 
 -- Sapiens
 INSERT INTO kappale VALUES 
-('D1', '9789522794703', 566, 0, 9.68, 12.90, null);
+('D1', DEFAULT, '9789522794703', 566, 0, 9.68, 12.90, null);
 
 -- Kvanttifysiikasta energiahoitoihin
 INSERT INTO kappale VALUES 
-('D1', '9789522606563', 298, 0, 15.38, 20.50, null);
+('D1', DEFAULT, '9789522606563', 298, 0, 15.38, 20.50, null);
 
 -- Java -ohjelmointi
 INSERT INTO kappale VALUES 
-('D2', '9525592758', 606, 0, 28.35, 37.80, null);
+('D2', DEFAULT, '9525592758', 606, 0, 28.35, 37.80, null);
 
 -- Halut, arvot ja valta
 INSERT INTO kappale VALUES 
-('D2', '9517961022', 435, 0, 13.50, 18.00, null);
+('D2', DEFAULT, '9517961022', 435, 0, 13.50, 18.00, null);
 
 -- Liiketoiminta ja johtaminen
 INSERT INTO kappale VALUES 
-('D2', '9529906006', 473, 0, 24.00, 32.00, null);
+('D2', DEFAULT, '9529906006', 473, 0, 24.00, 32.00, null);
 
 -- Ohjelmistotuotanto
 INSERT INTO kappale VALUES 
-('D2', '9521404868', 551, 0, 21.68, 28.90, null);
+('D2', DEFAULT, '9521404868', 551, 0, 21.68, 28.90, null);
 
 
 -- Divarit
@@ -236,18 +245,6 @@ INSERT INTO divari VALUES
 
 INSERT INTO divari VALUES
 ('D2', 'Korpimaantie 1230, 45435 Lempäälä');
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
