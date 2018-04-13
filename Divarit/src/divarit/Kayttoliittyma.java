@@ -90,21 +90,22 @@ public class Kayttoliittyma {
 
             String search = "%" + hakusana + "%";
             PreparedStatement prstmt = con.prepareStatement(
+                    
                     /*Teokset niiden nimen perusteella */
-                    "SELECT * FROM teos WHERE nimi LIKE ? "
+                    "SELECT * FROM keskusdivari.teos WHERE nimi LIKE ? "
                     /*Teokset tekijän nimen perusteella*/        
                   + "UNION "
                   + "SELECT t.isbn, t.nimi, t.kuvaus, t.luokka, t.tyyppi "
-                  + "FROM teos t "
-                  + "INNER JOIN teosten_tekijat tt ON t.isbn = tt.teos_isbn "
-                  + "INNER JOIN tekija ON tt.tekija_id = tekija.id "
-                  + "WHERE tekija.etunimi LIKE ? OR tekija.sukunimi LIKE ? "
+                  + "FROM keskusdivari.teos t "
+                  + "INNER JOIN keskusdivari.teosten_tekijat ktt ON t.isbn = ktt.teos_isbn "
+                  + "INNER JOIN keskusdivari.tekija kt ON ktt.tekija_id = kt.id "
+                  + "WHERE kt.etunimi LIKE ? OR kt.sukunimi LIKE ? "
                     /*Teokset tyypin perusteella*/
                   + "UNION "
-                  + "SELECT * FROM teos WHERE tyyppi LIKE ? "
+                  + "SELECT * FROM keskusdivari.teos WHERE tyyppi LIKE ? "
                     /*Teokset luokan perusteella*/
                   + "UNION "
-                  + "SELECT * FROM teos "
+                  + "SELECT * FROM keskusdivari.teos "
                   + "WHERE luokka LIKE ?;");
             prstmt.clearParameters();
             prstmt.setString(1, search);
@@ -116,21 +117,21 @@ public class Kayttoliittyma {
             ResultSet rset = prstmt.executeQuery();
 
             if (rset.next()) {
-                int rivi = 1;
+                int rivi = 0;
                 do {
-                    System.out.println(rset.getString(1) + " " + rset.getString(2) 
-                            + " " + rset.getString(3) + " " + rset.getString(4)
-                            + " " + rset.getString(5));
+                    System.out.println(rset.getString(1) + ", " + rset.getString(2) 
+                            + ", " + rset.getString(3) + ", " + rset.getString(4)
+                            + ", " + rset.getString(5));
                     rivi++;
                 } while (rset.next());
-                System.out.println("Loydetyt hakutulokset (" + rivi + "kappaletta");
+                System.out.println("Loydetyt hakutulokset (" + rivi + " kpl)");
             } else {
                 System.out.println("Ei loytynyt mitaan!");
             }
             prstmt.close();  // sulkee automaattisesti myös tulosjoukon rset
 
         } catch (SQLException e) {
-            System.out.println("Tapahtui seuraava virhe: " + e.getMessage());
+            System.out.println("Virhe: " + e.getMessage());
         }
         
         // Suljetaan tietokantayhteys
