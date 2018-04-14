@@ -13,33 +13,31 @@ import java.util.ArrayList;
  * @author Jarno Matarmaa
  */
 public class UserInterface {
-    
+
     // Staattinen järjestelmän salasana
     private final String PASSWORD = "1234";
-    
+
     // Aktiivisen käyttäjän tunnus
     private String[] signed_user_details = null;
     private boolean div_admin;
 
     // Ohjelman asiakas -komennot
     private final String FIND = "find"; // Myytävänä olevat kappaleet
-     private final String ADD = "add"; // Lisää ostoskoriin [add kappale_id]
+    private final String ADD = "add"; // Lisää ostoskoriin [add kappale_id]
     private final String CART = "cart"; // Näyttää ostoskorin sisällön
     private final String CHECKOUT = "checkout"; // Kassalle, näytetään tuotteet ja postikulut
     private final String ORDER = "order"; // Tilaa, komennon jälkeen pyydetään vahvistus
     private final String RETURN = "return"; // Palaa takaisin ostoskorista, säilyttää sisällön
     private final String REMOVE = "remove"; // Poistaa tuotteen ostoskorista [remove kappale_id]
-    
+
     // Ohjelman ylläpitäjä -komennot
     private final String FIND_BOOK = "find book"; // Teos (ei kappale)
-    
+
     // Ohjelman yleiskomennot
     private final String EXIT = "exit";
     private final String SIGN_OUT = "signout";
-    
-    // Ylläpitäjä: Komennon jälkeen täsmennys [add book] tai [add abstract]
-   
 
+    // Ylläpitäjä: Komennon jälkeen täsmennys [add book] tai [add abstract]
     // Tulosteet käyttäjän mukaan (2 kpl)
     private final String CUSTOMER_PRINT = "-Ohjelman komennot-\n"
             + "[1] find [hakusana]\n"
@@ -65,12 +63,12 @@ public class UserInterface {
 
     void kaynnista() {
         System.out.println(" *****************\n"
-                         + "***** DIVARIT *****\n"
-                         + " *****************");
+                + "***** DIVARIT *****\n"
+                + " *****************");
 
         if (signIn()) {
             printUserDetails();
-            
+
             if (this.div_admin) {
                 System.out.println(ADMIN_PRINT);
                 admin();
@@ -79,14 +77,10 @@ public class UserInterface {
                 customer();
             }
         }
-            
-        
-        // Nämä siirretään omaan metodiin (asiakkaalle ja ylläpitäjälle omat)
-        
 
+        // Nämä siirretään omaan metodiin (asiakkaalle ja ylläpitäjälle omat)
     }
-    
-    
+
     // Asiakas kirjautuneena ajetaan tämä metodi
     public void customer() {
         String[] input;
@@ -124,7 +118,7 @@ public class UserInterface {
                            ilman eri komentoa, muuten pyydetään tilauksen vahvistusta */
                     // 2.2.1 Asiakas vahvistaa valinnalla k (kyllä) tai p (peru)
                     break;
-                    
+
                 case SIGN_OUT:
                     signOut();
                     break;
@@ -137,8 +131,7 @@ public class UserInterface {
 
         } while (!input[0].equals(EXIT));
     }
-    
-    
+
     // Ylläpitäjä kirjautuneena ajetaan tämä metodi
     public void admin() {
         String[] input;
@@ -162,6 +155,10 @@ public class UserInterface {
                     System.out.println("Add books");
                     break;
 
+                case SIGN_OUT:
+                    signOut();
+                    break;
+
                 case EXIT:
                     break;
                 default:
@@ -170,8 +167,6 @@ public class UserInterface {
 
         } while (!input[0].equals(EXIT));
     }
-
-    
 
     public String[] commandline() {
         System.out.print(">");
@@ -197,13 +192,13 @@ public class UserInterface {
         if (sign_details.length == 2) {
             String username = sign_details[0];
             String password = sign_details[1];
-            
+
             // Salasanan tarkistus
             if (!password.equals(PASSWORD)) {
                 System.out.println("Invalid password!");
                 signIn();
             }
-           // Haetaan käyttäjätiedot tietokannasta (käyttäjänimen perusteella)
+            // Haetaan käyttäjätiedot tietokannasta (käyttäjänimen perusteella)
             String[] result = this.search_engine.userDetails(username);
 
             if (result != null) {
@@ -225,8 +220,7 @@ public class UserInterface {
         }
         return false;
     }
-    
-    
+
     // Kirjaa aktiivisen käyttäjän ulos järjestelmästä
     public void signOut() {
         System.out.println("Logging out...");
@@ -235,12 +229,11 @@ public class UserInterface {
         kaynnista();
     }
 
-    
     // Rekisteröityminen järjestelmään, esim. tilauksen yhteydessä.
     public void signUp() {
         System.out.println("User not found! Create new? [y] = yes, [n] = no");
         String input;
-        
+
         ArrayList<String> user_details = new ArrayList<>();
         String[] columns = {"Email: ", "Firstname: ", "Lastname: ", "Address: ", "Phone: "};
 
@@ -252,7 +245,7 @@ public class UserInterface {
                 for (int i = 0; i < columns.length; i++) {
                     System.out.print(columns[i]);
                     userInput = In.readString();
-                    
+
                     if (checkUserInput(userInput)) {
                         user_details.add(userInput);
                     } else {
@@ -268,23 +261,20 @@ public class UserInterface {
                 System.out.println("Invalid commad! [y] = yes, [n] = no");
             }
         }
-        
+
         // Lisätään uuden käyttäjän tiedot tietokantaan
         addCustomer(user_details);
         signIn();
     }
-    
-    
+
     public boolean checkUserInput(String input) {
         return !input.isEmpty(); // Jos tyhjä syöte, palautetaan false
     }
-    
-    
+
     public void addCustomer(ArrayList<String> user_details) {
         System.out.println("Adding customer to database...");
     }
-    
-    
+
     public void printUserDetails() {
         System.out.println("-User details-");
         for (int i = 0; i < this.signed_user_details.length; i++) {
