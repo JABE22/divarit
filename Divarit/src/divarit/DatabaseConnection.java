@@ -36,7 +36,14 @@ public class DatabaseConnection {
     public Connection getConnection() {
     
         try {
-            this.con = (Connection) DriverManager.getConnection(PROTOKOLLA + "//" + PALVELIN + ":" + PORTTI + "/" + TIETOKANTA, KAYTTAJA, SALASANA);
+            this.con = (Connection) DriverManager.getConnection(
+                    PROTOKOLLA + "//" 
+                  + PALVELIN + ":" 
+                  + PORTTI + "/" 
+                  + TIETOKANTA, 
+                    KAYTTAJA, 
+                    SALASANA);
+            
             return this.con;
         } catch(SQLException e) {
             System.out.println("Connection: " + e.getMessage());
@@ -50,7 +57,7 @@ public class DatabaseConnection {
             try {     // jos yhteyden luominen ei onnistunut, con == null
                 con.close();
             } catch (SQLException e) {
-                System.out.println("Yhteyden sulkeminen tietokantaan ei onnistunut. Lopetetaan ohjelman suoritus.");
+                System.out.println("Closing connection to database failed!");
             }
         }
     }
