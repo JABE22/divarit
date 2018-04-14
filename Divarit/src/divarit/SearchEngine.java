@@ -32,17 +32,23 @@ public class SearchEngine {
             + "INNER JOIN keskusdivari.tekija kt ON ktt.tekija_id = kt.id "
             + "WHERE kt.etunimi LIKE ? OR kt.sukunimi LIKE ?;";
 
-    private final String USER_QUERY 
-            // CASE WHEN estämään tyhjä/null -arvojen palautus SQL-kyselystä
-            = "SELECT email, etunimi, sukunimi, osoite, "
-            + "CASE WHEN puhelin IS NULL THEN 'ei_annettu' ELSE puhelin END, div_yllapitaja "
-            + "FROM keskusdivari.kayttaja "
-            + "WHERE email = ?;";
-    
-    private final String INSERT_COPY =
-            // isbn, nimi, kuvaus, luokka, tyyppi
+    private final String USER_QUERY = "SELECT * FROM keskusdivari.hea_kayttaja(?);";
+    // CASE WHEN estämään tyhjä/null -arvojen palautus SQL-kyselystä
+//            = "SELECT email, etunimi, sukunimi, osoite, "
+//            + "CASE WHEN puhelin IS NULL THEN 'ei_annettu' ELSE puhelin END, div_yllapitaja "
+//            + "FROM keskusdivari.kayttaja "
+//            + "WHERE email = ?;";
+
+    private final String INSERT_COPY
+            = // isbn, nimi, kuvaus, luokka, tyyppi
             "INSERT INTO keskusdivari.teos (isbn, nimi, kuvaus, luokka, tyyppi) "
             + "VALUES (?, ?, ?, ?, ?); ";
+
+    private final String INSERT_BOOK
+            = // isbn, nimi, kuvaus, luokka, tyyppi
+            "INSERT INTO keskusdivari.kappale "
+            + "(divari_nimi, id, teos_isbn, paino, tila, sisosto_hinta, hinta, myynti_pvm) "
+            + "VALUES (?, ?, ?, ?, ?, ?, ?, ?); ";
 
     public SearchEngine(DatabaseConnection dataCon) {
         this.dataCon = dataCon;
@@ -95,6 +101,7 @@ public class SearchEngine {
         String[] user_details = new String[6];
 
         try {
+            // setSchema("keskusdivari");
             PreparedStatement prstmt = con.prepareStatement(USER_QUERY);
 
             prstmt.clearParameters();
@@ -106,9 +113,9 @@ public class SearchEngine {
                 for (int i = 0; i < 6; i++) {
                     user_details[i] = rset.getString(i + 1);
                 }
-          
+
                 return user_details;
-                
+
             } else {
                 System.out.println("Username not found");
             }
@@ -122,7 +129,7 @@ public class SearchEngine {
 
         return null;
     }
-    
+
     public void insertCopy(ArrayList<String> copyDetails) {
         Connection con = this.dataCon.getConnection();
 
@@ -132,7 +139,7 @@ public class SearchEngine {
             prstmt.clearParameters();
 
             for (int i = 1; i < 6; i++) {
-                prstmt.setString(i, copyDetails.get(i-1));
+                prstmt.setString(i, copyDetails.get(i - 1));
             }
 
             prstmt.executeQuery();
@@ -141,7 +148,26 @@ public class SearchEngine {
         } catch (SQLException e) {
             System.out.println("Error: " + e.getMessage());
         }
-        
+
+        // Suljetaan tietokantayhteys
+        dataCon.closeConnection();
+    }
+
+    public void setSchema(String schema) {
+        Connection con = this.dataCon.getConnection();
+
+        try {
+            PreparedStatement prstmt = con.prepareStatement("SET search_path TO ?");
+
+            prstmt.clearParameters();
+            prstmt.setString(1, schema);
+
+            prstmt.executeQuery();
+            prstmt.close();  // sulkee automaattisesti myös tulosjoukon rset
+
+        } catch (SQLException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
         // Suljetaan tietokantayhteys
         dataCon.closeConnection();
     }

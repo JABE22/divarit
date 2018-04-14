@@ -105,11 +105,14 @@ public class UserInterface {
                     break;
 
                 case ADD:
+                    // >add [kirja_id] 
+                    // Lisätään tuote ostoskori -tauluun
                     System.out.println("Add books");
                     break;
 
                 case CART:
-                    System.out.println("Adding to cart");
+                    // Tee SQL kysely joka palauttaa ostoskori -taulun sisällön
+                    System.out.println("View contains of cart");
                     break;
 
                 case CHECKOUT:
