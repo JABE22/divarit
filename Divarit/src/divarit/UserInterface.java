@@ -32,6 +32,8 @@ public class UserInterface {
 
     // Ohjelman ylläpitäjä -komennot
     private final String FIND_BOOK = "find book"; // Teos (ei kappale)
+    private final String ADD_BOOK = "add book";
+    private final String ADD_COPY = "copy";
 
     // Ohjelman yleiskomennot
     private final String EXIT = "exit";
@@ -153,7 +155,17 @@ public class UserInterface {
                     break;
 
                 case ADD:
-                    System.out.println("Add books");
+                    
+                    if (input.length > 1) {
+                        if (input[1].equals(ADD_BOOK)) {
+                            addBook();
+                        } else if (input[1].equals(ADD_COPY)) {
+                            addCopy();
+                        } else {
+                            System.out.println("Command invalid!#");
+                        }
+                    }
+                    
                     break;
 
                 case SIGN_OUT:
@@ -282,5 +294,30 @@ public class UserInterface {
         for (int i = 0; i < this.signed_user_details.length; i++) {
             System.out.println(signed_user_details[i]);
         }
+    }
+
+    private void addCopy() {
+        String[] columns = {"isbn: ", "nimi: ", "kuvaus: ", "luokka: ", "tyyppi: "};
+        ArrayList<String> copy_details = new ArrayList<>();
+        
+        String userInput;
+        for (int i = 0; i < columns.length; i++) {
+            System.out.print(columns[i]);
+            userInput = In.readString();
+
+            if (checkUserInput(userInput)) {
+                copy_details.add(userInput);
+            } else {
+                System.out.println("Invalid copy detail! Try again:");
+                i--;
+            }
+        }
+        this.search_engine.insertCopy(copy_details);
+        System.out.println("Adding copy");
+                
+    }
+
+    private void addBook() {
+
     }
 }
