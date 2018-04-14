@@ -271,13 +271,15 @@ INSERT INTO divari VALUES
 INSERT INTO kayttaja VALUES ('admin@divarit.fi', 'Admin', 'Divari', 'Divarikatu 600', '050 999 999', true);
 INSERT INTO kayttaja VALUES ('kalle@divarit.fi', 'Kalle', 'Kirjala', 'Kimmontie 4 A 16', '040012345', false);
 INSERT INTO kayttaja VALUES ('liisa@divarit.fi', 'Liisa', 'Lukutoukkala', 'Kirjakuja 1', null, false);
+INSERT INTO kayttaja VALUES ('teppo@divarit.fi', 'Teppo', 'Teppola', 'Katukuja 99', '123456', false);
 
 -- Tilaus
 -- 0 rauennut/peruutttu, 1 aktiivinen, 2 tehty tilaus
 -- Kallella yksi akt. ja valmis tilaus, liisalla 1 aktiivisena oleva
-INSERT INTO tilaus VALUES (1, 'kalle@divarit.fi', NOW(), 1); 
-INSERT INTO tilaus VALUES (2, 'kalle@divarit.fi', NOW(), 2);
-INSERT INTO tilaus VALUES (3, 'liisa@divarit.fi', NOW(), 1); 
+INSERT INTO tilaus VALUES (1, 'kalle@divarit.fi', CURRENT_DATE, 1); 
+INSERT INTO tilaus VALUES (2, 'kalle@divarit.fi', CURRENT_DATE, 2);
+INSERT INTO tilaus VALUES (3, 'liisa@divarit.fi', CURRENT_DATE - '100 days'::interval, 1); 
+INSERT INTO tilaus VALUES (4, 'teppo@divarit.fi', CURRENT_DATE - '1 day'::interval, 2); 
 
 -- ostoskori
 -- Juokseva numerointi (!!) kappaleissa
@@ -286,13 +288,18 @@ INSERT INTO ostoskori VALUES (10010, 'D1', 1);
 INSERT INTO ostoskori VALUES (10020, 'D1', 1);
 INSERT INTO ostoskori VALUES (10070, 'D2', 1);
 
-INSERT INTO ostoskori VALUES (10010, 'D1', 2);
+INSERT INTO ostoskori VALUES (10011, 'D1', 2);
 
-INSERT INTO ostoskori VALUES (10010, 'D1', 3);
+INSERT INTO ostoskori VALUES (10050, 'D1', 3);
 INSERT INTO ostoskori VALUES (10060, 'D2', 3);
 
-
-
+-- Tepon tilaukset (tilaus ID:t 4,)
+INSERT INTO ostoskori VALUES (10060, 'D2', 4);
+INSERT INTO ostoskori VALUES (10061, 'D2', 4);
+INSERT INTO ostoskori VALUES (10070, 'D2', 4);
+INSERT INTO ostoskori VALUES (10090, 'D2', 4);
+INSERT INTO ostoskori VALUES (10091, 'D2', 4);
+INSERT INTO ostoskori VALUES (10092, 'D2', 4);
 
 
 
