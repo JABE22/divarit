@@ -33,6 +33,7 @@ public class SearchEngine {
             + "WHERE kt.etunimi LIKE ? OR kt.sukunimi LIKE ? ";
 
     private final String PREPARE_USER_QUERY 
+            // CASE WHEN estämään tyhjä/null -arvojen palautus SQL-kyselystä
             = "SELECT email, etunimi, sukunimi, osoite, "
             + "CASE WHEN puhelin IS NULL THEN 'ei_annettu' ELSE puhelin END, div_yllapitaja "
             + "FROM keskusdivari.kayttaja "

@@ -67,6 +67,7 @@ public class UserInterface {
                 + " *****************");
 
         if (signIn()) {
+            // Testausta varten
             printUserDetails();
 
             if (this.div_admin) {
@@ -273,6 +274,7 @@ public class UserInterface {
 
     public void addCustomer(ArrayList<String> user_details) {
         System.out.println("Adding customer to database...");
+        // Ei tee vielä mitään muuta
     }
 
     public void printUserDetails() {
