@@ -20,7 +20,7 @@ public class SearchEngine {
     private final DatabaseConnection dataCon;
     private final Connection con;
     
-    // SQL-kyselyt
+    // Hakukysely teoksille ja niiden tekijöille
     private final String UNI_QUERY
     /* Teokset niiden nimen, tyypin tai luokan perusteella */
     = "SELECT * FROM keskusdivari.teos "
@@ -33,6 +33,7 @@ public class SearchEngine {
     + "INNER JOIN keskusdivari.tekija kt ON ktt.tekija_id = kt.id "
     + "WHERE LOWER(kt.etunimi) LIKE ? OR LOWER(kt.sukunimi) LIKE ?;";
     
+    // Varastossa olevien kappaleiden hakukysely
     private final String CUSTOMER_QUERY
     = "WITH haetut_teokset AS ("
     // Teokset niiden nimen, tekijän nimen, luokan tai tyypin perusteella
@@ -49,16 +50,22 @@ public class SearchEngine {
     + "INNER JOIN haetut_teokset ht ON k.teos_isbn = ht.isbn "
     + "ORDER BY nimi;";
     
+    // Käyttäjän tiedot
     private final String USER_QUERY = "SELECT * FROM keskusdivari.hae_kayttaja(?);";
     
+    // Teoksen lisäys
     private final String INSERT_COPY =
     "INSERT INTO keskusdivari.teos (isbn, nimi, kuvaus, luokka, tyyppi) "
     + "VALUES (?, ?, ?, ?, ?);";
     
+    // Myytävän yksittäiskappaleen lisäys
     private final String INSERT_BOOK =
     "INSERT INTO keskusdivari.kappale "
     + "(divari_nimi, teos_isbn, paino, sisosto_hinta, hinta, myynti_pvm) "
     + "VALUES (?, ?, ?, ?, ?, null);";
+    
+    
+    
     
     public SearchEngine(DatabaseConnection dataCon) {
         this.dataCon = dataCon;
@@ -113,6 +120,7 @@ public class SearchEngine {
         return results;
     }
     
+    // Palauttaa käyttäjänimeä vastaavat käyttäjätiedot taulukossa
     public String[] userDetails(String username) {
         
         String[] user_details = new String[6];
@@ -145,6 +153,7 @@ public class SearchEngine {
         return null;
     }
     
+    // Lisää uuden teoksen tiedot tietokantaan
     public void insertCopy(ArrayList<String> copyDetails) {
         
         try {
@@ -164,6 +173,7 @@ public class SearchEngine {
         }
     }
     
+    // Lisää uuden kappaleen tietokantaan. HUOM! Teoksen tiedot lisättävä ensin (isbn)
     public void insertBook(ArrayList<String> bookDetails) {
         
         try {
@@ -189,6 +199,7 @@ public class SearchEngine {
         }
     }
     
+    // Asettaa oletus-skeeman
     public void setSchema(String schema) {
         
         try {
@@ -205,6 +216,7 @@ public class SearchEngine {
         }
     }
     
+    // Sulkee yhteyden tietokantaan
     public void closeDatabaseConnection() {
         this.dataCon.closeConnection();
     }
