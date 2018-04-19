@@ -2,6 +2,9 @@
 
 -- TRUNCATE <> tyhjentää kys. taulun. Kommentoi pois rivit jos et halua tyhjentää
 
+-- Asetetaan keskusdivari oletus-skeemaksi
+SET search_path TO keskusdivari;
+
 TRUNCATE divari CASCADE;
 TRUNCATE kappale CASCADE;
 TRUNCATE kayttaja CASCADE;
@@ -10,9 +13,6 @@ TRUNCATE tekija CASCADE;
 TRUNCATE teos CASCADE;
 TRUNCATE teosten_tekijat CASCADE;
 TRUNCATE tilaus CASCADE;
-
--- Asetetaan keskusdivari oletus-skeemaksi
-SET search_path TO keskusdivari;
 
 -- Juha Seppälä 1996 fiktio
 INSERT INTO teos (isbn, nimi, kuvaus, luokka, tyyppi) 
@@ -108,44 +108,74 @@ VALUES ('9789510396230', 'Miten saan ystäviä, menestystä, vaikutusvaltaa', 'K
 
 
 -- Tekijät
-INSERT INTO tekija (id ,etunimi, sukunimi, synt_vuosi, kansallisuus) VALUES (500, 'Juha', 'Seppälä', 1956, 'Suomi');
+INSERT INTO tekija (id ,etunimi, sukunimi, synt_vuosi, kansallisuus) 
+VALUES (500, 'Juha', 'Seppälä', 1956, 'Suomi');
 
-INSERT INTO tekija (id, etunimi, sukunimi, synt_vuosi, kansallisuus) VALUES (501, 'Ilkka', 'Remes', 1962, 'Suomi');
+INSERT INTO tekija (id, etunimi, sukunimi, synt_vuosi, kansallisuus) 
+VALUES (501, 'Ilkka', 'Remes', 1962, 'Suomi');
 
-INSERT INTO tekija (id, etunimi, sukunimi, synt_vuosi, kansallisuus) VALUES (502, 'Johanna', 'Sinisalo', 1958, 'Suomi');
+INSERT INTO tekija (id, etunimi, sukunimi, synt_vuosi, kansallisuus) 
+VALUES (502, 'Johanna', 'Sinisalo', 1958, 'Suomi');
 
-INSERT INTO tekija (id, etunimi, sukunimi, synt_vuosi, kansallisuus) VALUES (503, 'Tove', 'Jansson', 1914, 'Suomi');
+INSERT INTO tekija (id, etunimi, sukunimi, synt_vuosi, kansallisuus) 
+VALUES (503, 'Tove', 'Jansson', 1914, 'Suomi');
 
-INSERT INTO tekija (id, etunimi, sukunimi, synt_vuosi, kansallisuus) VALUES (504, 'Lauri', 'Viita', 1916, 'Suomi');
+INSERT INTO tekija (id, etunimi, sukunimi, synt_vuosi, kansallisuus) 
+VALUES (504, 'Lauri', 'Viita', 1916, 'Suomi');
 
 
 -- Jarnon lisäämät
-INSERT INTO tekija (id ,etunimi, sukunimi, synt_vuosi, kansallisuus) VALUES (505, 'Eva', 'Isakson', 1968, 'Suomi');
+INSERT INTO tekija (id ,etunimi, sukunimi, synt_vuosi, kansallisuus) 
+VALUES (505, 'Eva', 'Isakson', 1968, 'Suomi');
 
-INSERT INTO tekija (id, etunimi, sukunimi, synt_vuosi, kansallisuus) VALUES (506, 'Stephen', 'Hawking', 1959, 'USA');
+INSERT INTO tekija (id, etunimi, sukunimi, synt_vuosi, kansallisuus) 
+VALUES (506, 'Stephen', 'Hawking', 1959, 'USA');
 
-INSERT INTO tekija (id, etunimi, sukunimi, synt_vuosi, kansallisuus) VALUES (507, 'David', 'Shukman', 1958, 'Englanti');
+INSERT INTO tekija (id, etunimi, sukunimi, synt_vuosi, kansallisuus) 
+VALUES (507, 'David', 'Shukman', 1958, 'Englanti');
 
-INSERT INTO tekija (id, etunimi, sukunimi, synt_vuosi, kansallisuus) VALUES (508, 'Jari', 'Sarasvuo', 1965, 'Suomi');
+INSERT INTO tekija (id, etunimi, sukunimi, synt_vuosi, kansallisuus) 
+VALUES (508, 'Jari', 'Sarasvuo', 1965, 'Suomi');
 
-INSERT INTO tekija (id, etunimi, sukunimi, synt_vuosi, kansallisuus) VALUES (509, 'Yuval Noah', 'Harari', 1979, 'Intia');
+INSERT INTO tekija (id, etunimi, sukunimi, synt_vuosi, kansallisuus) 
+VALUES (509, 'Yuval Noah', 'Harari', 1979, 'Intia');
 
-INSERT INTO tekija (id ,etunimi, sukunimi, synt_vuosi, kansallisuus) VALUES (510, 'Johanna', 'Blomqvist', 1973, 'Suomi');
+INSERT INTO tekija (id ,etunimi, sukunimi, synt_vuosi, kansallisuus) 
+VALUES (510, 'Johanna', 'Blomqvist', 1973, 'Suomi');
 
-INSERT INTO tekija (id, etunimi, sukunimi, synt_vuosi, kansallisuus) VALUES (511, 'Kauko', 'Kolehmainen', 1965, 'Suomi');
+INSERT INTO tekija (id, etunimi, sukunimi, synt_vuosi, kansallisuus) 
+VALUES (511, 'Kauko', 'Kolehmainen', 1965, 'Suomi');
 
-INSERT INTO tekija (id, etunimi, sukunimi, synt_vuosi, kansallisuus) VALUES (512, 'Kari E.', 'Turunen', 1969, 'Suomi');
+INSERT INTO tekija (id, etunimi, sukunimi, synt_vuosi, kansallisuus) 
+VALUES (512, 'Kari E.', 'Turunen', 1969, 'Suomi');
 
-INSERT INTO tekija (id, etunimi, sukunimi, synt_vuosi, kansallisuus) VALUES (513, 'Sinikka', 'Vanhala', 1973, 'Suomi');
+INSERT INTO tekija (id, etunimi, sukunimi, synt_vuosi, kansallisuus) 
+VALUES (513, 'Sinikka', 'Vanhala', 1973, 'Suomi');
 
-INSERT INTO tekija (id, etunimi, sukunimi, synt_vuosi, kansallisuus) VALUES (514, 'Mauri', 'Laukkanen', 1978, 'Intia');
+INSERT INTO tekija (id, etunimi, sukunimi, synt_vuosi, kansallisuus) 
+VALUES (514, 'Mauri', 'Laukkanen', 1978, 'Intia');
 
-INSERT INTO tekija (id, etunimi, sukunimi, synt_vuosi, kansallisuus) VALUES (515, 'Antero', 'Koskinen', 1972, 'Suomi');
+INSERT INTO tekija (id, etunimi, sukunimi, synt_vuosi, kansallisuus) 
+VALUES (515, 'Antero', 'Koskinen', 1972, 'Suomi');
 
-INSERT INTO tekija (id, etunimi, sukunimi, synt_vuosi, kansallisuus) VALUES (516, 'Ilkka', 'Haikala', 1977, 'Suomi');
+INSERT INTO tekija (id, etunimi, sukunimi, synt_vuosi, kansallisuus) 
+VALUES (516, 'Ilkka', 'Haikala', 1977, 'Suomi');
 
-INSERT INTO tekija (id, etunimi, sukunimi, synt_vuosi, kansallisuus) VALUES (517, 'Jukka', 'Märijärvi', 1965, 'Intia');
+INSERT INTO tekija (id, etunimi, sukunimi, synt_vuosi, kansallisuus) 
+VALUES (517, 'Jukka', 'Märijärvi', 1965, 'Intia');
 
+-- Tehtävänannon tekijät
+INSERT INTO tekija (id, etunimi, sukunimi, synt_vuosi, kansallisuus) 
+VALUES (518, 'Madeleine', 'Brent', 1954, 'Britannia');
+
+INSERT INTO tekija (id, etunimi, sukunimi, synt_vuosi, kansallisuus) 
+VALUES (519, 'Mika', 'Waltari', 1908, 'Suomi');
+
+INSERT INTO tekija (id, etunimi, sukunimi, synt_vuosi, kansallisuus) 
+VALUES (520, 'Shelton', 'Gilbert', 1940, 'Amerikka');
+
+INSERT INTO tekija (id, etunimi, sukunimi, synt_vuosi, kansallisuus) 
+VALUES (521, 'Dale', 'Carnegien', 1888, 'Intia');
 
 
 
@@ -171,7 +201,8 @@ VALUES (507, '9789510423660');
 INSERT INTO teosten_tekijat 
 VALUES (506, '9789510393741');
 
-INSERT INTO teosten_tekijat VALUES (508, '951021244X');
+INSERT INTO teosten_tekijat 
+VALUES (508, '951021244X');
 
 INSERT INTO teosten_tekijat 
 VALUES (509, '9789522794703');
@@ -199,6 +230,25 @@ VALUES (516, '9521404868');
 
 INSERT INTO teosten_tekijat 
 VALUES (517, '9521404868');
+
+-- Tehtävänannon tekijät <> teokset
+INSERT INTO teosten_tekijat 
+VALUES (518, '9155430674');
+
+INSERT INTO teosten_tekijat 
+VALUES (518, '9156381451');
+
+INSERT INTO teosten_tekijat 
+VALUES (519, '9789510393444');
+
+INSERT INTO teosten_tekijat 
+VALUES (519, '9510212333');
+
+INSERT INTO teosten_tekijat 
+VALUES (520, '9789522794111');
+
+INSERT INTO teosten_tekijat 
+VALUES (521, '9789510396230');
 
 
 -- Kappaleet, Jarnon lisäämät
@@ -259,6 +309,20 @@ INSERT INTO kappale VALUES
 ('D2', 10093, '9521404868', 551, 0, 21.68, 15.00, null);
 INSERT INTO kappale VALUES 
 ('D2', 10094, '9521404868', 551, 0, 21.68, 7.00, null);
+
+-- Tehtävänannon kappaleet
+INSERT INTO kappale VALUES 
+('D2', 10101, '9155430674', 234, 0, 8.68, 15.90, null);
+INSERT INTO kappale VALUES 
+('D2', 10102, '9156381451', 532, 0, 8.99, 15.90, null);
+INSERT INTO kappale VALUES
+('D2', 10103, '9789510393444', 121, 0, 10.20, 17.00, null);
+INSERT INTO kappale VALUES 
+('D2', 10104, '9510212333', 376, 0, 10.35, 17.00, null);
+INSERT INTO kappale VALUES 
+('D2', 10105, '9789522794111', 444, 0, 9.89, 13.00, null);
+INSERT INTO kappale VALUES 
+('D2', 10106, '9789510396230', 321, 0, 5.00, 16.00, null);
 
 -- Divarit
 INSERT INTO divari VALUES
