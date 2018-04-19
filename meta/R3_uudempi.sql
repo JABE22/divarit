@@ -13,6 +13,8 @@
 	Nämä kaksi relaatiota JOINataan lopuksi LEFT JOIN:lla, jotta varmasti kaikki käyttäjät pysyvät
 	mukana. Coalesce() muuntaa lopputuloksesta NULL:n nollaksi. Järjestys spostin mukaan, ASC.
 	
+	-- HUOM: 'teoksen' tulkitaan tarkoittavan abstraktia kirjaa, ei kopiota kirjasta (eli kappaletta).
+	
 	[kayttaja@foo.fi] <-- LEFT JOIN --> [kayttaja@foo.fi, 10]
 	[kayttaja_2@foo.fi] <-- LEFT JOIN --> (ei vastaavaa tuplea) = 0
 	
