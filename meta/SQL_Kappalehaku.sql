@@ -1,3 +1,5 @@
+-- Muista muuttaa kaikki parametrit (5 kpl) 'merkkijono':ksi jos ajat kyselyn
+
 WITH haetut_teokset AS (
 -- Teokset niiden nimen, tekijän nimen, luokan tai tyypin perusteella
 SELECT isbn, nimi, id, kuvaus, luokka, tyyppi
