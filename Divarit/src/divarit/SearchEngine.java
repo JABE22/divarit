@@ -20,7 +20,7 @@ public class SearchEngine {
     private final DatabaseConnection dataCon;
 
     // SQL-kyselyt
-    private final String PREPARE_UNI_QUERY
+    private final String UNI_QUERY
             /* Teokset niiden nimen, tyypin tai luokan perusteella */
             = "SELECT * FROM keskusdivari.teos "
             + "WHERE nimi LIKE ? OR tyyppi LIKE ? OR luokka LIKE ? "
@@ -30,14 +30,19 @@ public class SearchEngine {
             + "FROM keskusdivari.teos t "
             + "INNER JOIN keskusdivari.teosten_tekijat ktt ON t.isbn = ktt.teos_isbn "
             + "INNER JOIN keskusdivari.tekija kt ON ktt.tekija_id = kt.id "
-            + "WHERE kt.etunimi LIKE ? OR kt.sukunimi LIKE ? ";
+            + "WHERE kt.etunimi LIKE ? OR kt.sukunimi LIKE ?;";
 
-    private final String PREPARE_USER_QUERY 
+    private final String USER_QUERY 
             // CASE WHEN estämään tyhjä/null -arvojen palautus SQL-kyselystä
             = "SELECT email, etunimi, sukunimi, osoite, "
             + "CASE WHEN puhelin IS NULL THEN 'ei_annettu' ELSE puhelin END, div_yllapitaja "
             + "FROM keskusdivari.kayttaja "
-            + "WHERE email = ?";
+            + "WHERE email = ?;";
+    
+    private final String INSERT_COPY =
+            // isbn, nimi, kuvaus, luokka, tyyppi
+            "INSERT INTO keskusdivari.teos (isbn, nimi, kuvaus, luokka, tyyppi) "
+            + "VALUES (?, ?, ?, ?, ?); ";
 
     public SearchEngine(DatabaseConnection dataCon) {
         this.dataCon = dataCon;
@@ -50,7 +55,7 @@ public class SearchEngine {
 
         try {
             String headword = "%" + entry + "%";
-            PreparedStatement prstmt = con.prepareStatement(PREPARE_UNI_QUERY);
+            PreparedStatement prstmt = con.prepareStatement(UNI_QUERY);
 
             prstmt.clearParameters();
 
@@ -90,7 +95,7 @@ public class SearchEngine {
         String[] user_details = new String[6];
 
         try {
-            PreparedStatement prstmt = con.prepareStatement(PREPARE_USER_QUERY);
+            PreparedStatement prstmt = con.prepareStatement(USER_QUERY);
 
             prstmt.clearParameters();
             prstmt.setString(1, username);
@@ -116,5 +121,28 @@ public class SearchEngine {
         dataCon.closeConnection();
 
         return null;
+    }
+    
+    public void insertCopy(ArrayList<String> copyDetails) {
+        Connection con = this.dataCon.getConnection();
+
+        try {
+            PreparedStatement prstmt = con.prepareStatement(INSERT_COPY);
+
+            prstmt.clearParameters();
+
+            for (int i = 1; i < 6; i++) {
+                prstmt.setString(i, copyDetails.get(i-1));
+            }
+
+            prstmt.executeQuery();
+            prstmt.close();  // sulkee automaattisesti myös tulosjoukon rset
+
+        } catch (SQLException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+        
+        // Suljetaan tietokantayhteys
+        dataCon.closeConnection();
     }
 }
