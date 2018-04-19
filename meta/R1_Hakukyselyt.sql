@@ -1,30 +1,14 @@
 -- Hakukyselyt annettujen kriteerien perusteella
--- Asetetaan oletus-skeema
+-- Asetetaan oletus-skeema (varotoimenpide)
 SET search_path TO keskusdivari;
 
 -- Teokset nimen perusteella
-SELECT * FROM teos
-WHERE nimi LIKE '%Tekniikka%'
-
+SELECT * FROM keskusdivari.teos
+WHERE LOWER(nimi) LIKE ? OR LOWER(tyyppi) LIKE ? OR LOWER(luokka) LIKE ?
+/* Teokset tekijän nimen perusteella */
 UNION
-
--- Teokset tekijän nimen perusteella
 SELECT t.isbn, t.nimi, t.kuvaus, t.luokka, t.tyyppi
-FROM teos t 
-	INNER JOIN teosten_tekijat tt ON t.isbn = tt.teos_isbn
-	INNER JOIN tekija ON tt.tekija_id = tekija.id
-WHERE tekija.etunimi LIKE '%Tekniikka%' OR tekija.sukunimi LIKE '%Tekniikka%'
-
-UNION
-
--- Teokset tyypin perusteella
-SELECT *
-FROM teos
-WHERE tyyppi LIKE '%Tekniikka%'
-
-UNION
-
--- Teokset luokan perusteella
-SELECT *
-FROM teos
-WHERE luokka LIKE '%Tekniikka%';
+FROM keskusdivari.teos t
+INNER JOIN keskusdivari.teosten_tekijat ktt ON t.isbn = ktt.teos_isbn
+INNER JOIN keskusdivari.tekija kt ON ktt.tekija_id = kt.id
+WHERE LOWER(kt.etunimi) LIKE ? OR LOWER(kt.sukunimi) LIKE ?;
