@@ -1,0 +1,60 @@
+TIETOKANNAN RAJAPINTA // OMAT FUNKTIOT
+
+Nämä funktiot on (tai pitäisi olla) lisättynä tietokannalle/skeemalle.
+Lisäys tapahtuu ajamalla CREATE FUNCTION ... -tiedosto.
+
+Kun funktio on lisätty, sitä voidaan kutsua kuin muitakin funktioita.
+> SELECT * FROM funktio_nimi(parameteri);
+
+
+
+
+
+
+
+
+=== Funktiot [tietokanta nimi, parametrit ja palautettava arvo] ===
+
+
+### 1 -- Tilauksen X painot eri divareittain ###
+
+    tilauksen_painot(tid int)
+    
+        tid : tilauksen ID
+    
+    RETURNS (
+        tilaus_id int, 
+        divari_nimi varchar(20), 
+        paino bigint,
+        kappale_lkm bigint
+    )
+    
+    
+    
+### 2 -- Tilauksen X kaikki teokset ###
+
+        tilauksen_teokset(tid int)
+        
+            tid : tilauksen ID
+    
+        RETURNS (
+            tilaus_id int,
+            tila int,
+            kayttaja_email varchar(255),
+            pvm date,
+            divari_nimi varchar(20),
+            kappale_id int,
+            teos_isbn varchar(20)
+        )
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
