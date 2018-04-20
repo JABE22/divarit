@@ -1,10 +1,15 @@
-TIETOKANNAN RAJAPINTA // OMAT FUNKTIOT
+    
+    // -- Pyssysalo -- Muokattu viimeksi 2018-04-20 -- //
+    
+    TIETOKANNAN RAJAPINTA // OMAT FUNKTIOT
 
-Nämä funktiot on (tai pitäisi olla) lisättynä tietokannalle/skeemalle.
-Lisäys tapahtuu ajamalla CREATE FUNCTION ... -tiedosto.
+    Nämä funktiot on (tai pitäisi olla) lisättynä skeemalle.
+    
+    Lisäys tapahtuu ajamalla CREATE FUNCTION ... -tiedosto (hae erikseen!) esim. HeidiSQL:ssä.
 
-Kun funktio on lisätty, sitä voidaan kutsua kuin muitakin funktioita.
-> SELECT * FROM funktio_nimi(parameteri);
+    Kun funktio on lisätty, sitä voidaan kutsua kuin muitakin funktioita.
+    
+    > SELECT * FROM funktio_nimi(parameteri);
 
 
 
@@ -22,7 +27,7 @@ Kun funktio on lisätty, sitä voidaan kutsua kuin muitakin funktioita.
     
         tid : tilauksen ID
     
-    RETURNS (
+    RETURNS TABLE(
         tilaus_id int, 
         divari_nimi varchar(20), 
         paino bigint,
@@ -37,7 +42,7 @@ Kun funktio on lisätty, sitä voidaan kutsua kuin muitakin funktioita.
         
             tid : tilauksen ID
     
-        RETURNS (
+        RETURNS TABLE(
             tilaus_id int,
             tila int,
             kayttaja_email varchar(255),
@@ -50,11 +55,39 @@ Kun funktio on lisätty, sitä voidaan kutsua kuin muitakin funktioita.
     
     
     
+### 3 -- Hae käyttäjän X tiedot
+
+    hae_kayttaja(hae_kayttaja(param_user_email varchar(255)))
+    
+        param_user_email : käyttäjän sposti (avain)
+    
+    
+    RETURNS TABLE(
+        email varchar(255),
+        etunimi varchar(20),
+        sukunimi varchar(60),
+        osoite varchar(100),
+        puhelin varchar(100),
+        div_yllapitaja boolean
+    )
+    
+    
+### 4 -- Tilauksen ID:n hakeminen
+
+    hae_tilaus_id(param_kayttaja_email varchar(255)) 
+        
+        param_user_email : käyttäjän sposti (avain)
+    
+
+    Kuvaus: Hakee käyttäjän aktiivisen tilauksen (1. joka osuu vastaan).
+    Jos tilausta EI ole, luodaa uusi. Palauttaa aina tilauksen ID:n
+    
+    RETURNS integer
+    
+    Esimerkkikutsu:
+    > SELECT * FROM hae_tilaus_id('admin@divarit.fi') as tilaus_id;
     
     
     
-    
-    
-    
-    
+
     
