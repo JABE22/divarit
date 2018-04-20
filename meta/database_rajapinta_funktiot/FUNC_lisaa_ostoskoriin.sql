@@ -7,8 +7,7 @@
 	
 	Palauttaa: boolean. TRUE jos lisättiin koriin onnistuneesti, FALSE jos ei. 
 	
-	** KESKEN **
-	
+
 */
 SET SCHEMA 'keskusdivari';
 
@@ -17,20 +16,27 @@ SET SCHEMA 'keskusdivari';
 CREATE OR REPLACE FUNCTION lisaa_ostoskoriin(p_kappale_id int, p_divari_nimi varchar(10), p_tilaus_id int) 
 RETURNS boolean AS $$
 DECLARE
-	tid int; -- tilauksen ID
+	kpl_tila int; 
+ 	x boolean; -- onnistuiko lisäys
 BEGIN
 	
-		-- Hae aktiivista tilausta käyttäjältä.
-		SELECT id INTO tid FROM tilaus WHERE kayttaja_email=param_kayttaja_email AND tila=1 LIMIT 1;
+		-- Hae ...
+		SELECT tila INTO kpl_tila FROM kappale
+		WHERE divari_nimi=p_divari_nimi AND id=p_kappale_id AND myynti_pvm IS NULL;
 		
-		-- tee toimenpiteet
-		IF tid IS NULL THEN
-			-- Jos ei aktv. luo sellainen. Palauta uusi ID
-			 INSERT INTO tilaus VALUES (DEFAULT, param_kayttaja_email, CURRENT_DATE, 1) RETURNING id INTO tid;
-			 RETURN tid;
+		-- jos vapaa, lisää koriin
+		IF kpl_tila = 0 THEN
+			-- Yritetään lisätä koriin. muuttuja x on boolean. RETURNING FOUND palauttaa lisätyn rivin tai booleanin.
+			BEGIN
+				INSERT INTO ostoskori VALUES (p_kappale_id, p_divari_nimi, p_tilaus_id) RETURNING FOUND INTO x;
+				RETURN x;
+			EXCEPTION WHEN unique_violation THEN
+				RETURN FALSE;
+			END;
+			
 		ELSE
-			-- Paluta löydetty ID, jos tulos ei NULL
-			RETURN tid; 
+			-- Ei vapaana. palauta false
+			RETURN false; 
 		END IF;
 		
 		

@@ -88,6 +88,23 @@
     > SELECT * FROM hae_tilaus_id('<sposti>') as tilaus_id;
     
     
+### 5 -- Teoksen lisäys ostoskoriin
+
+    lisaa_ostoskoriin(p_kappale_id int, p_divari_nimi varchar(10), p_tilaus_id int) 
     
+        p_kappale_id : kappaleen ID
+        p_divari_nimi : divarin nimi 
+        p_tilaus_id : tilauksen ID
+        (kaikki pakollisia)
+        
+    Kuvaus: Tekee lisäyksen ostoskoriin, jos mahdollista
+    
+    RETURNS boolean
+    
+    Esimerkkikutsu:
+    > SELECT * FROM lisaa_ostoskoriin(1234, 'D99', 1) as onnistuiko;
+
+
+
 
     

@@ -91,4 +91,14 @@ CREATE TABLE IF NOT EXISTS keskusdivari.ostoskori (
   FOREIGN KEY (divari_nimi, kappale_id) REFERENCES kappale -- divari_nimi, id
 );
 
+-- Lisätty 2018-04-20
+CREATE TABLE IF NOT EXISTS keskusdivari.postikulut(
+	painoluokitus_id SERIAL,
+	alaraja_g INTEGER CHECK(alaraja_g>=0),
+	ylaraja_g INTEGER,
+	hinta NUMERIC(4,2) CHECK(alaraja_g>=0.00),
+	PRIMARY KEY(painoluokitus_id)
+);
+
+
 -- END
