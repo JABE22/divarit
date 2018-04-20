@@ -217,7 +217,7 @@ public class UserInterface {
                     break;
                     
                 case REPORT:
-                    
+                    printReport();
                     
                 case RETURN:
                     admin();
@@ -433,6 +433,12 @@ public class UserInterface {
         this.search_engine.insertBook(book_details);
         System.out.println("Adding book...");
     }
+    
+    
+    private void printReport() {
+        
+    }
+    
 
     /*
     *Asiakkaan toimintoja ja funktioita
@@ -532,4 +538,5 @@ public class UserInterface {
 
         return komentorivi;
     }
+
 }
