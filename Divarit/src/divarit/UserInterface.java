@@ -14,9 +14,6 @@ import java.util.Scanner;
 /**
  *
  * @author Jarno Matarmaa
- * 
- * HUOM! EXIT ja RETURN -syötteet on varattu ohjelmalle. Älä käytä näitä muutoin
- * kuin lopettaaksesi ohjelman suorituksen tai palataksesi alkuun.
  */
 public class UserInterface {
 
@@ -76,14 +73,14 @@ public class UserInterface {
         this.komentoIndeksi = 0;
     }
 
-    public void run() {
-        System.out.println("\n *****************\n"
-                           + " **** DIVARIT ****\n"
-                           + " *****************");
+    public void kaynnista() {
+        System.out.println(" *****************\n"
+                + "***** DIVARIT *****\n"
+                + " *****************");
 
         if (signIn()) {
             // Testausta varten
-            //printUserDetails();
+            printUserDetails();
 
             if (this.div_admin) {
                 System.out.println(ADMIN_PRINT);
@@ -97,7 +94,6 @@ public class UserInterface {
 
     // Asiakas kirjautuneena ajetaan tämä metodi
     public void customer() {
-        System.out.println("**ASIAKKAAN ETUSIVU**" + " " + this.signed_user_details[1]);
         String[] input;
 
         do {
@@ -140,10 +136,6 @@ public class UserInterface {
                      ilman eri komentoa, muuten pyydetään tilauksen vahvistusta */
                     // 2.2.1 Asiakas vahvistaa valinnalla k (kyllä) tai p (peru)
                     break;
-                    
-                case RETURN:
-                    customer();
-                    break;
 
                 case SIGN_OUT:
                     signOut();
@@ -162,7 +154,6 @@ public class UserInterface {
 
     // Ylläpitäjä kirjautuneena ajetaan tämä metodi
     public void admin() {
-        System.out.println("**YLLÄPITÄJÄN ETUSIVU**" + " " + this.signed_user_details[1]);
         String[] input;
 
         do {
@@ -173,8 +164,6 @@ public class UserInterface {
             if (input == null || input.length < 1) {
                 System.out.println("Error! Command invalid");
             }
-            
-            checkUserInput(input[0]);
 
             switch (input[0]) {
 
@@ -203,6 +192,7 @@ public class UserInterface {
                             System.out.println("Command invalid!#");
                         }
                     }
+
                     break;
 
                 case SIGN_OUT:
@@ -288,7 +278,7 @@ public class UserInterface {
         System.out.println("Logging out...");
         this.div_admin = false;
         this.signed_user_details = null;
-        run();
+        kaynnista();
     }
 
     // Rekisteröityminen järjestelmään, esim. tilauksen yhteydessä.
@@ -300,15 +290,13 @@ public class UserInterface {
         String[] columns = {"Email: ", "Firstname: ", "Lastname: ", "Address: ", "Phone: "};
 
         while (true) {
-            // input = In.readString();
-            input = getKomento()[0];
-            
+            input = In.readString();
+
             if (input.equals("y")) {
                 String userInput;
                 for (int i = 0; i < columns.length; i++) {
                     System.out.print(columns[i]);
-                    // userInput = In.readString();
-                    userInput = getKomento()[0];
+                    userInput = In.readString();
 
                     if (checkUserInput(userInput)) {
                         user_details.add(userInput);
@@ -332,17 +320,6 @@ public class UserInterface {
     }
 
     public boolean checkUserInput(String input) {
-        if (input.equals(EXIT)) {
-            System.exit(0);
-        } else if (input.equals(RETURN)) {
-            if (signed_user_details == null) {
-                run();
-            } else if (this.div_admin) {
-                admin();
-            } else {
-                customer();
-            }
-        }
         return !input.isEmpty(); // Jos tyhjä syöte, palautetaan false
     }
 
@@ -438,12 +415,6 @@ public class UserInterface {
         this.search_engine.insertBook(book_details);
         System.out.println("Adding book...");
     }
-    
-    
-    
-    
-    
-    
 
     // Ohjelman testiajossa käytettävä metodi
     // Lukee komennot "esimerkkidata.txt" -tiedostosta listalle
