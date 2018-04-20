@@ -19,7 +19,7 @@ DECLARE
 BEGIN
 	
 		-- Hae aktiivista tilausta käyttäjältä.
-		SELECT id INTO tid FROM keskusdivari.tilaus WHERE kayttaja_email=param_kayttaja_email AND tila=1 LIMIT 1;
+		SELECT id INTO tid FROM keskusdivari.tilaus WHERE kayttaja_email = param_kayttaja_email AND tila = 1 LIMIT 1;
 		
 		-- tee toimenpiteet
 		IF tid IS NULL THEN

@@ -30,12 +30,16 @@ public class SearchEngine {
     // Käyttäjän tiedot
     private final String USER_QUERY = "SELECT * FROM keskusdivari.hae_kayttaja(?);";
     
-    // Palauttaa tilau_id :n tuotteiden ostoskoriin lisäämistä varten
+    // Palauttaa tilaus_id :n tuotteiden ostoskoriin lisäämistä varten
     private final String ORDER_ID_QUERY = "SELECT * FROM keskusdivari.hae_tilaus_id(?);";
     
+    // Palauttaa ostoskorin sisällön
+    private final String CART_CONTENT_QUERY = "SELECT * FROM keskusdivari.ostoskorin_tuotteet(?)";
+    
+    // Palauttaa tilattujen tuotteiden tilaajan ja kappalemäärän/asiakas viime vuonna
     private final String REPORT_QUERY = "SELECT * FROM keskusdivari.raportti()";
     
-    // Teoksen lisÃ¤ys
+    // Teoksen lisäys
     private final String INSERT_COPY =
       "INSERT INTO keskusdivari.teos (isbn, nimi, kuvaus, luokka, tyyppi) "
     + "VALUES (?, ?, ?, ?, ?);";
@@ -147,7 +151,8 @@ public class SearchEngine {
     *
     *
     */
-    // Lisää uuden teoksen tiedot tietokantaan
+    
+    // Lisää uuden käyttäjän tiedot tietokantaan
     public void addUser(ArrayList<String> user_details) {
         
         try {
@@ -167,11 +172,6 @@ public class SearchEngine {
         }
     }
     
-    /*
-    * Ylläpitäjän käyttämät metodit
-    *
-    *
-    */
     // Lisää uuden teoksen tiedot tietokantaan
     public void insertCopy(ArrayList<String> copyDetails) {
         
@@ -218,6 +218,7 @@ public class SearchEngine {
         }
     }
     
+    // Hakee tilaustietoja viime vuonna
     public ArrayList<String> report() {
         ArrayList<String> details = new ArrayList<>();
         
@@ -250,7 +251,10 @@ public class SearchEngine {
     * Asiakkaan metodit
     *
     */
-    public int searchOrderID(int book_id, String email) {
+    
+    // Palauttaa käyttäjänimeä vastaavan tilaus_id:n, jos ei löydy, 
+    // luo uuden ja palauttaa sen
+    public int searchOrderID(String email) {
         int order_id;
         try {
             PreparedStatement prstmt = this.con.prepareStatement(ORDER_ID_QUERY);
@@ -288,12 +292,48 @@ public class SearchEngine {
                     prstmt.setString(i, details.get(i - 1));
                 }
             }
-            prstmt.executeUpdate();
+            int changes = prstmt.executeUpdate();
+            if (changes == 1) {
+                System.out.println("Tuote lisättiin onnistuneesti!");
+            } else {
+                System.out.println("Antamaasi tuote ID:tä ei löytynyt");
+            }
             prstmt.close();  // sulkee automaattisesti myÃ¶s tulosjoukon rset
             
         } catch (SQLException e) {
             System.out.println("Error: " + e.getMessage());
         }
+    }
+    
+    public ArrayList<String> cartContent(int order_id) {
+        ArrayList<String> content = new ArrayList<>();
+
+        try {
+            PreparedStatement prstmt = this.con.prepareStatement(CART_CONTENT_QUERY);
+            prstmt.clearParameters();
+            prstmt.setInt(1, order_id);
+  
+            ResultSet rset = prstmt.executeQuery();
+            
+            if (rset.next()) {
+                String rivi;
+                do {
+                    // Teoksen kuvaus eli indeksi kolme poistettu (rset.getString(3))
+                    rivi = rset.getString(1) + ", " 
+                         + rset.getString(2) + ", "
+                         + rset.getString(3);
+                    content.add(rivi);
+                    
+                } while (rset.next());
+            }
+            
+            prstmt.close();  // sulkee automaattisesti myÃ¶s tulosjoukon rset
+            
+        } catch (SQLException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+        
+        return content;
     }
     
     

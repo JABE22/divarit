@@ -9,5 +9,6 @@ admin@divarit.fi 1234
 report
 signout
 kalle@divarit.fi 1234
-find tieto
-add 10106
+find romaani
+add 10600
+cart
