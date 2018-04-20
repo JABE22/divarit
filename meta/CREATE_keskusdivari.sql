@@ -100,5 +100,11 @@ CREATE TABLE IF NOT EXISTS keskusdivari.postikulut(
 	PRIMARY KEY(painoluokitus_id)
 );
 
+-- SERIAL SEQUENCE
+
+-- Päivitetään postgresin "sarja", jollainen myös SERIAL on alkamaan ID:stä 100
+-- jotta vältetään konflikteja esimerkkidatan kanssa
+ALTER SEQUENCE tilaus_id_seq RESTART WITH 100;
+
 
 -- END
