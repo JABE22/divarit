@@ -7,3 +7,7 @@ find Sarasvuo
 signout
 admin@divarit.fi 1234
 report
+signout
+kalle@divarit.fi 1234
+find tieto
+add 10106
