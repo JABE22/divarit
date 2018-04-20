@@ -1,7 +1,7 @@
 admin@divarit.fi 1234
 find stephen
 find_book tieto
-find tieto
+find romaani
 find_book tieto
 signout
 kalle@divarit.fi 1234
@@ -12,5 +12,5 @@ report
 signout
 kalle@divarit.fi 1234
 find romaani
-add 10600
+add 10102
 cart

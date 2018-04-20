@@ -96,10 +96,10 @@ public class SearchEngine {
                 String rivi;
                 do {
                     // Teoksen kuvaus eli indeksi kolme poistettu (rset.getString(3))
-                    rivi = rset.getString(1) + "," + rset.getString(2)
-                    + "," + rset.getString(3)
-                    + "," + rset.getString(4)
-                    + "," + rset.getString(5);
+                    rivi = rset.getString(1) + "/" + rset.getString(2)
+                    + "/" + rset.getString(3)
+                    + "/" + rset.getString(4)
+                    + "/" + rset.getString(5);
                     results.add(rivi);
                     
                 } while (rset.next());

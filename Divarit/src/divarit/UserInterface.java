@@ -16,7 +16,8 @@ import java.util.Scanner;
  * @author Jarno Matarmaa
  *
  * HUOM! EXIT ja RETURN -syötteet on varattu ohjelmalle. Älä käytä näitä muutoin
- * kuin ohjelman sulkeaksesi (EXIT) tai palataksesi käyttäjän etusivulle (RETURN).
+ * kuin ohjelman sulkeaksesi (EXIT) tai palataksesi käyttäjän etusivulle
+ * (RETURN).
  */
 public class UserInterface {
 
@@ -25,7 +26,7 @@ public class UserInterface {
 
     // Hakutoimintojen apumuuttujat
     private final int BOOK_SEARCH_TYPE = 0; // Kappalehaku (kappale_id)
-    private final int ABSTRACT_SEARCH_TYPE = 1; // Teoshaku
+    private final int COPY_SEARCH_TYPE = 1; // Teoshaku
 
     // Aktiivisen kÃ¤yttÃ¤jÃ¤n tietoja. On nollattava kun kirjaudutaan ulos
     // ...kutsumalla metodia signOut()
@@ -54,7 +55,8 @@ public class UserInterface {
 
     // YllÃ¤pitÃ¤jÃ¤: Komennon jÃ¤lkeen tÃ¤smennys [add book] tai [add abstract]
     // Tulosteet kÃ¤yttÃ¤jÃ¤n mukaan (2 kpl)
-    private final String CUSTOMER_PRINT = "_______________________\n"
+    private final String CUSTOMER_PRINT
+            = "_______________________\n"
             + "-Ohjelman komennot-\n"
             + "*1 find [hakusana]\n"
             + "*2 add\n"
@@ -67,7 +69,8 @@ public class UserInterface {
             + "*7 exit\n"
             + "_______________________\n";
 
-    private final String ADMIN_PRINT = "_______________________\n"
+    private final String ADMIN_PRINT
+            = "_______________________\n"
             + "-Ohjelman komennot-\n"
             + "*1 find [hakusana]\n"
             + "*2 find book [hakusana]\n"
@@ -94,7 +97,8 @@ public class UserInterface {
     }
 
     public void run() {
-        System.out.println("\n *****************\n"
+        System.out.println(
+                "\n *****************\n"
                 + " **** DIVARIT ****\n"
                 + " *****************");
 
@@ -145,7 +149,6 @@ public class UserInterface {
                         System.out.println("Adding book to cart...");
                         addToCart(input[1]);
                     }
-                    
                     break;
 
                 case CART:
@@ -160,7 +163,7 @@ public class UserInterface {
                     // Kysytään vahvistus tai peruutus
                     // String command = In.readString;
                     String command = getCommand()[0];
-                    
+
                     if (checkUserInput(command)) {
                         switch (command) {
                             case ORDER:
@@ -171,10 +174,9 @@ public class UserInterface {
                             case RETURN:
                                 customer();
                                 break;
-                        } 
-                    }           
+                        }
+                    }
                     break;
-                    
 
                 case RETURN:
                     customer();
@@ -216,7 +218,7 @@ public class UserInterface {
                 case FIND:
                     System.out.println("Searching copies...");
                     if (input.length > 1) {
-                        uniSearch(input[1], ABSTRACT_SEARCH_TYPE);
+                        uniSearch(input[1], COPY_SEARCH_TYPE);
                     }
                     break;
 
@@ -272,15 +274,20 @@ public class UserInterface {
     // Ylläpitäjän ja asiakkaan teos- ja kappalehaku, type 0=kappale ja 1=teos
     public void uniSearch(String entry, int type) {
         ArrayList<String> results = search_engine.uniQuery(entry, type);
-        printBookDetails(results, type);
-
+        // Hakutyyppiä vastaavan tulostusmetodin kutsu
+        if (type == 0) {
+            printBookDetails(results);
+        } else {
+            printCopyDetails(results);
+        }
     }
 
     /* Palauttaa false, jos käyttäjää ei löydy tietokannasta tai kirjautuminen
      *  epäonnistuu
      */
     public boolean signIn() {
-        System.out.println("Type username and password: [username password] ");
+        System.out.println("Type username and password\n"
+                + "[username password]: ");
         // String[] sign_details = commandline();
         String[] sign_details = getCommand();
 
@@ -391,52 +398,115 @@ public class UserInterface {
             }
         }
     }
-    
+
     // Tulostaa raportin muotoillusti
     public void showCartContents() {
-        System.out.println(tilaus_id);
         if (this.tilaus_id == 0) {
             System.out.println("Ostoskorisi on tyhjä");
         } else {
-            System.out.println("Ostoskorin sisältö\n"
-                         + "------------------");
+            System.out.println(
+                      "          -OSTOSKORI-       \n"
+                    + "______________________________");
             ArrayList<String> cartContents = this.search_engine.cartContent(tilaus_id);
             cartContents.stream().forEach(row -> System.out.println(row));
         }
+        System.out.println("______________________________");
     }
 
-    // Tulostaa teokset ja niihin liitetyt tekijät tai kappale id:t
-    public void printBookDetails(ArrayList<String> results, int type) {
-        // Tulostaminen
+    // Teosten muotoiltu tulostus
+    public void printCopyDetails(ArrayList<String> results) {
+        results.stream().forEach(row -> {
+            String[] parts = row.split("/");
+            String copyname = "";
 
-        switch (type) {
-            case ABSTRACT_SEARCH_TYPE:
-                results.stream().forEach(row -> {
-                    String[] parts = row.split(",");
-                    for (int i = 0; i < parts.length; i++) {
-                        if (i == 2) {
-                            System.out.print(parts[i] + " ");
-                        } else if (i < parts.length - 1) {
-                            System.out.print(parts[i] + ", ");
-                        } else {
-                            System.out.println(parts[i]);
-                        }
+            for (int i = 0; i < parts.length; i++) {
+                // Rajataan näytettävä nimen koko 30 merkkiin
+                if (i == 1) {
+                    if (parts[i].length() > 30) {
+                        copyname = parts[i].substring(0, 30) + "...";
+                    } else {
+                        copyname = parts[i];
                     }
-                });
-                break;
-                
-            case BOOK_SEARCH_TYPE:
-                results.stream().forEach(row -> {
-                    String[] parts = row.split(",");
-                    for (int i = 0; i < parts.length; i++) {
-                        if (i < parts.length - 1) {
-                            System.out.print(parts[i] + ", ");
-                        } else {
-                            System.out.println(parts[i]);
-                        }
+                }
+                // Tulostuksen sisennys tasaus
+                switch (i) {
+                    case 0: // isbn, välimerkit jälkeen lkm
+                        System.out.print(parts[i]);
+                        printSpace(20 - parts[i].length());
+                        break;
+
+                    case 1: // teosnimi, välimerkit jälkeen lkm
+                        System.out.print(copyname);
+                        printSpace(37 - copyname.length());
+                        break;
+
+                    case 2: // tekijän etunimi (etunimen ja sukunimen yhdistämien)       
+                        System.out.print(parts[i] + " ");
+                        break;
+
+                    case 3: // luokka, välimerkit jälkeen lkm
+                        System.out.print(parts[i]);
+                        int nameLength = parts[i].length() + parts[i - 1].length();
+                        printSpace(25 - nameLength);
+                        break;
+
+                    case 4: // Tyyppi
+                        System.out.println(parts[i]);
+                        break;
+                }
+            }
+        });
+    }
+    
+    // Myyntikappaleiden muotoiltu tulostus
+    public void printBookDetails(ArrayList<String> results) {
+        results.stream().forEach(row -> {
+            String[] parts = row.split("/");
+            String limiter = "";
+
+            for (int i = 0; i < parts.length; i++) {
+                // Rajataan näytettävän nimen ja kuvauksen koko 30 merkkiin
+                if (i == 1 || i == 2) {
+                    if (parts[i].length() > 30) {
+                        limiter = parts[i].substring(0, 30) + "...";
+                    } else {
+                        limiter = parts[i];
                     }
-                });
-                break;
+                }
+                // Tulostuksen sisennys tasaus
+                switch (i) {
+                    case 0: // id, välimerkit jälkeen lkm
+                        System.out.print(parts[i]);
+                        printSpace(10 - parts[i].length());
+                        break;
+
+                    case 1: // teosnimi, välimerkit jälkeen lkm
+                        System.out.print(limiter);
+                        printSpace(37 - limiter.length());
+                        break;
+
+                    case 2: // kuvaus , välimerkit jälkeen lkm
+                        System.out.print(limiter);
+                        printSpace(36 - limiter.length());
+                        break;
+
+                    case 3: // luokka, välimerkit jälkeen lkm
+                        System.out.print(parts[i]);
+                        printSpace(24 - parts[i].length());
+                        break;
+
+                    case 4: // Tyyppi
+                        System.out.println(parts[i]);
+                        break;
+                }
+            }
+        });
+    }
+
+    // Välimerkkien tulosteluun käytetty netodi
+    public void printSpace(int count) {
+        for (int i = 0; i < count; i++) {
+            System.out.print(" ");
         }
     }
 
@@ -504,7 +574,7 @@ public class UserInterface {
         }
         System.out.println("Adding book...");
         this.search_engine.insertBook(book_details);
-        
+
     }
 
     private void printReport() {
@@ -516,10 +586,9 @@ public class UserInterface {
         for (String row : data) {
             String[] parts = row.split(" ");
             System.out.print(parts[0]);
-            
-            for (int i = 0; i < 25 - parts[0].length(); i++) {
-                System.out.print(" ");
-            }
+
+            printSpace(25 - parts[0].length());
+
             System.out.println(parts[1]);
         }
         System.out.println("");
@@ -533,7 +602,7 @@ public class UserInterface {
      */
     public void addToCart(String book_id) {
         int casted_bid = checkIntFormat(book_id);
-        
+
         ArrayList<String> details = new ArrayList<>();
         String email = this.signed_user_details[0];
 
@@ -623,7 +692,7 @@ public class UserInterface {
 
         return komentorivi;
     }
-    
+
     public String getCommandAsDetails() {
         if (this.komentoIndeksi > this.testikomennot.size() - 1) {
             System.out.println("Ei enempää komentoja.");
