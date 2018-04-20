@@ -9,6 +9,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 
 /**
@@ -50,15 +51,20 @@ public class SearchEngine {
     + "INNER JOIN haetut_teokset ht ON k.teos_isbn = ht.isbn "
     + "ORDER BY nimi;";
     
-    // KÃ¤yttÃ¤jÃ¤n tiedot
+    // Käyttäjän tiedot
     private final String USER_QUERY = "SELECT * FROM keskusdivari.hae_kayttaja(?);";
+    
+    // Palauttaa tilau_id :n tuotteiden ostoskoriin lisäämistä varten
+    private final String ORDER_ID_QUERY = "SELECT * FROM keskusdivari.hae_tilaus_id(?);";
+    
+    private final String REPORT_QUERY = "SELECT * FROM keskusdivari.raportti()";
     
     // Teoksen lisÃ¤ys
     private final String INSERT_COPY =
       "INSERT INTO keskusdivari.teos (isbn, nimi, kuvaus, luokka, tyyppi) "
     + "VALUES (?, ?, ?, ?, ?);";
     
-    // MyytÃ¤vÃ¤n yksittÃ¤iskappaleen lisÃ¤ys
+    // Myytävän yksittäiskappaleen lisäys
     private final String INSERT_BOOK =
       "INSERT INTO keskusdivari.kappale "
     + "(divari_nimi, teos_isbn, paino, sisosto_hinta, hinta, myynti_pvm) "
@@ -68,15 +74,12 @@ public class SearchEngine {
       "INSERT INTO keskusdivari.kayttaja "
     + "(email, etunimi, sukunimi, osoite, puhelin) "
     + "VALUES (?, ?, ?, ?, ?);";
-    
 
     private final String ADD_TO_CART = 
       "INSERT INTO keskusdivari.ostoskori "
     + "(kappale_id, divari_nimi, tilaus_id) "
     + "VALUES (?, ?, ?);";
             
-
-    private final String ORDER_ID_QUERY = "SELECT * FROM keskusdivari.hae_tilaus_id(?);";
 
     
     
@@ -240,6 +243,33 @@ public class SearchEngine {
         } catch (SQLException e) {
             System.out.println("Error: " + e.getMessage());
         }
+    }
+    
+    public ArrayList<String> report() {
+        ArrayList<String> details = new ArrayList<>();
+        
+        try {
+            Statement stmt = this.con.createStatement();     
+            ResultSet rset = stmt.executeQuery(REPORT_QUERY);
+            
+            
+            if (rset.next()) {
+                String customer;
+                String orderedBooks;
+                
+                while (rset.next()) {
+                    customer = rset.getString(1);
+                    orderedBooks = rset.getString(2);
+                    details.add(customer + ", " + orderedBooks);
+                }
+            }
+            
+            stmt.close();  // sulkee automaattisesti myÃ¶s tulosjoukon rset
+            
+        } catch (SQLException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+        return details;
     }
     
     

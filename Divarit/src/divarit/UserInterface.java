@@ -436,7 +436,11 @@ public class UserInterface {
     
     
     private void printReport() {
+        ArrayList<String> data = this.search_engine.report();
         
+        for (String rivi : data) {
+            System.out.println(rivi);
+        }
     }
     
 
