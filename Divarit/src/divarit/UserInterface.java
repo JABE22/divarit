@@ -15,17 +15,21 @@ import java.util.Scanner;
  *
  * @author Jarno Matarmaa
  *
-<<<<<<< HEAD
+ * <<<<<<< HEAD
  * HUOM! EXIT ja RETURN -syötteet on varattu ohjelmalle. Älä käytä näitä muutoin
-=======
+ * =======
  * HUOM! EXIT ja RETURN -syÃ¶tteet on varattu ohjelmalle. Ã„lÃ¤ kÃ¤ytÃ¤ nÃ¤itÃ¤ muutoin
->>>>>>> 1d84d56fd05b37584374975e82ab367b32a14716
- * kuin lopettaaksesi ohjelman suorituksen tai palataksesi alkuun.
+ * >>>>>>> 1d84d56fd05b37584374975e82ab367b32a14716 kuin lopettaaksesi ohjelman
+ * suorituksen tai palataksesi alkuun.
  */
 public class UserInterface {
 
     // Staattinen jÃ¤rjestelmÃ¤n salasana
     private final String PASSWORD = "1234";
+
+    // Hakutoimintojen apumuuttujat
+    private final int BOOK_SEARCH_TYPE = 0; // Kappalehaku (kappale_id)
+    private final int ABSTRACT_SEARCH_TYPE = 1; // Teoshaku
 
     // Aktiivisen kÃ¤yttÃ¤jÃ¤n tunnus
     private String[] signed_user_details = null;
@@ -42,7 +46,7 @@ public class UserInterface {
     private final String REMOVE = "remove"; // Poistaa tuotteen ostoskorista [remove kappale_id]
 
     // Ohjelman ylläpitäjän -komennot
-    private final String FIND_BOOK = "find book"; // Teos (ei kappale)
+    private final String FIND_BOOK = "find_book"; // Teos (ei kappale)
     private final String ADD_BOOK = "book";
     private final String ADD_COPY = "copy";
     private final String REPORT = "report";
@@ -84,8 +88,8 @@ public class UserInterface {
 
     public void run() {
         System.out.println("\n *****************\n"
-                           + " **** DIVARIT ****\n"
-                           + " *****************");
+                + " **** DIVARIT ****\n"
+                + " *****************");
 
         if (signIn()) {
             // Testausta varten
@@ -123,7 +127,7 @@ public class UserInterface {
                     // Tämä muutetaan siten, että haetaan teosten sijaan kappaleita
                     System.out.println("Searching items...");
                     if (input.length > 1) {
-                        uniSearch(input[1], 0);
+                        uniSearch(input[1], BOOK_SEARCH_TYPE);
                     }
                     break;
 
@@ -192,14 +196,14 @@ public class UserInterface {
                 case FIND:
                     System.out.println("Searching books...");
                     if (input.length > 1) {
-                        uniSearch(input[1], 1);
+                        uniSearch(input[1], ABSTRACT_SEARCH_TYPE);
                     }
                     break;
 
                 case FIND_BOOK:
                     System.out.println("Searching books...");
                     if (input.length > 1) {
-                        uniSearch(input[1], 0);
+                        uniSearch(input[1], BOOK_SEARCH_TYPE);
                     }
                     break;
 
@@ -215,10 +219,10 @@ public class UserInterface {
                         }
                     }
                     break;
-                    
+
                 case REPORT:
                     printReport();
-                    
+
                 case RETURN:
                     admin();
                     break;
@@ -245,10 +249,10 @@ public class UserInterface {
         return parts;
     }
 
-    // Ylläpitäjän ja asiakkaan teoshaku
+    // Ylläpitäjän ja asiakkaan teos- ja kappalehaku, type 0=kappale ja 1=teos
     public void uniSearch(String entry, int type) {
         ArrayList<String> results = search_engine.uniQuery(entry, type);
-        results.stream().forEach(row -> System.out.println("#" + row));
+        printBookDetails(results, type);
 
     }
 
@@ -272,7 +276,7 @@ public class UserInterface {
             // Haetaan käyttäjätiedot tietokannasta (käyttäjänimen perusteella)
             String[] result = this.search_engine.userDetails(username);
 
-            if (result != null && result[0] != null ) {
+            if (result != null && result[0] != null) {
                 // Salasanan tarkistus
                 if (!password.equals(PASSWORD)) {
                     System.out.println("Invalid password!");
@@ -349,14 +353,12 @@ public class UserInterface {
         signIn();
     }
 
-
     // Lisää asiakkaan tiedot tietokantaan
     public void addCustomer(ArrayList<String> user_details) {
         System.out.println("Adding customer to database...");
         this.search_engine.addUser(user_details);
         // Ei tee vielÃ¤ mitÃ¤Ã¤n muuta
     }
-
 
     // Tulostaa kirjautuneena oevan käyttäjän tiedot
     public void printUserDetails() {
@@ -365,13 +367,48 @@ public class UserInterface {
             for (int i = 0; i < this.signed_user_details.length; i++) {
                 System.out.println(signed_user_details[i]);
             }
-        } 
+        }
+    }
+
+    // Tulostaa teokset ja niihin liitetyt tekijät tai kappale id:t
+    public void printBookDetails(ArrayList<String> results, int type) {
+        // Tulostaminen
+
+        switch (type) {
+            case ABSTRACT_SEARCH_TYPE:
+                results.stream().forEach(row -> {
+                    String[] parts = row.split(",");
+                    for (int i = 0; i < parts.length; i++) {
+                        if (i == 2) {
+                            System.out.print(parts[i] + " ");
+                        } else if (i < parts.length - 1) {
+                            System.out.print(parts[i] + ", ");
+                        } else {
+                            System.out.println(parts[i]);
+                        }
+                    }
+                });
+                break;
+                
+            case BOOK_SEARCH_TYPE:
+                results.stream().forEach(row -> {
+                    String[] parts = row.split(",");
+                    for (int i = 0; i < parts.length; i++) {
+                        if (i < parts.length - 1) {
+                            System.out.print(parts[i] + ", ");
+                        } else {
+                            System.out.println(parts[i]);
+                        }
+                    }
+                });
+                break;
+        }
     }
 
     /*
     * Ylläpitäjän toimintoja ja funktioita
     *
-    */
+     */
     // Lisää uuden painoksen/teoksen tiedot (Kysytään käyttäjältä)
     private void addCopy() {
         String[] columns = {"ISBN: ", "NIMI: ", "KUVAUS: ", "LUOKKA: ", "TYYPPI: "};
@@ -394,7 +431,6 @@ public class UserInterface {
 
     }
 
-    
     // Lisää uuden kappaleen/yksittäisen kirjan tiedot (Kysytään käyttäjältä)
     // LisÃ¤Ã¤ uuden kappaleen/yksittÃ¤isen kirjan tiedot (KysytÃ¤Ã¤n kÃ¤yttÃ¤jÃ¤ltÃ¤)
     private void addBook() {
@@ -433,43 +469,42 @@ public class UserInterface {
         this.search_engine.insertBook(book_details);
         System.out.println("Adding book...");
     }
-    
-    
+
     private void printReport() {
         ArrayList<String> data = this.search_engine.report();
-        
+        System.out.println("Asiakas   tuotteet/kpl\n"
+                + "----------------------");
+
         for (String rivi : data) {
             System.out.println(rivi);
         }
     }
-    
+
 
     /*
     *Asiakkaan toimintoja ja funktioita
     *
     *
-    */
+     */
     public void addToCart(String book_id) {
         int casted_bid = checkIntFormat(book_id);
-        
+
         if (tilaus_id == 0) {
             tilaus_id = search_engine.searchOrderID(casted_bid, signed_user_details[1]);
         }
         ArrayList<String> details = new ArrayList<>();
         String email = this.signed_user_details[0];
-        
+
         details.add(Integer.toString(casted_bid));
         details.add(email);
-        
+
         this.search_engine.addToCart(details);
     }
-    
-    
-    
+
     /*
     * Syotteen muodon tarkistusmetodeita
     *
-    */
+     */
     public boolean checkUserInput(String input) {
         if (input.equals(EXIT)) {
             System.exit(0);
@@ -508,8 +543,6 @@ public class UserInterface {
         return luku;
     }
 
-    
-    
     // Ohjelman testiajossa käytettävä metodi
     // Ohjelman testiajossa kÃ¤ytettÃ¤vÃ¤ metodi
     // Lukee komennot "esimerkkidata.txt" -tiedostosta listalle

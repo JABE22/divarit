@@ -22,34 +22,10 @@ public class SearchEngine {
     private final Connection con;
     
     // Hakukysely teoksille ja niiden tekijÃ¶ille
-    private final String UNI_QUERY
-    /* Teokset niiden nimen, tyypin tai luokan perusteella */
-    = "SELECT * FROM keskusdivari.teos "
-    + "WHERE LOWER(nimi) LIKE ? OR LOWER(tyyppi) LIKE ? OR LOWER(luokka) LIKE ? "
-    /* Teokset tekijÃ¤n nimen perusteella */
-    + "UNION "
-    + "SELECT t.isbn, t.nimi, t.kuvaus, t.luokka, t.tyyppi "
-    + "FROM keskusdivari.teos t "
-    + "INNER JOIN keskusdivari.teosten_tekijat ktt ON t.isbn = ktt.teos_isbn "
-    + "INNER JOIN keskusdivari.tekija kt ON ktt.tekija_id = kt.id "
-    + "WHERE LOWER(kt.etunimi) LIKE ? OR LOWER(kt.sukunimi) LIKE ?;";
+    private final String UNI_QUERY = "SELECT * FROM keskusdivari.hae_teokset(?)";
     
     // Varastossa olevien kappaleiden hakukysely
-    private final String CUSTOMER_QUERY
-    = "WITH haetut_teokset AS ("
-    // Teokset niiden nimen, tekijÃ¤n nimen, luokan tai tyypin perusteella
-    + "SELECT isbn, nimi, id, kuvaus, luokka, tyyppi "
-    + "FROM keskusdivari.teos t "
-    + "INNER JOIN keskusdivari.teosten_tekijat ktt ON t.isbn = ktt.teos_isbn "
-    + "INNER JOIN keskusdivari.tekija kt ON ktt.tekija_id = kt.id "
-    + "WHERE LOWER(etunimi) LIKE ? OR LOWER(sukunimi) LIKE ? OR "
-    + "LOWER(nimi) LIKE ? OR LOWER(tyyppi) LIKE ? OR "
-    + "LOWER(luokka) LIKE ? ) "
-    //  NÃ¤ytetÃ¤Ã¤n hakua vastaavat varastossa olevat kappaleet
-    + "SELECT DISTINCT k.id, nimi, kuvaus, luokka, tyyppi "
-    + "FROM keskusdivari.kappale k "
-    + "INNER JOIN haetut_teokset ht ON k.teos_isbn = ht.isbn "
-    + "ORDER BY nimi;";
+    private final String CUSTOMER_QUERY = "SELECT * FROM keskusdivari.hae_kappaleet(?)";
     
     // Käyttäjän tiedot
     private final String USER_QUERY = "SELECT * FROM keskusdivari.hae_kayttaja(?);";
@@ -106,21 +82,18 @@ public class SearchEngine {
             PreparedStatement prstmt = this.con.prepareStatement(query);
             
             prstmt.clearParameters();
-            
-            for (int i = 1; i < 6; i++) {
-                // Hakusanan kirjaimet muutetaan pieniksi
-                prstmt.setString(i, headword.toLowerCase());
-            }
-            
+            prstmt.setString(1, headword.toLowerCase());
+
             ResultSet rset = prstmt.executeQuery();
             
             if (rset.next()) {
                 String rivi;
                 do {
                     // Teoksen kuvaus eli indeksi kolme poistettu (rset.getString(3))
-                    rivi = rset.getString(1) + ", " + rset.getString(2)
-                    + ", " + rset.getString(4)
-                    + ", " + rset.getString(5);
+                    rivi = rset.getString(1) + "," + rset.getString(2)
+                    + "," + rset.getString(3)
+                    + "," + rset.getString(4)
+                    + "," + rset.getString(5);
                     results.add(rivi);
                     
                 } while (rset.next());
