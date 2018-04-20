@@ -7,10 +7,3 @@ find Sarasvuo
 signout
 jarno@divarit.fi 1234
 find jari
-return
-<<<<<<< HEAD
-admin@divarit.fi 1234
-find tieto
-=======
->>>>>>> 1d84d56fd05b37584374975e82ab367b32a14716
-signout

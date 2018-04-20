@@ -64,24 +64,20 @@ public class SearchEngine {
     + "(divari_nimi, teos_isbn, paino, sisosto_hinta, hinta, myynti_pvm) "
     + "VALUES (?, ?, ?, ?, ?, null);";
     
-<<<<<<< HEAD
-=======
     private final String INSERT_USER = 
       "INSERT INTO keskusdivari.kayttaja "
     + "(email, etunimi, sukunimi, osoite, puhelin) "
     + "VALUES (?, ?, ?, ?, ?);";
     
->>>>>>> 1d84d56fd05b37584374975e82ab367b32a14716
+
     private final String ADD_TO_CART = 
       "INSERT INTO keskusdivari.ostoskori "
     + "(kappale_id, divari_nimi, tilaus_id) "
     + "VALUES (?, ?, ?);";
             
-<<<<<<< HEAD
-    private final String ORDER_ID_QUERY = "SELECT * FROM keskusdivari.hae_tilaus_id(?, ?);";
-=======
+
     private final String ORDER_ID_QUERY = "SELECT * FROM keskusdivari.hae_tilaus_id(?);";
->>>>>>> 1d84d56fd05b37584374975e82ab367b32a14716
+
     
     
     
@@ -90,7 +86,7 @@ public class SearchEngine {
         this.con = this.dataCon.getConnection();
     }
     
-    // TÃ¤mÃ¤ haku kohdistuu teoksiin (ei myytÃ¤viin kappaleisiin)
+    // Tämä haku kohdistuu teoksiin (ei myytäviin kappaleisiin)
     public ArrayList<String> uniQuery(String entry, int type) {
         // Valitaan suoritettava kysely
         String query;
@@ -129,7 +125,7 @@ public class SearchEngine {
             } else {
                 System.out.println("Nothing found!");
             }
-            prstmt.close();  // sulkee automaattisesti myÃ¶s tulosjoukon rset
+            prstmt.close();  // sulkee automaattisesti myös tulosjoukon rset
             
         } catch (SQLException e) {
             System.out.println("Error: " + e.getMessage());
@@ -138,7 +134,7 @@ public class SearchEngine {
         return results;
     }
     
-    // Palauttaa kÃ¤yttÃ¤jÃ¤nimeÃ¤ vastaavat kÃ¤yttÃ¤jÃ¤tiedot taulukossa
+    // Palauttaa käyttäjänimeä vastaavat käyttäjätiedot taulukossa
     public String[] userDetails(String username) {
         
         String[] user_details = new String[6];
@@ -160,7 +156,7 @@ public class SearchEngine {
             } else {
                 System.out.println("Username not found");
             }
-            prstmt.close();  // sulkee automaattisesti myÃ¶s tulosjoukon rset
+            prstmt.close();  // sulkee automaattisesti myös tulosjoukon rset
             
         } catch (SQLException e) {
             System.out.println("Error: [SearchEngine/userDetails()], " + e.getMessage());
@@ -169,15 +165,13 @@ public class SearchEngine {
         return user_details;
     }
     
-<<<<<<< HEAD
-    
+ 
     /*
     * Ylläpitäjän käyttämät metodit
     *
     *
     */
     // Lisää uuden teoksen tiedot tietokantaan
-=======
     public void addUser(ArrayList<String> user_details) {
         
         try {
@@ -198,12 +192,11 @@ public class SearchEngine {
     }
     
     /*
-    * YllÃ¤pitÃ¤jÃ¤n kÃ¤yttÃ¤mÃ¤t metodit
+    * Ylläpitäjän käyttämät metodit
     *
     *
     */
-    // LisÃ¤Ã¤ uuden teoksen tiedot tietokantaan
->>>>>>> 1d84d56fd05b37584374975e82ab367b32a14716
+    // Lisää uuden teoksen tiedot tietokantaan
     public void insertCopy(ArrayList<String> copyDetails) {
         
         try {
@@ -223,7 +216,7 @@ public class SearchEngine {
         }
     }
     
-    // LisÃ¤Ã¤ uuden kappaleen tietokantaan. HUOM! Teoksen tiedot lisÃ¤ttÃ¤vÃ¤ ensin (isbn)
+    // Lisää uuden kappaleen tietokantaan. HUOM! Teoksen tiedot lisättävä ensin (isbn)
     public void insertBook(ArrayList<String> bookDetails) {
         
         try {
@@ -242,7 +235,7 @@ public class SearchEngine {
                 }
             }
             prstmt.executeQuery();
-            prstmt.close();  // sulkee automaattisesti myÃ¶s tulosjoukon rset
+            prstmt.close();  // sulkee automaattisesti myös tulosjoukon rset
             
         } catch (SQLException e) {
             System.out.println("Error: " + e.getMessage());
@@ -300,57 +293,6 @@ public class SearchEngine {
         }
     }
     
-    
-    /*
-    * Asiakkaan metodit
-    *
-    */
-    public int searchOrderID(int book_id, String email) {
-        int order_id;
-        try {
-            PreparedStatement prstmt = this.con.prepareStatement(ORDER_ID_QUERY);
-            prstmt.clearParameters();
-            
-            prstmt.setInt(1, book_id);
-            prstmt.setString(2, email);
-            
-            ResultSet rset = prstmt.executeQuery();
-            if (rset.next()) {
-                order_id = rset.getInt(1);
-                return order_id;
-            }
-            
-            prstmt.close();  // sulkee automaattisesti myös tulosjoukon rset
-            
-        } catch (SQLException e) {
-            System.out.println("Error: " + e.getMessage());
-        }
-        
-        return 0;
-    }
-    
-    public void addToCart(ArrayList<String> details) {
-        
-        try {
-            PreparedStatement prstmt = this.con.prepareStatement(ADD_TO_CART);
-            prstmt.clearParameters();
-            
-            for (int i = 1; i < 4; i++) {
-                if (i == 1 || i == 3) {
-                    // Lukumuunnos onnistuu, koska muoto tarkistettu aiemmin
-                    prstmt.setInt(i, Integer.parseInt(details.get(i - 1)));
-                } else {
-                    // Lukumuunnos onnistuu, koska muoto tarkistettu aiemmin
-                    prstmt.setString(i, details.get(i - 1));
-                }
-            }
-            prstmt.executeQuery();
-            prstmt.close();  // sulkee automaattisesti myös tulosjoukon rset
-            
-        } catch (SQLException e) {
-            System.out.println("Error: " + e.getMessage());
-        }
-    }
     
     // Asettaa oletus-skeeman
     public void setSchema(String schema) {
