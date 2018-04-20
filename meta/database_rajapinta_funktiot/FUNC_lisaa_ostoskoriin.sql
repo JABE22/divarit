@@ -27,8 +27,13 @@ BEGIN
 		-- jos vapaa, lisää koriin
 		IF kpl_tila = 0 THEN
 			-- Yritetään lisätä koriin. muuttuja x on boolean. RETURNING FOUND palauttaa lisätyn rivin tai booleanin.
-			INSERT INTO ostoskori VALUES (p_kappale_id, p_divari_nimi, p_tilaus_id) RETURNING FOUND INTO x;
-			RETURN x;
+			BEGIN
+				INSERT INTO ostoskori VALUES (p_kappale_id, p_divari_nimi, p_tilaus_id) RETURNING FOUND INTO x;
+				RETURN x;
+			EXCEPTION WHEN unique_violation THEN
+				RETURN FALSE;
+			END;
+			
 		ELSE
 			-- Ei vapaana. palauta false
 			RETURN false; 
