@@ -1,4 +1,3 @@
-﻿
 SET SCHEMA 'keskusdivari';
 
 -- DROP FUNCTION hae_kayttaja CASCADE;

@@ -516,10 +516,10 @@ public class UserInterface {
         ArrayList<String> details = new ArrayList<>();
         String email = this.signed_user_details[0];
 
-//        if (this.tilaus_id == 0) {
-//            this.tilaus_id = this.search_engine.searchOrderID(email);
-//            System.out.println("*Uusi ostoskori luotu*");
-//        }
+        if (this.tilaus_id == 0) {
+            this.tilaus_id = this.search_engine.searchOrderID(email);
+            System.out.println("*Uusi ostoskori luotu*");
+        }
 
         details.add(Integer.toString(casted_bid));
         details.add("D2");
