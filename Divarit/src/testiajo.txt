@@ -14,3 +14,6 @@ kalle@divarit.fi 1234
 find romaani
 add 10102
 cart
+signout
+liisa@divarit.fi 1234
+cart
