@@ -85,7 +85,7 @@
     RETURNS integer
     
     Esimerkkikutsu:
-    > SELECT * FROM hae_tilaus_id('admin@divarit.fi') as tilaus_id;
+    > SELECT * FROM hae_tilaus_id('<sposti>') as tilaus_id;
     
     
     
