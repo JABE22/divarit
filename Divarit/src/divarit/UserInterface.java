@@ -14,7 +14,7 @@ import java.util.Scanner;
 /**
  *
  * @author Jarno Matarmaa
- * 
+ *
  * HUOM! EXIT ja RETURN -syötteet on varattu ohjelmalle. Älä käytä näitä muutoin
  * kuin lopettaaksesi ohjelman suorituksen tai palataksesi alkuun.
  */
@@ -25,6 +25,7 @@ public class UserInterface {
 
     // Aktiivisen käyttäjän tunnus
     private String[] signed_user_details = null;
+    private int tilaus_id;
     private boolean div_admin;
 
     // Ohjelman asiakas -komennot
@@ -98,6 +99,7 @@ public class UserInterface {
     // Asiakas kirjautuneena ajetaan tämä metodi
     public void customer() {
         System.out.println("**ASIAKKAAN ETUSIVU**" + " " + this.signed_user_details[1]);
+        this.tilaus_id = 0;
         String[] input;
 
         do {
@@ -123,7 +125,10 @@ public class UserInterface {
                 case ADD:
                     // >add [kirja_id]
                     // Lisätään tuote ostoskori -tauluun
-                    System.out.println("Add books");
+                    if (input.length > 1) {
+                        addToCart(input[1]);
+                    }
+                    System.out.println("Adding book to cart...");
                     break;
 
                 case CART:
@@ -140,7 +145,7 @@ public class UserInterface {
                      ilman eri komentoa, muuten pyydetään tilauksen vahvistusta */
                     // 2.2.1 Asiakas vahvistaa valinnalla k (kyllä) tai p (peru)
                     break;
-                    
+
                 case RETURN:
                     customer();
                     break;
@@ -173,7 +178,7 @@ public class UserInterface {
             if (input == null || input.length < 1) {
                 System.out.println("Error! Command invalid");
             }
-            
+
             checkUserInput(input[0]);
 
             switch (input[0]) {
@@ -302,7 +307,7 @@ public class UserInterface {
         while (true) {
             // input = In.readString();
             input = getKomento()[0];
-            
+
             if (input.equals("y")) {
                 String userInput;
                 for (int i = 0; i < columns.length; i++) {
@@ -331,6 +336,110 @@ public class UserInterface {
         signIn();
     }
 
+
+    // Lisää asiakkaan tiedot tietokantaan
+    public void addCustomer(ArrayList<String> user_details) {
+        System.out.println("Adding customer to database...");
+        // Ei tee vielä mitään muuta
+    }
+
+    // Tulostaa kirjautuneena oevan käyttäjän tiedot
+    public void printUserDetails() {
+        System.out.println("-User details-");
+        if (this.signed_user_details != null) {
+            for (int i = 0; i < this.signed_user_details.length; i++) {
+                System.out.println(signed_user_details[i]);
+            }
+        } 
+    }
+
+    /*
+    * Ylläpitäjän toimintoja ja funktioita
+    *
+    */
+    // Lisää uuden painoksen/teoksen tiedot (Kysytään käyttäjältä)
+    private void addCopy() {
+        String[] columns = {"isbn: ", "nimi: ", "kuvaus: ", "luokka: ", "tyyppi: "};
+        ArrayList<String> copy_details = new ArrayList<>();
+
+        String userInput;
+        for (int i = 0; i < columns.length; i++) {
+            System.out.print(columns[i]);
+            userInput = In.readString();
+
+            if (checkUserInput(userInput)) {
+                copy_details.add(userInput);
+            } else {
+                System.out.println("Invalid copy detail! Try again:");
+                i--;
+            }
+        }
+        this.search_engine.insertCopy(copy_details);
+        System.out.println("Adding copy...");
+
+    }
+
+    // Lisää uuden kappaleen/yksittäisen kirjan tiedot (Kysytään käyttäjältä)
+    private void addBook() {
+        String[] columns = {"DIVARI: ", "ISBN: ", "PAINO: ", "SISÄÄNOSTOHINTA: ", "HINTA: "};
+        ArrayList<String> book_details = new ArrayList<>();
+
+        String userInput;
+
+        for (int i = 0; i < columns.length; i++) {
+            System.out.print(columns[i]);
+            userInput = In.readString();
+
+            if (checkUserInput(userInput)) {
+                if (i > 2) {
+                    if (checkDoubleFormat(userInput) == -1) {
+                        System.out.println("Invalid argument! Try again!");
+                        i--;
+                    } else {
+                        book_details.add(userInput);
+                    }
+                } else if (i == 2) {
+                    if (checkIntFormat(userInput) == -1) {
+                        System.out.println("Invalid argument! Try again!");
+                        i--;
+                    } else {
+                        book_details.add(userInput);
+                    }
+                }
+                book_details.add(userInput);
+            } else {
+                System.out.println("Invalid book detail! Try again:");
+                i--;
+            }
+
+        }
+        this.search_engine.insertBook(book_details);
+        System.out.println("Adding book...");
+    }
+
+    /*
+    *Asiakkaan toimintoja ja funktioita
+    *
+    *
+    */
+    public void addToCart(String book_id) {
+        int casted_bid = checkIntFormat(book_id);
+        
+        if (tilaus_id == 0) {
+            tilaus_id = search_engine.searchOrderID(casted_bid, signed_user_details[1]);
+        }
+        ArrayList<String> details = new ArrayList<>();
+        String email = this.signed_user_details[0];
+        
+        this.search_engine.addToCart(testikomennot);
+    }
+    
+    
+    
+    /*
+    * Syotteen muodon tarkistusmetodeita
+    *
+    */
     public boolean checkUserInput(String input) {
         if (input.equals(EXIT)) {
             System.exit(0);
@@ -368,83 +477,10 @@ public class UserInterface {
 
         return luku;
     }
-
-    public void addCustomer(ArrayList<String> user_details) {
-        System.out.println("Adding customer to database...");
-        // Ei tee vielä mitään muuta
-    }
-
-    public void printUserDetails() {
-        System.out.println("-User details-");
-        for (int i = 0; i < this.signed_user_details.length; i++) {
-            System.out.println(signed_user_details[i]);
-        }
-    }
-
-    private void addCopy() {
-        String[] columns = {"isbn: ", "nimi: ", "kuvaus: ", "luokka: ", "tyyppi: "};
-        ArrayList<String> copy_details = new ArrayList<>();
-
-        String userInput;
-        for (int i = 0; i < columns.length; i++) {
-            System.out.print(columns[i]);
-            userInput = In.readString();
-
-            if (checkUserInput(userInput)) {
-                copy_details.add(userInput);
-            } else {
-                System.out.println("Invalid copy detail! Try again:");
-                i--;
-            }
-        }
-        this.search_engine.insertCopy(copy_details);
-        System.out.println("Adding copy...");
-
-    }
-
-    private void addBook() {
-        String[] columns = {"DIVARI: ", "ISBN: ", "PAINO: ", "SISÄÄNOSTOHINTA: ", "HINTA: "};
-        ArrayList<String> book_details = new ArrayList<>();
-
-        String userInput;
-
-        for (int i = 0; i < columns.length; i++) {
-            System.out.print(columns[i]);
-            userInput = In.readString();
-
-            if (checkUserInput(userInput)) {
-                if (i > 2) {
-                    if (checkDoubleFormat(userInput) == -1) {
-                        System.out.println("Invalid argument! Try again!");
-                        i--;
-                    } else {
-                        book_details.add(userInput);
-                    }
-                } else if (i == 2) {
-                    if (checkIntFormat(userInput) == -1) {
-                        System.out.println("Invalid argument! Try again!");
-                        i--;
-                    } else {
-                        book_details.add(userInput);
-                    }
-                }
-                book_details.add(userInput);
-            } else {
-                System.out.println("Invalid book detail! Try again:");
-                i--;
-            }
-
-        }
-        this.search_engine.insertBook(book_details);
-        System.out.println("Adding book...");
-    }
     
     
     
     
-    
-    
-
     // Ohjelman testiajossa käytettävä metodi
     // Lukee komennot "esimerkkidata.txt" -tiedostosta listalle
     public static ArrayList<String> lueKomennotTiedostosta(String filename) {

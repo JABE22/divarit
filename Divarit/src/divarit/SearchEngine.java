@@ -55,15 +55,21 @@ public class SearchEngine {
     
     // Teoksen lisäys
     private final String INSERT_COPY =
-    "INSERT INTO keskusdivari.teos (isbn, nimi, kuvaus, luokka, tyyppi) "
+      "INSERT INTO keskusdivari.teos (isbn, nimi, kuvaus, luokka, tyyppi) "
     + "VALUES (?, ?, ?, ?, ?);";
     
     // Myytävän yksittäiskappaleen lisäys
     private final String INSERT_BOOK =
-    "INSERT INTO keskusdivari.kappale "
+      "INSERT INTO keskusdivari.kappale "
     + "(divari_nimi, teos_isbn, paino, sisosto_hinta, hinta, myynti_pvm) "
     + "VALUES (?, ?, ?, ?, ?, null);";
     
+    private final String ADD_TO_CART = 
+      "INSERT INTO keskusdivari.ostoskori "
+    + "(kappale_id, divari_nimi, tilaus_id) "
+    + "VALUES (?, ?, ?);";
+            
+    private final String ORDER_ID_QUERY = "SELECT * FROM keskusdivari.hae_tilaus_id(?, ?);";
     
     
     
@@ -139,8 +145,6 @@ public class SearchEngine {
                     user_details[i] = rset.getString(i + 1);
                 }
                 
-                return user_details;
-                
             } else {
                 System.out.println("Username not found");
             }
@@ -150,9 +154,15 @@ public class SearchEngine {
             System.out.println("Error: [SearchEngine/userDetails()], " + e.getMessage());
         }
         
-        return null;
+        return user_details;
     }
     
+    
+    /*
+    * Ylläpitäjän käyttämät metodit
+    *
+    *
+    */
     // Lisää uuden teoksen tiedot tietokantaan
     public void insertCopy(ArrayList<String> copyDetails) {
         
@@ -189,6 +199,58 @@ public class SearchEngine {
                 } else {
                     // Lukumuunnos onnistuu, koska muoto tarkistettu aiemmin
                     prstmt.setDouble(i, Double.parseDouble(bookDetails.get(i - 1)));
+                }
+            }
+            prstmt.executeQuery();
+            prstmt.close();  // sulkee automaattisesti myös tulosjoukon rset
+            
+        } catch (SQLException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+    }
+    
+    
+    /*
+    * Asiakkaan metodit
+    *
+    */
+    public int searchOrderID(int book_id, String email) {
+        int order_id;
+        try {
+            PreparedStatement prstmt = this.con.prepareStatement(ORDER_ID_QUERY);
+            prstmt.clearParameters();
+            
+            prstmt.setInt(1, book_id);
+            prstmt.setString(2, email);
+            
+            ResultSet rset = prstmt.executeQuery();
+            if (rset.next()) {
+                order_id = rset.getInt(1);
+                return order_id;
+            }
+            
+            prstmt.close();  // sulkee automaattisesti myös tulosjoukon rset
+            
+        } catch (SQLException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+        
+        return 0;
+    }
+    
+    public void addToCart(ArrayList<String> details) {
+        
+        try {
+            PreparedStatement prstmt = this.con.prepareStatement(ADD_TO_CART);
+            prstmt.clearParameters();
+            
+            for (int i = 1; i < 4; i++) {
+                if (i == 1 || i == 3) {
+                    // Lukumuunnos onnistuu, koska muoto tarkistettu aiemmin
+                    prstmt.setInt(i, Integer.parseInt(details.get(i - 1)));
+                } else {
+                    // Lukumuunnos onnistuu, koska muoto tarkistettu aiemmin
+                    prstmt.setString(i, details.get(i - 1));
                 }
             }
             prstmt.executeQuery();
