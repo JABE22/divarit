@@ -54,20 +54,30 @@ public class UserInterface {
 
     // YllÃ¤pitÃ¤jÃ¤: Komennon jÃ¤lkeen tÃ¤smennys [add book] tai [add abstract]
     // Tulosteet kÃ¤yttÃ¤jÃ¤n mukaan (2 kpl)
-    private final String CUSTOMER_PRINT = "-Ohjelman komennot-\n"
-            + "[1] find [hakusana]\n"
-            + "[2] add\n"
-            + "[3] cart [kappale_id]\n"
-            + "[4] checkout\n"
-            + "   [4.1] order\n"
-            + "   [4.2] return\n"
-            + "[5] exit\n";
+    private final String CUSTOMER_PRINT = "_______________________\n"
+            + "-Ohjelman komennot-\n"
+            + "*1 find [hakusana]\n"
+            + "*2 add\n"
+            + "*3 cart [kappale_id]\n"
+            + "*4 checkout\n"
+            + "   *4.1 order\n"
+            + "   *4.2 return\n"
+            + "*5 return\n"
+            + "*6 signout\n"
+            + "*7 exit\n"
+            + "_______________________\n";
 
-    private final String ADMIN_PRINT = "-Ohjelman komennot-\n"
-            + "[1] find [hakusana]\n"
-            + "[2] find book [hakusana]\n"
-            + "[3] add\n"
-            + "[4] exit\n";
+    private final String ADMIN_PRINT = "_______________________\n"
+            + "-Ohjelman komennot-\n"
+            + "*1 find [hakusana]\n"
+            + "*2 find book [hakusana]\n"
+            + "*3 add copy\n"
+            + "*4 add book\n"
+            + "*5 report\n"
+            + "*6 return\n"
+            + "*7 signout\n"
+            + "*8 exit\n"
+            + "_______________________\n";
 
     // Luokkamuuttuja Tietokannan SQL -kyselyille
     private final SearchEngine search_engine;
@@ -90,7 +100,7 @@ public class UserInterface {
 
         if (signIn()) {
             // Testausta varten
-            printUserDetails();
+            // printUserDetails();
 
             if (this.div_admin) {
                 System.out.println(ADMIN_PRINT);
@@ -121,7 +131,7 @@ public class UserInterface {
             switch (input[0]) {
 
                 case FIND:
-                    // Tämä muutetaan siten, että haetaan teosten sijaan kappaleita
+                    // Haetaan myynnissä olevia kappaleita
                     System.out.println("Searching items...");
                     if (input.length > 1) {
                         uniSearch(input[1], BOOK_SEARCH_TYPE);
@@ -139,12 +149,13 @@ public class UserInterface {
                     break;
 
                 case CART:
-                    System.out.println("View contains of cart");
+                    // Näytetään aktiivisen käyttäjän ostoskorin sisältö
+                    System.out.println("Viewing contents of cart...");
                     showCartContents();
                     break;
 
                 case CHECKOUT:
-                    System.out.println("Checking out");
+                    System.out.println("Checking out...");
                     // Näytetään tuotteiden lisäksi postikulut 
                     // Kysytään vahvistus tai peruutus
                     // String command = In.readString;
@@ -203,7 +214,7 @@ public class UserInterface {
             switch (input[0]) {
 
                 case FIND:
-                    System.out.println("Searching books...");
+                    System.out.println("Searching copies...");
                     if (input.length > 1) {
                         uniSearch(input[1], ABSTRACT_SEARCH_TYPE);
                     }
@@ -293,7 +304,6 @@ public class UserInterface {
                 } else {
                     this.signed_user_details = result;
                     this.tilaus_id = this.search_engine.searchOrderID(username);
-                    System.out.println("KOODI!!!" + username);
                     System.out.println("Welcome " + this.signed_user_details[1] + "!");
                 }
 
@@ -372,7 +382,7 @@ public class UserInterface {
         // Ei tee vielÃ¤ mitÃ¤Ã¤n muuta
     }
 
-    // Tulostaa kirjautuneena oevan käyttäjän tiedot
+    // Tulostaa kirjautuneena olevan käyttäjän tiedot, Testiajoja varten
     public void printUserDetails() {
         System.out.println("-User details-");
         if (this.signed_user_details != null) {
@@ -382,6 +392,7 @@ public class UserInterface {
         }
     }
     
+    // Tulostaa raportin muotoillusti
     public void showCartContents() {
         System.out.println(tilaus_id);
         if (this.tilaus_id == 0) {
@@ -441,7 +452,8 @@ public class UserInterface {
         String userInput;
         for (int i = 0; i < columns.length; i++) {
             System.out.print(columns[i]);
-            userInput = In.readString();
+            // userInput = In.readString();
+            userInput = getCommandAsDetails();
 
             if (checkUserInput(userInput)) {
                 copy_details.add(userInput);
@@ -464,7 +476,8 @@ public class UserInterface {
 
         for (int i = 0; i < columns.length; i++) {
             System.out.print(columns[i]);
-            userInput = In.readString();
+            // userInput = In.readString();
+            userInput = getCommandAsDetails();
 
             if (checkUserInput(userInput)) {
                 if (i > 2) {
@@ -496,12 +509,20 @@ public class UserInterface {
 
     private void printReport() {
         ArrayList<String> data = this.search_engine.report();
-        System.out.println("Asiakas   tuotteet/kpl\n"
-                + "----------------------");
+        System.out.println("         -RAPORTTI-        \n"
+                + "Asiakas             tilatut/kpl\n"
+                + "-------------------------------");
 
-        for (String rivi : data) {
-            System.out.println(rivi);
+        for (String row : data) {
+            String[] parts = row.split(" ");
+            System.out.print(parts[0]);
+            
+            for (int i = 0; i < 25 - parts[0].length(); i++) {
+                System.out.print(" ");
+            }
+            System.out.println(parts[1]);
         }
+        System.out.println("");
     }
 
 
@@ -598,6 +619,17 @@ public class UserInterface {
             System.exit(0);
         }
         String[] komentorivi = this.testikomennot.get(this.komentoIndeksi).split(" ", 2);
+        this.komentoIndeksi++;
+
+        return komentorivi;
+    }
+    
+    public String getCommandAsDetails() {
+        if (this.komentoIndeksi > this.testikomennot.size() - 1) {
+            System.out.println("Ei enempää komentoja.");
+            System.exit(0);
+        }
+        String komentorivi = this.testikomennot.get(this.komentoIndeksi);
         this.komentoIndeksi++;
 
         return komentorivi;

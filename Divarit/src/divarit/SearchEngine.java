@@ -50,11 +50,13 @@ public class SearchEngine {
     + "(divari_nimi, teos_isbn, paino, sisosto_hinta, hinta, myynti_pvm) "
     + "VALUES (?, ?, ?, ?, ?, null);";
     
+    // Käyttäjän lisäys tietokantaan
     private final String INSERT_USER = 
       "INSERT INTO keskusdivari.kayttaja "
     + "(email, etunimi, sukunimi, osoite, puhelin) "
     + "VALUES (?, ?, ?, ?, ?);";
 
+    // Tuotteen lisäys ostoskoriin
     private final String ADD_TO_CART = 
       "INSERT INTO keskusdivari.ostoskori "
     + "(kappale_id, divari_nimi, tilaus_id) "
@@ -184,7 +186,7 @@ public class SearchEngine {
                 prstmt.setString(i, copyDetails.get(i - 1));
             }
             
-            prstmt.executeQuery();
+            prstmt.executeUpdate();
             prstmt.close();  // sulkee automaattisesti myÃ¶s tulosjoukon rset
             
         } catch (SQLException e) {
@@ -210,7 +212,7 @@ public class SearchEngine {
                     prstmt.setDouble(i, Double.parseDouble(bookDetails.get(i - 1)));
                 }
             }
-            prstmt.executeQuery();
+            prstmt.executeUpdate();
             prstmt.close();  // sulkee automaattisesti myös tulosjoukon rset
             
         } catch (SQLException e) {

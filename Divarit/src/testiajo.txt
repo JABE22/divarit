@@ -1,6 +1,8 @@
 admin@divarit.fi 1234
 find stephen
-find_book romaani
+find_book tieto
+find tieto
+find_book tieto
 signout
 kalle@divarit.fi 1234
 find Sarasvuo
