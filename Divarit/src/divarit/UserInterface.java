@@ -211,6 +211,9 @@ public class UserInterface {
                     }
                     break;
                     
+                case REPORT:
+                    
+                    
                 case RETURN:
                     admin();
                     break;
@@ -421,6 +424,10 @@ public class UserInterface {
         }
         this.search_engine.insertBook(book_details);
         System.out.println("Adding book...");
+    }
+    
+    public void printReport() {
+        this.search_engine.
     }
 
     /*
