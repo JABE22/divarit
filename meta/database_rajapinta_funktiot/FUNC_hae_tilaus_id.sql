@@ -24,7 +24,7 @@ BEGIN
 		-- tee toimenpiteet
 		IF tid IS NULL THEN
 			-- Jos ei aktv. luo sellainen. Palauta uusi ID
-			 INSERT INTO tilaus VALUES (DEFAULT, param_kayttaja_email, CURRENT_DATE, 1) RETURNING id INTO tid;
+			 INSERT INTO keskusdivari.tilaus VALUES (DEFAULT, param_kayttaja_email, CURRENT_DATE, 1) RETURNING id INTO tid;
 			 RETURN tid;
 		ELSE
 			-- Paluta löydetty ID, jos tulos ei NULL

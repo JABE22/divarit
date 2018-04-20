@@ -5,8 +5,5 @@ signout
 kalle@divarit.fi 1234
 find Sarasvuo
 signout
-jarno@divarit.fi 1234
-find jari
-signout
 admin@divarit.fi 1234
 report
