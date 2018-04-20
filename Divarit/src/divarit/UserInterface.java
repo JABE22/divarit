@@ -37,10 +37,11 @@ public class UserInterface {
     private final String RETURN = "return"; // Palaa takaisin ostoskorista, sÃ¤ilyttÃ¤Ã¤ sisÃ¤llÃ¶n
     private final String REMOVE = "remove"; // Poistaa tuotteen ostoskorista [remove kappale_id]
 
-    // Ohjelman yllÃ¤pitÃ¤jÃ¤ -komennot
+    // Ohjelman ylläpitäjän -komennot
     private final String FIND_BOOK = "find book"; // Teos (ei kappale)
     private final String ADD_BOOK = "book";
     private final String ADD_COPY = "copy";
+    private final String REPORT = "report";
 
     // Ohjelman yleiskomennot
     private final String EXIT = "exit";
@@ -167,7 +168,7 @@ public class UserInterface {
 
     // YllÃ¤pitÃ¤jÃ¤ kirjautuneena ajetaan tÃ¤mÃ¤ metodi
     public void admin() {
-        System.out.println("**YLLÃ„PITÃ„JÃ„N ETUSIVU**" + " " + this.signed_user_details[1]);
+        System.out.println("**YLLÄPITÄJÄN ETUSIVU**" + " " + this.signed_user_details[1]);
         String[] input;
 
         do {
@@ -208,6 +209,10 @@ public class UserInterface {
                             System.out.println("Command invalid!#");
                         }
                     }
+                    break;
+                    
+                case RETURN:
+                    admin();
                     break;
 
                 case SIGN_OUT:
@@ -432,7 +437,10 @@ public class UserInterface {
         ArrayList<String> details = new ArrayList<>();
         String email = this.signed_user_details[0];
         
-        this.search_engine.addToCart(testikomennot);
+        details.add(Integer.toString(casted_bid));
+        details.add(email);
+        
+        this.search_engine.addToCart(details);
     }
     
     

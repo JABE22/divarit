@@ -74,7 +74,7 @@ public class SearchEngine {
     + "(kappale_id, divari_nimi, tilaus_id) "
     + "VALUES (?, ?, ?);";
             
-    private final String ORDER_ID_QUERY = "SELECT * FROM keskusdivari.hae_tilaus_id(?, ?);";
+    private final String ORDER_ID_QUERY = "SELECT * FROM keskusdivari.hae_tilaus_id(?);";
     
     
     
@@ -243,8 +243,7 @@ public class SearchEngine {
             PreparedStatement prstmt = this.con.prepareStatement(ORDER_ID_QUERY);
             prstmt.clearParameters();
             
-            prstmt.setInt(1, book_id);
-            prstmt.setString(2, email);
+            prstmt.setString(1, email);
             
             ResultSet rset = prstmt.executeQuery();
             if (rset.next()) {
@@ -276,7 +275,7 @@ public class SearchEngine {
                     prstmt.setString(i, details.get(i - 1));
                 }
             }
-            prstmt.executeQuery();
+            prstmt.executeUpdate();
             prstmt.close();  // sulkee automaattisesti myÃ¶s tulosjoukon rset
             
         } catch (SQLException e) {
