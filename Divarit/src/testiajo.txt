@@ -1,0 +1,7 @@
+admin@divarit.fi 1234
+find romaani
+find book Stephen
+signout
+kalle@divarit.fi 1234
+find Sarasvuo
+signout
