@@ -7,5 +7,3 @@ find Sarasvuo
 signout
 jarno@divarit.fi 1234
 find jari
-return
-signout

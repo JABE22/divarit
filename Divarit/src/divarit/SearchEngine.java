@@ -69,12 +69,15 @@ public class SearchEngine {
     + "(email, etunimi, sukunimi, osoite, puhelin) "
     + "VALUES (?, ?, ?, ?, ?);";
     
+
     private final String ADD_TO_CART = 
       "INSERT INTO keskusdivari.ostoskori "
     + "(kappale_id, divari_nimi, tilaus_id) "
     + "VALUES (?, ?, ?);";
             
+
     private final String ORDER_ID_QUERY = "SELECT * FROM keskusdivari.hae_tilaus_id(?);";
+
     
     
     
@@ -83,7 +86,7 @@ public class SearchEngine {
         this.con = this.dataCon.getConnection();
     }
     
-    // TÃ¤mÃ¤ haku kohdistuu teoksiin (ei myytÃ¤viin kappaleisiin)
+    // Tämä haku kohdistuu teoksiin (ei myytäviin kappaleisiin)
     public ArrayList<String> uniQuery(String entry, int type) {
         // Valitaan suoritettava kysely
         String query;
@@ -122,7 +125,7 @@ public class SearchEngine {
             } else {
                 System.out.println("Nothing found!");
             }
-            prstmt.close();  // sulkee automaattisesti myÃ¶s tulosjoukon rset
+            prstmt.close();  // sulkee automaattisesti myös tulosjoukon rset
             
         } catch (SQLException e) {
             System.out.println("Error: " + e.getMessage());
@@ -131,7 +134,7 @@ public class SearchEngine {
         return results;
     }
     
-    // Palauttaa kÃ¤yttÃ¤jÃ¤nimeÃ¤ vastaavat kÃ¤yttÃ¤jÃ¤tiedot taulukossa
+    // Palauttaa käyttäjänimeä vastaavat käyttäjätiedot taulukossa
     public String[] userDetails(String username) {
         
         String[] user_details = new String[6];
@@ -153,7 +156,7 @@ public class SearchEngine {
             } else {
                 System.out.println("Username not found");
             }
-            prstmt.close();  // sulkee automaattisesti myÃ¶s tulosjoukon rset
+            prstmt.close();  // sulkee automaattisesti myös tulosjoukon rset
             
         } catch (SQLException e) {
             System.out.println("Error: [SearchEngine/userDetails()], " + e.getMessage());
@@ -162,6 +165,13 @@ public class SearchEngine {
         return user_details;
     }
     
+ 
+    /*
+    * Ylläpitäjän käyttämät metodit
+    *
+    *
+    */
+    // Lisää uuden teoksen tiedot tietokantaan
     public void addUser(ArrayList<String> user_details) {
         
         try {
@@ -182,11 +192,11 @@ public class SearchEngine {
     }
     
     /*
-    * YllÃ¤pitÃ¤jÃ¤n kÃ¤yttÃ¤mÃ¤t metodit
+    * Ylläpitäjän käyttämät metodit
     *
     *
     */
-    // LisÃ¤Ã¤ uuden teoksen tiedot tietokantaan
+    // Lisää uuden teoksen tiedot tietokantaan
     public void insertCopy(ArrayList<String> copyDetails) {
         
         try {
@@ -206,7 +216,7 @@ public class SearchEngine {
         }
     }
     
-    // LisÃ¤Ã¤ uuden kappaleen tietokantaan. HUOM! Teoksen tiedot lisÃ¤ttÃ¤vÃ¤ ensin (isbn)
+    // Lisää uuden kappaleen tietokantaan. HUOM! Teoksen tiedot lisättävä ensin (isbn)
     public void insertBook(ArrayList<String> bookDetails) {
         
         try {
@@ -225,7 +235,7 @@ public class SearchEngine {
                 }
             }
             prstmt.executeQuery();
-            prstmt.close();  // sulkee automaattisesti myÃ¶s tulosjoukon rset
+            prstmt.close();  // sulkee automaattisesti myös tulosjoukon rset
             
         } catch (SQLException e) {
             System.out.println("Error: " + e.getMessage());
@@ -282,6 +292,7 @@ public class SearchEngine {
             System.out.println("Error: " + e.getMessage());
         }
     }
+    
     
     // Asettaa oletus-skeeman
     public void setSchema(String schema) {

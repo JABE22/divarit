@@ -15,7 +15,11 @@ import java.util.Scanner;
  *
  * @author Jarno Matarmaa
  *
+<<<<<<< HEAD
+ * HUOM! EXIT ja RETURN -syötteet on varattu ohjelmalle. Älä käytä näitä muutoin
+=======
  * HUOM! EXIT ja RETURN -syÃ¶tteet on varattu ohjelmalle. Ã„lÃ¤ kÃ¤ytÃ¤ nÃ¤itÃ¤ muutoin
+>>>>>>> 1d84d56fd05b37584374975e82ab367b32a14716
  * kuin lopettaaksesi ohjelman suorituksen tai palataksesi alkuun.
  */
 public class UserInterface {
@@ -97,7 +101,7 @@ public class UserInterface {
         }
     }
 
-    // Asiakas kirjautuneena ajetaan tÃ¤mÃ¤ metodi
+    // Asiakas kirjautuneena ajetaan tämä metodi
     public void customer() {
         System.out.println("**ASIAKKAAN ETUSIVU**" + " " + this.signed_user_details[1]);
         this.tilaus_id = 0;
@@ -106,7 +110,7 @@ public class UserInterface {
         do {
 
             // input = commandline();
-            // Testiajon komentolistan lÃ¤pikÃ¤ynti
+            // Testiajon komentolistan läpikäynti
             input = getKomento();
 
             if (input == null || input.length < 1) {
@@ -116,7 +120,7 @@ public class UserInterface {
             switch (input[0]) {
 
                 case FIND:
-                    // TÃ¤mÃ¤ muutetaan siten, ettÃ¤ haetaan teosten sijaan kappaleita
+                    // Tämä muutetaan siten, että haetaan teosten sijaan kappaleita
                     System.out.println("Searching items...");
                     if (input.length > 1) {
                         uniSearch(input[1], 0);
@@ -125,7 +129,8 @@ public class UserInterface {
 
                 case ADD:
                     // >add [kirja_id]
-                    // LisÃ¤tÃ¤Ã¤n tuote ostoskori -tauluun
+
+                    // Lisätään tuote ostoskori -tauluun
                     if (input.length > 1) {
                         addToCart(input[1]);
                     }
@@ -139,8 +144,8 @@ public class UserInterface {
 
                 case CHECKOUT:
                     System.out.println("Checking out");
-                    // 1. NÃ¤ytetÃ¤Ã¤n ostoskorin sisÃ¤ltÃ¶
-                    // 2. KÃ¤yttÃ¤jÃ¤ voi syÃ¶ttÃ¤Ã¤ komennon "tilaa" tai "palaa"
+                    // 1. Näytetään ostoskorin sisältö
+                    // 2. Käyttäjä voi syöttää komennon "tilaa" tai "palaa"
                     // 2.1 Tarkastetaan kirjautuneen asiakkaan osoitetiedot
                     /* 2.2 Jos puutteita tietokannassa, kysytÃ¤Ã¤n tiedot kÃ¤yttÃ¤jÃ¤ltÃ¤
                      ilman eri komentoa, muuten pyydetÃ¤Ã¤n tilauksen vahvistusta */
@@ -166,14 +171,14 @@ public class UserInterface {
         } while (!input[0].equals(EXIT));
     }
 
-    // YllÃ¤pitÃ¤jÃ¤ kirjautuneena ajetaan tÃ¤mÃ¤ metodi
+    // Ylläpitäjä kirjautuneena ajetaan tämä metodi
     public void admin() {
         System.out.println("**YLLÄPITÄJÄN ETUSIVU**" + " " + this.signed_user_details[1]);
         String[] input;
 
         do {
             // input = commandline();
-            // Testiajon komentolistan lÃ¤pikÃ¤ynti
+            // Testiajon komentolistan läpikäynti
             input = getKomento();
 
             if (input == null || input.length < 1) {
@@ -212,7 +217,7 @@ public class UserInterface {
                     break;
                     
                 case REPORT:
-                    
+                    printReport();
                     
                 case RETURN:
                     admin();
@@ -240,15 +245,15 @@ public class UserInterface {
         return parts;
     }
 
-    // YllÃ¤pitÃ¤jÃ¤n ja asiakkaan teoshaku
+    // Ylläpitäjän ja asiakkaan teoshaku
     public void uniSearch(String entry, int type) {
         ArrayList<String> results = search_engine.uniQuery(entry, type);
         results.stream().forEach(row -> System.out.println("#" + row));
 
     }
 
-    /* Palauttaa false, jos kÃ¤yttÃ¤jÃ¤Ã¤ ei lÃ¶ydy tietokannasta tai kirjautuminen
-     *  epÃ¤onnistuu
+    /* Palauttaa false, jos käyttäjää ei löydy tietokannasta tai kirjautuminen
+     *  epäonnistuu
      */
     public boolean signIn() {
         System.out.println("Type username and password: [username password] ");
@@ -264,7 +269,7 @@ public class UserInterface {
             String username = sign_details[0];
             String password = sign_details[1];
 
-            // Haetaan kÃ¤yttÃ¤jÃ¤tiedot tietokannasta (kÃ¤yttÃ¤jÃ¤nimen perusteella)
+            // Haetaan käyttäjätiedot tietokannasta (käyttäjänimen perusteella)
             String[] result = this.search_engine.userDetails(username);
 
             if (result != null && result[0] != null ) {
@@ -285,7 +290,7 @@ public class UserInterface {
                     return true;
                 }
             } else {
-                // Jos tuloksia ei annetulla kÃ¤yttÃ¤jÃ¤nimellÃ¤ lÃ¶ydetty, niin...
+                // Jos tuloksia ei annetulla käyttäjänimellä löydetty, niin...
                 signUp();
             }
 
@@ -296,7 +301,7 @@ public class UserInterface {
         return false;
     }
 
-    // Kirjaa aktiivisen kÃ¤yttÃ¤jÃ¤n ulos jÃ¤rjestelmÃ¤stÃ¤
+    // Kirjaa aktiivisen käyttäjän ulos järjestelmästä
     public void signOut() {
         System.out.println("Logging out...");
         this.div_admin = false;
@@ -304,7 +309,7 @@ public class UserInterface {
         run();
     }
 
-    // RekisterÃ¶ityminen jÃ¤rjestelmÃ¤Ã¤n, esim. tilauksen yhteydessÃ¤.
+    // Rekisteröityminen järjestelmään, esim. tilauksen yhteydessä.
     public void signUp() {
         System.out.println("User not found! Create new? [y] = yes, [n] = no");
         String input;
@@ -339,20 +344,21 @@ public class UserInterface {
             }
         }
 
-        // LisÃ¤tÃ¤Ã¤n uuden kÃ¤yttÃ¤jÃ¤n tiedot tietokantaan
+        // Lisätään uuden käyttäjän tiedot tietokantaan
         addCustomer(user_details);
         signIn();
     }
 
 
-    // LisÃ¤Ã¤ asiakkaan tiedot tietokantaan
+    // Lisää asiakkaan tiedot tietokantaan
     public void addCustomer(ArrayList<String> user_details) {
         System.out.println("Adding customer to database...");
         this.search_engine.addUser(user_details);
         // Ei tee vielÃ¤ mitÃ¤Ã¤n muuta
     }
 
-    // Tulostaa kirjautuneena oevan kÃ¤yttÃ¤jÃ¤n tiedot
+
+    // Tulostaa kirjautuneena oevan käyttäjän tiedot
     public void printUserDetails() {
         System.out.println("-User details-");
         if (this.signed_user_details != null) {
@@ -363,10 +369,10 @@ public class UserInterface {
     }
 
     /*
-    * YllÃ¤pitÃ¤jÃ¤n toimintoja ja funktioita
+    * Ylläpitäjän toimintoja ja funktioita
     *
     */
-    // LisÃ¤Ã¤ uuden painoksen/teoksen tiedot (KysytÃ¤Ã¤n kÃ¤yttÃ¤jÃ¤ltÃ¤)
+    // Lisää uuden painoksen/teoksen tiedot (Kysytään käyttäjältä)
     private void addCopy() {
         String[] columns = {"ISBN: ", "NIMI: ", "KUVAUS: ", "LUOKKA: ", "TYYPPI: "};
         ArrayList<String> copy_details = new ArrayList<>();
@@ -388,6 +394,8 @@ public class UserInterface {
 
     }
 
+    
+    // Lisää uuden kappaleen/yksittäisen kirjan tiedot (Kysytään käyttäjältä)
     // LisÃ¤Ã¤ uuden kappaleen/yksittÃ¤isen kirjan tiedot (KysytÃ¤Ã¤n kÃ¤yttÃ¤jÃ¤ltÃ¤)
     private void addBook() {
         String[] columns = {"DIVARI: ", "ISBN: ", "PAINO: ", "SISÄÄNOSTOHINTA: ", "HINTA: "};
@@ -426,9 +434,11 @@ public class UserInterface {
         System.out.println("Adding book...");
     }
     
-    public void printReport() {
-        this.search_engine.
+    
+    private void printReport() {
+        
     }
+    
 
     /*
     *Asiakkaan toimintoja ja funktioita
@@ -493,10 +503,10 @@ public class UserInterface {
 
         return luku;
     }
+
     
     
-    
-    
+    // Ohjelman testiajossa käytettävä metodi
     // Ohjelman testiajossa kÃ¤ytettÃ¤vÃ¤ metodi
     // Lukee komennot "esimerkkidata.txt" -tiedostosta listalle
     public static ArrayList<String> lueKomennotTiedostosta(String filename) {
@@ -520,7 +530,7 @@ public class UserInterface {
 
     public String[] getKomento() {
         if (this.komentoIndeksi > this.testikomennot.size() - 1) {
-            System.out.println("Ei enempÃ¤Ã¤ komentoja.");
+            System.out.println("Ei enempää komentoja.");
             System.exit(0);
         }
         String[] komentorivi = this.testikomennot.get(this.komentoIndeksi).split(" ", 2);
@@ -528,4 +538,5 @@ public class UserInterface {
 
         return komentorivi;
     }
+
 }
