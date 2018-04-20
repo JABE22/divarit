@@ -15,39 +15,44 @@ import java.util.Scanner;
  *
  * @author Jarno Matarmaa
  *
+<<<<<<< HEAD
  * HUOM! EXIT ja RETURN -syötteet on varattu ohjelmalle. Älä käytä näitä muutoin
+=======
+ * HUOM! EXIT ja RETURN -syÃ¶tteet on varattu ohjelmalle. Ã„lÃ¤ kÃ¤ytÃ¤ nÃ¤itÃ¤ muutoin
+>>>>>>> 1d84d56fd05b37584374975e82ab367b32a14716
  * kuin lopettaaksesi ohjelman suorituksen tai palataksesi alkuun.
  */
 public class UserInterface {
 
-    // Staattinen järjestelmän salasana
+    // Staattinen jÃ¤rjestelmÃ¤n salasana
     private final String PASSWORD = "1234";
 
-    // Aktiivisen käyttäjän tunnus
+    // Aktiivisen kÃ¤yttÃ¤jÃ¤n tunnus
     private String[] signed_user_details = null;
     private int tilaus_id;
     private boolean div_admin;
 
     // Ohjelman asiakas -komennot
-    private final String FIND = "find"; // Myytävänä olevat kappaleet
-    private final String ADD = "add"; // Lisää ostoskoriin [add kappale_id]
-    private final String CART = "cart"; // Näyttää ostoskorin sisällön
-    private final String CHECKOUT = "checkout"; // Kassalle, näytetään tuotteet ja postikulut
-    private final String ORDER = "order"; // Tilaa, komennon jälkeen pyydetään vahvistus
-    private final String RETURN = "return"; // Palaa takaisin ostoskorista, säilyttää sisällön
+    private final String FIND = "find"; // MyytÃ¤vÃ¤nÃ¤ olevat kappaleet
+    private final String ADD = "add"; // LisÃ¤Ã¤ ostoskoriin [add kappale_id]
+    private final String CART = "cart"; // NÃ¤yttÃ¤Ã¤ ostoskorin sisÃ¤llÃ¶n
+    private final String CHECKOUT = "checkout"; // Kassalle, nÃ¤ytetÃ¤Ã¤n tuotteet ja postikulut
+    private final String ORDER = "order"; // Tilaa, komennon jÃ¤lkeen pyydetÃ¤Ã¤n vahvistus
+    private final String RETURN = "return"; // Palaa takaisin ostoskorista, sÃ¤ilyttÃ¤Ã¤ sisÃ¤llÃ¶n
     private final String REMOVE = "remove"; // Poistaa tuotteen ostoskorista [remove kappale_id]
 
-    // Ohjelman ylläpitäjä -komennot
+    // Ohjelman ylläpitäjän -komennot
     private final String FIND_BOOK = "find book"; // Teos (ei kappale)
     private final String ADD_BOOK = "book";
     private final String ADD_COPY = "copy";
+    private final String REPORT = "report";
 
     // Ohjelman yleiskomennot
     private final String EXIT = "exit";
     private final String SIGN_OUT = "signout";
 
-    // Ylläpitäjä: Komennon jälkeen täsmennys [add book] tai [add abstract]
-    // Tulosteet käyttäjän mukaan (2 kpl)
+    // YllÃ¤pitÃ¤jÃ¤: Komennon jÃ¤lkeen tÃ¤smennys [add book] tai [add abstract]
+    // Tulosteet kÃ¤yttÃ¤jÃ¤n mukaan (2 kpl)
     private final String CUSTOMER_PRINT = "-Ohjelman komennot-\n"
             + "[1] find [hakusana]\n"
             + "[2] add\n"
@@ -96,7 +101,7 @@ public class UserInterface {
         }
     }
 
-    // Asiakas kirjautuneena ajetaan tämä metodi
+    // Asiakas kirjautuneena ajetaan tÃ¤mÃ¤ metodi
     public void customer() {
         System.out.println("**ASIAKKAAN ETUSIVU**" + " " + this.signed_user_details[1]);
         this.tilaus_id = 0;
@@ -105,7 +110,7 @@ public class UserInterface {
         do {
 
             // input = commandline();
-            // Testiajon komentolistan läpikäynti
+            // Testiajon komentolistan lÃ¤pikÃ¤ynti
             input = getKomento();
 
             if (input == null || input.length < 1) {
@@ -115,7 +120,7 @@ public class UserInterface {
             switch (input[0]) {
 
                 case FIND:
-                    // Tämä muutetaan siten, että haetaan teosten sijaan kappaleita
+                    // TÃ¤mÃ¤ muutetaan siten, ettÃ¤ haetaan teosten sijaan kappaleita
                     System.out.println("Searching items...");
                     if (input.length > 1) {
                         uniSearch(input[1], 0);
@@ -124,7 +129,11 @@ public class UserInterface {
 
                 case ADD:
                     // >add [kirja_id]
+<<<<<<< HEAD
                     // Lisätään tuote ostoskori -tauluun
+=======
+                    // LisÃ¤tÃ¤Ã¤n tuote ostoskori -tauluun
+>>>>>>> 1d84d56fd05b37584374975e82ab367b32a14716
                     if (input.length > 1) {
                         addToCart(input[1]);
                     }
@@ -132,18 +141,18 @@ public class UserInterface {
                     break;
 
                 case CART:
-                    // Tee SQL kysely joka palauttaa ostoskori -taulun sisällön
+                    // Tee SQL kysely joka palauttaa ostoskori -taulun sisÃ¤llÃ¶n
                     System.out.println("View contains of cart");
                     break;
 
                 case CHECKOUT:
                     System.out.println("Checking out");
-                    // 1. Näytetään ostoskorin sisältö
-                    // 2. Käyttäjä voi syöttää komennon "tilaa" tai "palaa"
+                    // 1. NÃ¤ytetÃ¤Ã¤n ostoskorin sisÃ¤ltÃ¶
+                    // 2. KÃ¤yttÃ¤jÃ¤ voi syÃ¶ttÃ¤Ã¤ komennon "tilaa" tai "palaa"
                     // 2.1 Tarkastetaan kirjautuneen asiakkaan osoitetiedot
-                    /* 2.2 Jos puutteita tietokannassa, kysytään tiedot käyttäjältä
-                     ilman eri komentoa, muuten pyydetään tilauksen vahvistusta */
-                    // 2.2.1 Asiakas vahvistaa valinnalla k (kyllä) tai p (peru)
+                    /* 2.2 Jos puutteita tietokannassa, kysytÃ¤Ã¤n tiedot kÃ¤yttÃ¤jÃ¤ltÃ¤
+                     ilman eri komentoa, muuten pyydetÃ¤Ã¤n tilauksen vahvistusta */
+                    // 2.2.1 Asiakas vahvistaa valinnalla k (kyllÃ¤) tai p (peru)
                     break;
 
                 case RETURN:
@@ -165,14 +174,14 @@ public class UserInterface {
         } while (!input[0].equals(EXIT));
     }
 
-    // Ylläpitäjä kirjautuneena ajetaan tämä metodi
+    // YllÃ¤pitÃ¤jÃ¤ kirjautuneena ajetaan tÃ¤mÃ¤ metodi
     public void admin() {
         System.out.println("**YLLÄPITÄJÄN ETUSIVU**" + " " + this.signed_user_details[1]);
         String[] input;
 
         do {
             // input = commandline();
-            // Testiajon komentolistan läpikäynti
+            // Testiajon komentolistan lÃ¤pikÃ¤ynti
             input = getKomento();
 
             if (input == null || input.length < 1) {
@@ -209,6 +218,13 @@ public class UserInterface {
                         }
                     }
                     break;
+                    
+                case REPORT:
+                    
+                    
+                case RETURN:
+                    admin();
+                    break;
 
                 case SIGN_OUT:
                     signOut();
@@ -232,15 +248,15 @@ public class UserInterface {
         return parts;
     }
 
-    // Ylläpitäjän ja asiakkaan teoshaku
+    // YllÃ¤pitÃ¤jÃ¤n ja asiakkaan teoshaku
     public void uniSearch(String entry, int type) {
         ArrayList<String> results = search_engine.uniQuery(entry, type);
         results.stream().forEach(row -> System.out.println("#" + row));
 
     }
 
-    /* Palauttaa false, jos käyttäjää ei löydy tietokannasta tai kirjautuminen
-     *  epäonnistuu
+    /* Palauttaa false, jos kÃ¤yttÃ¤jÃ¤Ã¤ ei lÃ¶ydy tietokannasta tai kirjautuminen
+     *  epÃ¤onnistuu
      */
     public boolean signIn() {
         System.out.println("Type username and password: [username password] ");
@@ -256,10 +272,10 @@ public class UserInterface {
             String username = sign_details[0];
             String password = sign_details[1];
 
-            // Haetaan käyttäjätiedot tietokannasta (käyttäjänimen perusteella)
+            // Haetaan kÃ¤yttÃ¤jÃ¤tiedot tietokannasta (kÃ¤yttÃ¤jÃ¤nimen perusteella)
             String[] result = this.search_engine.userDetails(username);
 
-            if (result != null) {
+            if (result != null && result[0] != null ) {
                 // Salasanan tarkistus
                 if (!password.equals(PASSWORD)) {
                     System.out.println("Invalid password!");
@@ -277,7 +293,7 @@ public class UserInterface {
                     return true;
                 }
             } else {
-                // Jos tuloksia ei annetulla käyttäjänimellä löydetty, niin...
+                // Jos tuloksia ei annetulla kÃ¤yttÃ¤jÃ¤nimellÃ¤ lÃ¶ydetty, niin...
                 signUp();
             }
 
@@ -288,7 +304,7 @@ public class UserInterface {
         return false;
     }
 
-    // Kirjaa aktiivisen käyttäjän ulos järjestelmästä
+    // Kirjaa aktiivisen kÃ¤yttÃ¤jÃ¤n ulos jÃ¤rjestelmÃ¤stÃ¤
     public void signOut() {
         System.out.println("Logging out...");
         this.div_admin = false;
@@ -296,13 +312,13 @@ public class UserInterface {
         run();
     }
 
-    // Rekisteröityminen järjestelmään, esim. tilauksen yhteydessä.
+    // RekisterÃ¶ityminen jÃ¤rjestelmÃ¤Ã¤n, esim. tilauksen yhteydessÃ¤.
     public void signUp() {
         System.out.println("User not found! Create new? [y] = yes, [n] = no");
         String input;
 
         ArrayList<String> user_details = new ArrayList<>();
-        String[] columns = {"Email: ", "Firstname: ", "Lastname: ", "Address: ", "Phone: "};
+        String[] columns = {"EMAIL: ", "ETUNIMI: ", "SUKUNIMI: ", "OSOITE: ", "PUH: "};
 
         while (true) {
             // input = In.readString();
@@ -331,19 +347,28 @@ public class UserInterface {
             }
         }
 
-        // Lisätään uuden käyttäjän tiedot tietokantaan
+        // LisÃ¤tÃ¤Ã¤n uuden kÃ¤yttÃ¤jÃ¤n tiedot tietokantaan
         addCustomer(user_details);
         signIn();
     }
 
 
+<<<<<<< HEAD
     // Lisää asiakkaan tiedot tietokantaan
+=======
+    // LisÃ¤Ã¤ asiakkaan tiedot tietokantaan
+>>>>>>> 1d84d56fd05b37584374975e82ab367b32a14716
     public void addCustomer(ArrayList<String> user_details) {
         System.out.println("Adding customer to database...");
-        // Ei tee vielä mitään muuta
+        this.search_engine.addUser(user_details);
+        // Ei tee vielÃ¤ mitÃ¤Ã¤n muuta
     }
 
+<<<<<<< HEAD
     // Tulostaa kirjautuneena oevan käyttäjän tiedot
+=======
+    // Tulostaa kirjautuneena oevan kÃ¤yttÃ¤jÃ¤n tiedot
+>>>>>>> 1d84d56fd05b37584374975e82ab367b32a14716
     public void printUserDetails() {
         System.out.println("-User details-");
         if (this.signed_user_details != null) {
@@ -354,12 +379,19 @@ public class UserInterface {
     }
 
     /*
+<<<<<<< HEAD
     * Ylläpitäjän toimintoja ja funktioita
     *
     */
     // Lisää uuden painoksen/teoksen tiedot (Kysytään käyttäjältä)
+=======
+    * YllÃ¤pitÃ¤jÃ¤n toimintoja ja funktioita
+    *
+    */
+    // LisÃ¤Ã¤ uuden painoksen/teoksen tiedot (KysytÃ¤Ã¤n kÃ¤yttÃ¤jÃ¤ltÃ¤)
+>>>>>>> 1d84d56fd05b37584374975e82ab367b32a14716
     private void addCopy() {
-        String[] columns = {"isbn: ", "nimi: ", "kuvaus: ", "luokka: ", "tyyppi: "};
+        String[] columns = {"ISBN: ", "NIMI: ", "KUVAUS: ", "LUOKKA: ", "TYYPPI: "};
         ArrayList<String> copy_details = new ArrayList<>();
 
         String userInput;
@@ -379,7 +411,11 @@ public class UserInterface {
 
     }
 
+<<<<<<< HEAD
     // Lisää uuden kappaleen/yksittäisen kirjan tiedot (Kysytään käyttäjältä)
+=======
+    // LisÃ¤Ã¤ uuden kappaleen/yksittÃ¤isen kirjan tiedot (KysytÃ¤Ã¤n kÃ¤yttÃ¤jÃ¤ltÃ¤)
+>>>>>>> 1d84d56fd05b37584374975e82ab367b32a14716
     private void addBook() {
         String[] columns = {"DIVARI: ", "ISBN: ", "PAINO: ", "SISÄÄNOSTOHINTA: ", "HINTA: "};
         ArrayList<String> book_details = new ArrayList<>();
@@ -434,7 +470,73 @@ public class UserInterface {
         this.search_engine.addToCart(testikomennot);
     }
     
+    public void printReport() {
+        this.search_engine.
+    }
+
+    /*
+    *Asiakkaan toimintoja ja funktioita
+    *
+    *
+    */
+    public void addToCart(String book_id) {
+        int casted_bid = checkIntFormat(book_id);
+        
+        if (tilaus_id == 0) {
+            tilaus_id = search_engine.searchOrderID(casted_bid, signed_user_details[1]);
+        }
+        ArrayList<String> details = new ArrayList<>();
+        String email = this.signed_user_details[0];
+        
+        details.add(Integer.toString(casted_bid));
+        details.add(email);
+        
+        this.search_engine.addToCart(details);
+    }
     
+    
+    
+    /*
+    * Syotteen muodon tarkistusmetodeita
+    *
+    */
+    public boolean checkUserInput(String input) {
+        if (input.equals(EXIT)) {
+            System.exit(0);
+        } else if (input.equals(RETURN)) {
+            if (signed_user_details == null) {
+                run();
+            } else if (this.div_admin) {
+                admin();
+            } else {
+                customer();
+            }
+        }
+        return !input.isEmpty(); // Jos tyhjÃ¤ syÃ¶te, palautetaan false
+    }
+
+    public double checkDoubleFormat(String input) {
+        double luku;
+
+        try {
+            luku = Double.parseDouble(input);
+        } catch (NumberFormatException e) {
+            return -1;
+        }
+
+        return luku;
+    }
+
+    public int checkIntFormat(String input) {
+        int luku;
+        try {
+            luku = Integer.parseInt(input);
+        } catch (NumberFormatException e) {
+            return -1;
+        }
+
+        return luku;
+    }
     
     /*
     * Syotteen muodon tarkistusmetodeita
@@ -481,10 +583,14 @@ public class UserInterface {
     
     
     
+<<<<<<< HEAD
     // Ohjelman testiajossa käytettävä metodi
+=======
+    // Ohjelman testiajossa kÃ¤ytettÃ¤vÃ¤ metodi
+>>>>>>> 1d84d56fd05b37584374975e82ab367b32a14716
     // Lukee komennot "esimerkkidata.txt" -tiedostosta listalle
     public static ArrayList<String> lueKomennotTiedostosta(String filename) {
-        // Lista jonne komennot lisätään
+        // Lista jonne komennot lisÃ¤tÃ¤Ã¤n
         ArrayList<String> komennot = new ArrayList<>();
 
         try {
@@ -504,7 +610,7 @@ public class UserInterface {
 
     public String[] getKomento() {
         if (this.komentoIndeksi > this.testikomennot.size() - 1) {
-            System.out.println("Ei enempää komentoja.");
+            System.out.println("Ei enempÃ¤Ã¤ komentoja.");
             System.exit(0);
         }
         String[] komentorivi = this.testikomennot.get(this.komentoIndeksi).split(" ", 2);
