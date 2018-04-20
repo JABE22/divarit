@@ -5,3 +5,11 @@ signout
 kalle@divarit.fi 1234
 find Sarasvuo
 signout
+uusi käyttäjä
+p
+y
+jarno@divarit.fi
+return
+admin@divarit.fi 1234
+find tieto
+signout
