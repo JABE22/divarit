@@ -1,18 +1,22 @@
--- Teoksia
+-- Esimerkkidataa
 
 -- TRUNCATE <> tyhjentää kys. taulun. Kommentoi pois rivit jos et halua tyhjentää
 
--- Asetetaan keskusdivari oletus-skeemaksi
-SET search_path TO keskusdivari;
 
-TRUNCATE divari CASCADE;
+-- KOMMENTOI TRUNCANTE-RIVIT POIS, JOTKA KUULUVAT KESKUSDIVARILLE SILLOIN KUN AJAT NORMIDIVARILLE TÄMÄN TIEDOSTON!
+-- JA ASETA search_path TO ...
+
+SET search_path TO d1;
+
+
 TRUNCATE kappale CASCADE;
-TRUNCATE kayttaja CASCADE;
-TRUNCATE ostoskori CASCADE;
 TRUNCATE tekija CASCADE;
 TRUNCATE teos CASCADE;
 TRUNCATE teosten_tekijat CASCADE;
-TRUNCATE tilaus CASCADE;
+-- TRUNCATE tilaus CASCADE;
+-- TRUNCATE kayttaja CASCADE;
+-- TRUNCATE ostoskori CASCADE;
+-- TRUNCATE divari CASCADE;
 
 -- Juha Seppälä 1996 fiktio
 INSERT INTO teos (isbn, nimi, kuvaus, luokka, tyyppi) 
@@ -323,6 +327,11 @@ INSERT INTO kappale VALUES
 ('D2', 10105, '9789522794111', 444, 0, 9.89, 13.00, null);
 INSERT INTO kappale VALUES 
 ('D2', 10106, '9789510396230', 321, 0, 5.00, 16.00, null);
+
+
+/* TÄSTÄ ALKAA KESKUSDIVARIIN KUULUVIEN TIETOJEN SYÖTTÖ 
+	AIHEUTTAA VIRHEEN KUN DATAA AJETAAN NORMIDIVARIIN
+*/
 
 -- Divarit
 INSERT INTO divari VALUES
