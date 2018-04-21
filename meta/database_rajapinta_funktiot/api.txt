@@ -105,6 +105,19 @@
     > SELECT * FROM lisaa_ostoskoriin(1234, 'D99', 1) as onnistuiko;
 
 
+### 6 -- Raportti 2. Myytävien kappaleiden hintatiedot
 
+    hae_myytavien_hintatiedot()
 
+    Kuvaus: Hakee MYYTÄVÄNÄ OLEVIEN (tila=0) teosten luokan, yhteishinnan (SUM), ja keskihinnan (AVG).
+    Jos luokka on NULL, asetetaan arvoksi 'Luokittelematon'. Tulos järjestetään luokan nimen mukaan nousevaan järj.
+    
+    RETURNS TABLE(
+    	luokka varchar(20),
+        kokonaismyyntihinta decimal(6,2),
+        keskihinta decimal(6,2)   
+    )
+    
+    Esimerkkikutsu
+    > SELECT * FROM hae_myytavien_hintatiedot();
     
