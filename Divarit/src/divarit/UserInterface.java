@@ -89,13 +89,13 @@ public class UserInterface {
             + "_______________________\n";
 
     // Luokkamuuttuja Tietokannan SQL -kyselyille
-    private final SearchEngine search_engine;
+    private final QueryEngine search_engine;
 
     private final ArrayList<String> testikomennot;
     private int komentoIndeksi;
 
     public UserInterface() {
-        this.search_engine = new SearchEngine(new DatabaseConnection());
+        this.search_engine = new QueryEngine(new DatabaseConnection());
 
         // Testiajo ** lukee esivalitut komennot tiedostosta
         this.testikomennot = lueKomennotTiedostosta("src/testiajo_checkout.txt");

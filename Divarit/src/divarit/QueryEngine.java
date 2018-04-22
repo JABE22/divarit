@@ -16,7 +16,7 @@ import java.util.ArrayList;
  *
  * @author jarnomata
  */
-public class SearchEngine {
+public class QueryEngine {
     
     private final DatabaseConnection dataCon;
     private final Connection con;
@@ -55,9 +55,9 @@ public class SearchEngine {
     + "(email, etunimi, sukunimi, osoite, puhelin) "
     + "VALUES (?, ?, ?, ?, ?);";
     // Tuotteen lisäys ostoskoriin
-    private final String ADD_TO_CART = 
-      "INSERT INTO keskusdivari.ostoskori "
-    + "(kappale_id, divari_nimi, tilaus_id) VALUES (?, ?, ?);";
+    private final String ADD_TO_CART = "SELECT keskusdivari.lisaa_ostoskoriin(?, ?, ?);";
+//      "INSERT INTO keskusdivari.ostoskori "
+//    + "(kappale_id, divari_nimi, tilaus_id) VALUES (?, ?, ?);";
     // Päivittää tilauksen tilan -> Tilattu
     private final String SET_ORDER_STATUS = "SELECT keskusdivari.muuta_tilauksen_tila(?, ?)";
     // Poistaa ostoskorista tuotteen
@@ -68,7 +68,7 @@ public class SearchEngine {
     private final String EMPTY_CART = "DELETE FROM keskusdivari.ostoskori WHERE tilaus_id = ?;";
 
     
-    public SearchEngine(DatabaseConnection dataCon) {
+    public QueryEngine(DatabaseConnection dataCon) {
         this.dataCon = dataCon;
         this.con = this.dataCon.getConnection();
     }
