@@ -82,10 +82,10 @@ public class UserInterface {
             + "*3 add copy\n"
             + "*4 add book\n"
             + "*5 add author\n"
-            + "*5 report [pur_his] or [cat_pri]\n"
-            + "*6 return\n"
-            + "*7 signout\n"
-            + "*8 exit\n"
+            + "*6 report [pur_his] or [cat_pri]\n"
+            + "*7 return\n"
+            + "*8 signout\n"
+            + "*9 exit\n"
             + "_______________________\n";
 
     // Luokkamuuttuja Tietokannan SQL -kyselyille
