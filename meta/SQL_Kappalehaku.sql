@@ -2,6 +2,8 @@ SET SCHEMA 'keskusdivari';
 
 -- DROP FUNCTION hae_kayttaja CASCADE;
 
+-- Korjattu tilatarkistus [Pyssysalo]
+
 CREATE OR REPLACE FUNCTION hae_kappaleet(hakusana varchar(50))
 RETURNS TABLE(
 	k.id integer,
@@ -26,7 +28,7 @@ AS $$
     SELECT DISTINCT k.id, nimi, kuvaus, luokka, tyyppi
     FROM keskusdivari.kappale k
     INNER JOIN haetut_teokset ht ON k.teos_isbn = ht.isbn
-	WHERE k.tila = 1;
+	WHERE k.tila = 0; -- Korjattu, Pyssysalo
     ORDER BY nimi;
 
 $$ LANGUAGE SQL;
