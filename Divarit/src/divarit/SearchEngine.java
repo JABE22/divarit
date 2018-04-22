@@ -21,43 +21,36 @@ public class SearchEngine {
     private final DatabaseConnection dataCon;
     private final Connection con;
     
+    /*** SQL-Funktioita käyttävät kyselyt ***/
     // Hakukysely teoksille ja niiden tekijÃ¶ille
     private final String UNI_QUERY = "SELECT * FROM keskusdivari.hae_teokset(?)";
-    
     // Varastossa olevien kappaleiden hakukysely
-    private final String CUSTOMER_QUERY = "SELECT * FROM keskusdivari.hae_kappaleet(?)";
-    
+    private final String CUSTOMER_QUERY = "SELECT * FROM keskusdivari.hae_kappaleet(?)"; 
     // Käyttäjän tiedot
-    private final String USER_QUERY = "SELECT * FROM keskusdivari.hae_kayttaja(?);";
-    
+    private final String USER_QUERY = "SELECT * FROM keskusdivari.hae_kayttaja(?);"; 
     // Palauttaa tilaus_id :n tuotteiden ostoskoriin lisäämistä varten
     private final String ORDER_ID_QUERY = "SELECT * FROM keskusdivari.hae_tilaus_id(?);";
-    
     // Palauttaa ostoskorin sisällön
     private final String CART_CONTENT_QUERY = "SELECT * FROM keskusdivari.ostoskorin_tuotteet(?)";
-    
     // Palauttaa tilattujen tuotteiden tilaajan ja kappalemäärän/asiakas viime vuonna
     private final String REPORT_QUERY = "SELECT * FROM keskusdivari.raportti()";
-    
     private final String REPORT_CATEGORY_QUERY = "SELECT * FROM keskusdivari.hae_myytavien_hintatiedot()";
     
+    /*** Lisäyslauseita ***/
     // Teoksen lisäys
     private final String INSERT_COPY =
       "INSERT INTO keskusdivari.teos (isbn, nimi, kuvaus, luokka, tyyppi) "
     + "VALUES (?, ?, ?, ?, ?);";
-    
     // Myytävän yksittäiskappaleen lisäys
     private final String INSERT_BOOK =
       "INSERT INTO keskusdivari.kappale "
     + "(divari_nimi, teos_isbn, paino, sisosto_hinta, hinta, myynti_pvm) "
     + "VALUES (?, ?, ?, ?, ?, null);";
-    
     // Käyttäjän lisäys tietokantaan
     private final String INSERT_USER = 
       "INSERT INTO keskusdivari.kayttaja "
     + "(email, etunimi, sukunimi, osoite, puhelin) "
     + "VALUES (?, ?, ?, ?, ?);";
-
     // Tuotteen lisäys ostoskoriin
     private final String ADD_TO_CART = 
       "INSERT INTO keskusdivari.ostoskori "
@@ -65,8 +58,6 @@ public class SearchEngine {
     + "VALUES (?, ?, ?);";
             
 
-    
-    
     
     public SearchEngine(DatabaseConnection dataCon) {
         this.dataCon = dataCon;

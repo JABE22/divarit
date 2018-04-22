@@ -8,7 +8,7 @@
 */
 -- SET SCHEMA '';
 
-DROP FUNCTION hae_myytavien_hintatiedot CASCADE;
+-- DROP FUNCTION hae_myytavien_hintatiedot CASCADE;
 
 CREATE OR REPLACE FUNCTION hae_myytavien_hintatiedot() RETURNS
 TABLE(
@@ -23,7 +23,7 @@ BEGIN
 		RETURN QUERY SELECT COALESCE(teos.luokka, 'Luokittelematon') as luokka,
 		SUM(kappale.hinta) AS kokonaismyyntihinta, 
 		AVG(kappale.hinta) AS keskihinta 
-		FROM kappale
+		FROM keskusdivari.kappale
 			INNER JOIN teos ON kappale.teos_isbn=teos.isbn
 		WHERE kappale.tila=0 -- 0 = vapaa. HUOM: MYYNNISSÄ OLEVAT KAPPALEET
 		GROUP BY(teos.luokka)

@@ -17,4 +17,5 @@ add 10102
 cart
 signout
 liisa@divarit.fi 1234
+add 10102
 cart

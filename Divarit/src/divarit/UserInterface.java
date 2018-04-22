@@ -607,16 +607,20 @@ public class UserInterface {
         ArrayList<String> data = this.search_engine.getCategoryReport();
         System.out.println(
                 "      -RAPORTTI KATEGORIAHINNAT        \n"
-                + "Kategoria       hinta/yht     hinta/avg\n"
-                + "---------------------------------------");
+                + "Kategoria         hinta/yht    hinta/avg\n"
+                + "-----------------------------------------");
 
         for (String row : data) {
-            String[] parts = row.split(" ");
+            String[] parts = row.split("/");
             System.out.print(parts[0]);
-            printSpace(25 - parts[0].length()); // Tasaus
-            System.out.println(parts[1]);
-            printSpace(10 - parts[1].length()); // Tasaus
-            System.out.println(parts[2]);
+            printSpace(20 - parts[0].length()); // Tasaus
+            System.out.print(parts[1]);
+            printSpace(13 - parts[1].length()); // Tasaus
+            // Poistetaan keskihinnan ylimääräiset nollat
+            String[] avgPrice = parts[2].split("\\.");
+            String newCents = avgPrice[1].substring(0, 2); // Otetaan kaksi desimaalia
+            String newPrice = avgPrice[0] + "," + newCents; // Muotoillun hinnan parsinta
+            System.out.println(newPrice);
         }
         System.out.println("");
     }
