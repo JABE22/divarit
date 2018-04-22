@@ -1,6 +1,6 @@
-SET SCHEMA 'keskusdivari';
+﻿SET SCHEMA 'keskusdivari';
 
-DROP FUNCTION tilauksen_painot CASCADE;
+-- DROP FUNCTION tilauksen_painot CASCADE;
 
 CREATE OR REPLACE FUNCTION tilauksen_painot(tid int)
 RETURNS TABLE(tilaus_id int, divari_nimi varchar(20), paino bigint, kappale_lkm bigint)

@@ -1,4 +1,4 @@
-SET SCHEMA 'keskusdivari';
+﻿SET SCHEMA 'keskusdivari';
 
 -- DROP FUNCTION hae_kayttaja CASCADE;
 
@@ -6,7 +6,6 @@ CREATE OR REPLACE FUNCTION raportti_3()
 RETURNS TABLE(
 	email varchar(60),
 	tilatut_maara bigint
-	
 )
 AS $$
 	SELECT kayttaja.email, COALESCE(laskenta.eri_kirjojen_lkm_vuoden_sis, 0) as eri_kirjojen_lkm_vuoden_sis FROM keskusdivari.kayttaja

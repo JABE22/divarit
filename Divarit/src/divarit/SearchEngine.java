@@ -29,7 +29,7 @@ public class SearchEngine {
     // Käyttäjän tiedot
     private final String USER_QUERY = "SELECT * FROM keskusdivari.hae_kayttaja(?);"; 
     // Palauttaa tilaus_id :n tuotteiden ostoskoriin lisäämistä varten
-    private final String ORDER_ID_QUERY = "SELECT * FROM keskusdivari.hae_tilaus_id(?);";
+    private final String ORDER_ID_QUERY = "SELECT * FROM hae_tilaus_id(?);";
     // Palauttaa ostoskorin sisällön
     private final String CART_CONTENT_QUERY = "SELECT * FROM keskusdivari.ostoskorin_tuotteet(?);";
     // Palauttaa tilaus_id:tä vastaavan ostoskorin yhteis-summan
@@ -282,13 +282,13 @@ public class SearchEngine {
     // Palauttaa käyttäjänimeä vastaavan tilaus_id:n, jos ei löydy, 
     // luo uuden ja palauttaa sen
     public int getOrderID(String email) {
+        setSchema("keskusdivari"); 
         int order_id;
         try {
             PreparedStatement prstmt = this.con.prepareStatement(ORDER_ID_QUERY);
-            prstmt.clearParameters();
-            
+            prstmt.clearParameters();        
             prstmt.setString(1, email);
-            
+            prstmt.execute("SET SCHEMA = keskusdivari");
             ResultSet rset = prstmt.executeQuery();
             if (rset.next()) {
                 order_id = rset.getInt(1);
@@ -436,13 +436,11 @@ public class SearchEngine {
     public void setSchema(String schema) {
         
         try {
-            PreparedStatement prstmt = con.prepareStatement("SET search_path TO ?");
-            
+            PreparedStatement prstmt = con.prepareStatement("SET SCHEMA ?;");
             prstmt.clearParameters();
             prstmt.setString(1, schema);
             
             prstmt.executeUpdate();
-            prstmt.close();  // sulkee automaattisesti myÃ¶s tulosjoukon rset
             
         } catch (SQLException e) {
             System.out.println(e.getMessage());

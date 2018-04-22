@@ -1,4 +1,7 @@
 -- Triggerin T6 luova koodi.
+
+-- Siirretty toiseen tied. ÄLÄ MUOKKAA
+
 SET SCHEMA 'd1';
 
 DROP TRIGGER IF EXISTS trigger_insert_kappale_divari_ja_keskusdivari ON kappale CASCADE;

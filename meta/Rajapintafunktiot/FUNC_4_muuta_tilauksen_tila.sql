@@ -1,4 +1,4 @@
-/*
+﻿/*
 
 	Pyssysalo :: Muokattu viimeksi 2018-04-22
 	
@@ -14,11 +14,9 @@
 
 CREATE OR REPLACE FUNCTION muuta_tilauksen_tila(tid int, uusi_tila int) RETURNS void AS $$
 BEGIN
-	
 	UPDATE tilaus
 	SET 
 	tila=$2
 	WHERE id=$1;
-	
 END;
 $$ LANGUAGE plpgsql;

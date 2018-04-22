@@ -3,7 +3,7 @@
 -- Ei varsinaisesti tarkastella itse teoksen tietoja, koska oletetaan olevan oikein kun 1. kerran
 -- syötetty (jompaan kumpaan). Lisäksi olisi omituista päivittää (korvata) keskukannan teostietoja vain jos joku
 -- alidivarissa syöttää vaikkapa väärät tiedot.
--- Pyssysalo :: Muokattu viimeksi 2018-04-17
+-- Pyssysalo :: Muokattu viimeksi 2018-04-23
 
 SET SCHEMA 'd1';
 DROP FUNCTION insert_teos_ja_kopioi_keskusdivariin() CASCADE;
@@ -18,3 +18,15 @@ AS $$
 		RETURN NEW;
 	END; 
 $$ LANGUAGE plpgsql;
+
+
+-- Triggeri
+
+DROP TRIGGER IF EXISTS trigger_insert_teos_ja_kopioi_keskusdivariin ON teos CASCADE;
+
+CREATE TRIGGER trigger_insert_teos_ja_kopioi_keskusdivariin
+AFTER INSERT ON teos
+FOR EACH ROW
+EXECUTE PROCEDURE insert_teos_ja_kopioi_keskusdivariin();
+
+
