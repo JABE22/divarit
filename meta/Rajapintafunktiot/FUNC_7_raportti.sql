@@ -2,7 +2,7 @@ SET SCHEMA 'keskusdivari';
 
 -- DROP FUNCTION hae_kayttaja CASCADE;
 
-CREATE OR REPLACE FUNCTION raportti()
+CREATE OR REPLACE FUNCTION raportti_3()
 RETURNS TABLE(
 	email varchar(60),
 	tilatut_maara bigint
@@ -17,7 +17,7 @@ AS $$
 			INNER JOIN keskusdivari.kappale ON ostoskori.kappale_id=kappale.id
 			RIGHT JOIN keskusdivari.kayttaja ON tilaus.kayttaja_email=kayttaja.email
 			WHERE
-			-- tilaus.tila=2 AND -- 2 = valmis tilaus
+			tilaus.tila=2 AND -- 2 = valmis tilaus
 			tilaus.pvm >= CURRENT_DATE - '1 year'::interval 
 			GROUP BY(kayttaja.email)
 	) as laskenta ON kayttaja.email=laskenta.k_e
