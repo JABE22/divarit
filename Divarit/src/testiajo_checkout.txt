@@ -6,3 +6,4 @@ add 10104
 cart
 remove 10102
 cart
+checkout
