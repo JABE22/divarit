@@ -58,13 +58,14 @@ public class SearchEngine {
     private final String ADD_TO_CART = 
       "INSERT INTO keskusdivari.ostoskori "
     + "(kappale_id, divari_nimi, tilaus_id) VALUES (?, ?, ?);";
+    // Päivittää tilauksen tilan -> Tilattu
+    private final String SET_ORDER_STATUS = "SELECT keskusdivari.muuta_tilauksen_tila(?, ?)";
     // Poistaa ostoskorista tuotteen
     private final String DELETE_FROM_CART =
       "DELETE FROM keskusdivari.ostoskori "
     + "WHERE kappale_id = ? AND tilaus_id = keskusdivari.hae_tilaus_id(?)";
-    
-    private final String EMPTY_CART = 
-            "";
+    // Tyhjentää ostoskorin sisällön
+    private final String EMPTY_CART = "DELETE FROM keskusdivari.ostoskori WHERE tilaus_id = ?;";
 
     
     public SearchEngine(DatabaseConnection dataCon) {
@@ -329,25 +330,38 @@ public class SearchEngine {
         }
     }
     
-    public void remove(int book_id, String username) {
-        
+    public boolean remove(int book_id, String username) {  
         try {
             PreparedStatement prstmt = this.con.prepareStatement(DELETE_FROM_CART);
             prstmt.clearParameters();
             prstmt.setInt(1, book_id);
             prstmt.setString(2, username);
-            
-            int changes = prstmt.executeUpdate();
-            if (changes > 0) {
-                System.out.println("Tuote poistettiin onnistuneesti!");
-            } else {
-                System.out.println("Tuote ID:tä ei löytynyt");
-            }
+            prstmt.executeUpdate();
             prstmt.close(); 
             
+            return true;
         } catch (SQLException e) {
-            System.out.println("Error: " + e.getMessage());
+            System.out.println(e.getMessage());
         }
+        return false;
+    }
+    
+    public int emptyCart(int order_id) {
+        int changedRows;
+        try {
+            PreparedStatement prstmt = con.prepareStatement(EMPTY_CART);
+            
+            prstmt.clearParameters();
+            prstmt.setInt(1, order_id);
+            
+            changedRows = prstmt.executeUpdate();
+            prstmt.close();  // sulkee automaattisesti myÃ¶s tulosjoukon rset
+            return changedRows;
+            
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return 0;
     }
     
     public ArrayList<String> cartContent(int order_id) {
@@ -396,9 +410,25 @@ public class SearchEngine {
             } 
             prstmt.close();  // sulkee automaattisesti myös tulosjoukon rset   
         } catch (SQLException e) {
-            System.out.println("Error: " + e.getMessage());
+            System.out.println(e.getMessage());
         } 
         return -1;
+    }
+    
+    public void setOrderStatus(int order_id, int newStatus) {
+        try {
+            PreparedStatement prstmt = con.prepareStatement(SET_ORDER_STATUS);
+            
+            prstmt.clearParameters();
+            prstmt.setInt(1, order_id);
+            prstmt.setInt(2, newStatus);
+            
+            prstmt.executeUpdate();
+            prstmt.close();  // sulkee automaattisesti myÃ¶s tulosjoukon rset
+            
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
     }
     
     
@@ -411,11 +441,11 @@ public class SearchEngine {
             prstmt.clearParameters();
             prstmt.setString(1, schema);
             
-            prstmt.executeQuery();
+            prstmt.executeUpdate();
             prstmt.close();  // sulkee automaattisesti myÃ¶s tulosjoukon rset
             
         } catch (SQLException e) {
-            System.out.println("Error: " + e.getMessage());
+            System.out.println(e.getMessage());
         }
     }
     

@@ -35,25 +35,26 @@ public class UserInterface {
     private boolean div_admin;
 
     // Ohjelman asiakas -komennot
-    private final String FIND = "find"; // MyytÃ¤vÃ¤nÃ¤ olevat kappaleet
+    private final String FIND = "find"; // Myytävänä olevat kappaleet
     private final String ADD = "add"; // LisÃ¤Ã¤ ostoskoriin [add kappale_id]
     private final String CART = "cart"; // Näyttää ostoskorin sisällön
     private final String CHECKOUT = "checkout"; // Kassalle, nÃ¤ytetÃ¤Ã¤n tuotteet ja postikulut
     private final String ORDER = "order"; // Tilaa, komennon jÃ¤lkeen pyydetÃ¤Ã¤n vahvistus
-    private final String RETURN = "return"; // Palaa takaisin ostoskorista, sÃ¤ilyttÃ¤Ã¤ sisÃ¤llÃ¶n
     private final String REMOVE = "remove"; // Poistaa tuotteen ostoskorista [remove kappale_id]
+    private final String EMPTY_CART = "empty";
 
     // Ohjelman ylläpitäjän -komennot
-    private final String FIND_BOOK = "find_book"; // Teos (ei kappale)
-    private final String ADD_BOOK = "book";
-    private final String ADD_COPY = "copy";
-    private final String REPORT = "report";
-    private final String REPORT_PURCHASE_HISTORY = "pur_his";
-    private final String REPORT_CATEGORY_PRICES = "cat_pri";
+    private final String FIND_BOOK = "find_book"; // Kappaleet (teokset "find" komennolla)
+    private final String ADD_BOOK = "book"; // Lisää kirjan, jolla jo teostiedot kannassa
+    private final String ADD_COPY = "copy"; // Lisää teoksen
+    private final String REPORT = "report"; // Komennon jälkeen samalla rivillä täsmennys...
+    private final String REPORT_PURCHASE_HISTORY = "pur_his"; // ...ostohistoria...
+    private final String REPORT_CATEGORY_PRICES = "cat_pri"; // tai kategorioiden hinnat
 
     // Ohjelman yleiskomennot
-    private final String EXIT = "exit";
-    private final String SIGN_OUT = "signout";
+    private final String RETURN = "return"; // Palaa etusivulle milloin tahansa
+    private final String EXIT = "exit"; // Sulkee sovelluksen
+    private final String SIGN_OUT = "signout"; // Kirjaa ulos käyttäjän
 
     // YllÃ¤pitÃ¤jÃ¤: Komennon jÃ¤lkeen tÃ¤smennys [add book] tai [add abstract]
     // Tulosteet kÃ¤yttÃ¤jÃ¤n mukaan (2 kpl)
@@ -61,24 +62,27 @@ public class UserInterface {
             = "_______________________\n"
             + "-Ohjelman komennot-\n"
             + "*1 find [hakusana]\n"
-            + "*2 add\n"
-            + "*3 cart [kappale_id]\n"
-            + "*4 checkout\n"
-            + "   *4.1 order\n"
-            + "   *4.2 return\n"
-            + "*5 return\n"
-            + "*6 signout\n"
-            + "*7 exit\n"
+            + "*2 add [book_id]\n"
+            + "*3 remove [book_id]\n"
+            + "*4 empty\n"
+            + "*5 cart [kappale_id]\n"
+            + "*6 checkout\n"
+            + "   *6.1 order\n"
+            + "   *6.2 return\n"
+            + "*7 return\n"
+            + "*8 signout\n"
+            + "*9 exit\n"
             + "_______________________\n";
 
     private final String ADMIN_PRINT
             = "_______________________\n"
             + "-Ohjelman komennot-\n"
             + "*1 find [hakusana]\n"
-            + "*2 find book [hakusana]\n"
+            + "*2 find_book [hakusana]\n"
             + "*3 add copy\n"
             + "*4 add book\n"
-            + "*5 report\n"
+            + "*5 add author\n"
+            + "*5 report [pur_his] or [cat_pri]\n"
             + "*6 return\n"
             + "*7 signout\n"
             + "*8 exit\n"
@@ -159,6 +163,11 @@ public class UserInterface {
                         remove(input[1]);
                     }
                     break;
+                    
+                case EMPTY_CART:
+                    System.out.println("Clearing shopping cart...");
+                    clearCart();
+                    break;
 
                 case CART:
                     // Näytetään aktiivisen käyttäjän ostoskorin sisältö
@@ -181,6 +190,8 @@ public class UserInterface {
                         if (checkUserInput(command)) {
                             // Tehdään tietokantaan tarvittavat muutokset
                             if (command.equals(ORDER)) {
+                                this.search_engine.setOrderStatus(tilaus_id, 2);
+                                this.search_engine.emptyCart(tilaus_id);
                                 System.out.println("Kiitos tilauksesta!");
                                 customer();
                             } else {
@@ -688,12 +699,24 @@ public class UserInterface {
         this.search_engine.addToCart(details);
     }
 
+    // Poistaa tuotteen ostoskorista
     public void remove(String book_id) {
         int id = checkIntFormat(book_id);
         String username = this.signed_user_details[0];
-        if (id > 0) {
-            this.search_engine.remove(id, username);
+        if (id > 0) { 
+            if (this.search_engine.remove(id, username)) {
+                System.out.println("Tuote poistettiin onnistuneesti!");
+            } else {
+                System.out.println("Tuote ID:tä ei löytynyt");
+            }
         }
+    }
+    
+    // Tyhjentää ostoskorin
+    public void clearCart() {
+        setTilausID();
+        int changes = this.search_engine.emptyCart(tilaus_id);
+        System.out.println(changes + " items removed.");
     }
 
     // Tarkistaa parametrina annetun syötteen pituuden. Jos pituus ylittyy, palauttaa
@@ -790,5 +813,4 @@ public class UserInterface {
 
         return komentorivi;
     }
-
 }

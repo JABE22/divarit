@@ -3,10 +3,18 @@ cart
 find romaani
 add 10101
 add 10104
-add 
+add 10102
 cart
 remove 10102
 cart
 checkout
-fhdfgh
 return
+checkout
+order
+signout
+liisa@divarit.fi 1234
+add 10101
+add 10102
+cart
+checkout
+order
