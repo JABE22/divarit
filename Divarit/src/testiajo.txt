@@ -19,3 +19,7 @@ signout
 liisa@divarit.fi 1234
 add 10102
 cart
+add 10060
+cart
+remove 10102
+cart

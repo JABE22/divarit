@@ -94,7 +94,7 @@ public class UserInterface {
         this.search_engine = new SearchEngine(new DatabaseConnection());
 
         // Testiajo ** lukee esivalitut komennot tiedostosta
-        this.testikomennot = lueKomennotTiedostosta("src/testiajo.txt");
+        this.testikomennot = lueKomennotTiedostosta("src/testiajo_checkout.txt");
         this.komentoIndeksi = 0;
     }
 
@@ -153,10 +153,17 @@ public class UserInterface {
                     }
                     break;
 
+                case REMOVE:
+                    if (input.length > 1) {
+                        System.out.println("Removing book from cart...");
+                        remove(input[1]);
+                    }
+                    break;
+
                 case CART:
                     // Näytetään aktiivisen käyttäjän ostoskorin sisältö
                     System.out.println("Viewing contents of cart...");
-                    showCartContents();
+                    printCartContents();
                     break;
 
                 case CHECKOUT:
@@ -320,7 +327,6 @@ public class UserInterface {
                     signIn();
                 } else {
                     this.signed_user_details = result;
-                    this.tilaus_id = this.search_engine.searchOrderID(username);
                     System.out.println("Welcome " + this.signed_user_details[1] + "!");
                 }
 
@@ -399,6 +405,20 @@ public class UserInterface {
         // Ei tee vielÃ¤ mitÃ¤Ã¤n muuta
     }
 
+    public boolean setTilausID() {
+        String userEmail = this.signed_user_details[0];
+        int orderID = this.search_engine.getOrderID(userEmail);
+        if (orderID == -1) {
+            return false;
+        } else {
+            this.tilaus_id = orderID;
+            return true;
+        }
+    }
+
+    /**
+     * * Tulostelumetodeita **
+     */
     // Tulostaa kirjautuneena olevan käyttäjän tiedot, Testiajoja varten
     public void printUserDetails() {
         System.out.println("-User details-");
@@ -409,14 +429,15 @@ public class UserInterface {
         }
     }
 
-    // Tulostaa raportin muotoillusti
-    public void showCartContents() {
+    // Tulostaa ostoskorin muotoillusti
+    public void printCartContents() {
+        setTilausID();
         if (this.tilaus_id == 0) {
             System.out.println("Ostoskorisi on tyhjä");
         } else {
             System.out.println(
-                    "          -OSTOSKORI-       \n"
-                    + "______________________________");
+                      "          -OSTOSKORI-          \n"
+                    + "_______________________________");
             ArrayList<String> cartContents = this.search_engine.cartContent(tilaus_id);
             cartContents.stream().forEach(row -> System.out.println(row));
         }
@@ -638,7 +659,7 @@ public class UserInterface {
         String email = this.signed_user_details[0];
 
         if (this.tilaus_id == 0) {
-            this.tilaus_id = this.search_engine.searchOrderID(email);
+            this.tilaus_id = this.search_engine.getOrderID(email);
             System.out.println("*Uusi ostoskori luotu*");
         }
 
@@ -647,6 +668,14 @@ public class UserInterface {
         details.add(Integer.toString(this.tilaus_id));
 
         this.search_engine.addToCart(details);
+    }
+
+    public void remove(String book_id) {
+        int id = checkIntFormat(book_id);
+        String username = this.signed_user_details[0];
+        if (id > 0) {
+            this.search_engine.remove(id, username);
+        }
     }
 
     /*
@@ -692,10 +721,9 @@ public class UserInterface {
     }
 
     // Ohjelman testiajossa käytettävä metodi
-    // Ohjelman testiajossa kÃ¤ytettÃ¤vÃ¤ metodi
-    // Lukee komennot "esimerkkidata.txt" -tiedostosta listalle
+    // Lukee komennot "filename" -tiedostosta listalle
     public static ArrayList<String> lueKomennotTiedostosta(String filename) {
-        // Lista jonne komennot lisÃ¤tÃ¤Ã¤n
+        // Lista jonne komennot lisätään
         ArrayList<String> komennot = new ArrayList<>();
 
         try {
