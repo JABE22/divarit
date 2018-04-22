@@ -39,6 +39,8 @@ public class SearchEngine {
     // Palauttaa tilattujen tuotteiden tilaajan ja kappalemäärän/asiakas viime vuonna
     private final String REPORT_QUERY = "SELECT * FROM keskusdivari.raportti()";
     
+    private final String REPORT_CATEGORY_QUERY = "SELECT * FROM keskusdivari.hae_myytavien_hintatiedot()";
+    
     // Teoksen lisäys
     private final String INSERT_COPY =
       "INSERT INTO keskusdivari.teos (isbn, nimi, kuvaus, luokka, tyyppi) "
@@ -221,14 +223,13 @@ public class SearchEngine {
     }
     
     // Hakee tilaustietoja viime vuonna
-    public ArrayList<String> report() {
+    public ArrayList<String> getPurchaseReport() {
         ArrayList<String> details = new ArrayList<>();
-        
+     
         try {
             Statement stmt = this.con.createStatement();     
             ResultSet rset = stmt.executeQuery(REPORT_QUERY);
-            
-            
+
             if (rset.next()) {
                 String customer;
                 String orderedBooks;
@@ -238,16 +239,40 @@ public class SearchEngine {
                     orderedBooks = rset.getString(2);
                     details.add(customer + ", " + orderedBooks);
                 }
-            }
-            
-            stmt.close();  // sulkee automaattisesti myÃ¶s tulosjoukon rset
-            
+            }      
+            stmt.close();  // sulkee automaattisesti myÃ¶s tulosjoukon rset           
         } catch (SQLException e) {
             System.out.println("Error: " + e.getMessage());
         }
         return details;
     }
     
+    // Hakee kategorioihin liittyviä hintatietoja
+    public ArrayList<String> getCategoryReport() {
+        ArrayList<String> details = new ArrayList<>();
+     
+        try {
+            Statement stmt = this.con.createStatement();     
+            ResultSet rset = stmt.executeQuery(REPORT_CATEGORY_QUERY);
+
+            if (rset.next()) {
+                String category;
+                String totalPrice;
+                String avgPrice;
+                
+                while (rset.next()) {
+                    category = rset.getString(1);
+                    totalPrice = rset.getString(2);
+                    avgPrice = rset.getString(3);
+                    details.add(category + "/" + totalPrice + "/" + avgPrice);
+                }
+            }      
+            stmt.close();  // sulkee automaattisesti myÃ¶s tulosjoukon rset           
+        } catch (SQLException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+        return details;
+    }    
     
     /*
     * Asiakkaan metodit

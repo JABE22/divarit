@@ -8,7 +8,8 @@ kalle@divarit.fi 1234
 find Sarasvuo
 signout
 admin@divarit.fi 1234
-report
+report pur_his
+report cat_pri
 signout
 kalle@divarit.fi 1234
 find romaani

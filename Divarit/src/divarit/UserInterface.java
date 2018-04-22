@@ -48,6 +48,8 @@ public class UserInterface {
     private final String ADD_BOOK = "book";
     private final String ADD_COPY = "copy";
     private final String REPORT = "report";
+    private final String REPORT_PURCHASE_HISTORY = "pur_his";
+    private final String REPORT_CATEGORY_PRICES = "cat_pri";
 
     // Ohjelman yleiskomennot
     private final String EXIT = "exit";
@@ -230,7 +232,6 @@ public class UserInterface {
                     break;
 
                 case ADD:
-
                     if (input.length > 1) {
                         if (input[1].equals(ADD_BOOK)) {
                             addBook();
@@ -243,7 +244,16 @@ public class UserInterface {
                     break;
 
                 case REPORT:
-                    printReport();
+                    if (input.length > 1) {
+                        if (input[1].equals(REPORT_PURCHASE_HISTORY)) {
+                            printPurchaseReport();
+                        } else if (input[1].equals(REPORT_CATEGORY_PRICES)) {
+                            printCategoryReport();
+                        } else {
+                            System.out.println("Command invalid!#");
+                        }
+                    }
+                    break;
 
                 case RETURN:
                     admin();
@@ -405,7 +415,7 @@ public class UserInterface {
             System.out.println("Ostoskorisi on tyhjä");
         } else {
             System.out.println(
-                      "          -OSTOSKORI-       \n"
+                    "          -OSTOSKORI-       \n"
                     + "______________________________");
             ArrayList<String> cartContents = this.search_engine.cartContent(tilaus_id);
             cartContents.stream().forEach(row -> System.out.println(row));
@@ -457,7 +467,7 @@ public class UserInterface {
             }
         });
     }
-    
+
     // Myyntikappaleiden muotoiltu tulostus
     public void printBookDetails(ArrayList<String> results) {
         results.stream().forEach(row -> {
@@ -577,19 +587,36 @@ public class UserInterface {
 
     }
 
-    private void printReport() {
-        ArrayList<String> data = this.search_engine.report();
-        System.out.println("         -RAPORTTI-        \n"
+    private void printPurchaseReport() {
+        ArrayList<String> data = this.search_engine.getPurchaseReport();
+        System.out.println(
+                "    -RAPORTTI OSTOHISTORIA-    \n"
                 + "Asiakas             tilatut/kpl\n"
                 + "-------------------------------");
 
         for (String row : data) {
             String[] parts = row.split(" ");
             System.out.print(parts[0]);
-
             printSpace(25 - parts[0].length());
-
             System.out.println(parts[1]);
+        }
+        System.out.println("");
+    }
+
+    private void printCategoryReport() {
+        ArrayList<String> data = this.search_engine.getCategoryReport();
+        System.out.println(
+                "      -RAPORTTI KATEGORIAHINNAT        \n"
+                + "Kategoria       hinta/yht     hinta/avg\n"
+                + "---------------------------------------");
+
+        for (String row : data) {
+            String[] parts = row.split(" ");
+            System.out.print(parts[0]);
+            printSpace(25 - parts[0].length()); // Tasaus
+            System.out.println(parts[1]);
+            printSpace(10 - parts[1].length()); // Tasaus
+            System.out.println(parts[2]);
         }
         System.out.println("");
     }
