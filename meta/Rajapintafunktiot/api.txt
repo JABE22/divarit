@@ -21,7 +21,7 @@
 === Funktiot [tietokanta nimi, parametrit ja palautettava arvo] ===
 
 
-### 1 -- Tilauksen X painot eri divareittain ###
+###  -- Tilauksen X painot eri divareittain ###
 
     tilauksen_painot(tid int)
     
@@ -36,7 +36,7 @@
     
     
     
-### 2 -- Tilauksen X kaikki teokset ###
+### -- Tilauksen X kaikki teokset ###
 
         tilauksen_teokset(tid int)
         
@@ -55,7 +55,7 @@
     
     
     
-### 3 -- Hae käyttäjän X tiedot
+###  -- Hae käyttäjän X tiedot
 
     hae_kayttaja(hae_kayttaja(param_user_email varchar(255)))
     
@@ -72,7 +72,7 @@
     )
     
     
-### 4 -- Tilauksen ID:n hakeminen
+### -- Tilauksen ID:n hakeminen
 
     hae_tilaus_id(param_kayttaja_email varchar(255)) 
         
@@ -88,7 +88,7 @@
     > SELECT * FROM hae_tilaus_id('<sposti>') as tilaus_id;
     
     
-### 5 -- Teoksen lisäys ostoskoriin
+### -- Teoksen lisäys ostoskoriin
 
     lisaa_ostoskoriin(p_kappale_id int, p_divari_nimi varchar(10), p_tilaus_id int) 
     
@@ -105,7 +105,7 @@
     > SELECT * FROM lisaa_ostoskoriin(1234, 'D99', 1) as onnistuiko;
 
 
-### 6 -- Raportti 2. Myytävien kappaleiden hintatiedot
+### -- Raportti 2. Myytävien kappaleiden hintatiedot
 
     hae_myytavien_hintatiedot()
 

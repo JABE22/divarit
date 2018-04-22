@@ -1,5 +1,5 @@
 /*
-	T5 -- Palauttaa tilauksen (parametri id) kaikki teokset.
+	Palauttaa tilauksen (parametri id) kaikki teokset.
 	Lajittelu divarin nimen mukaan ensisijaisesti.
 
 */
