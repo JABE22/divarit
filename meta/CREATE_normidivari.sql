@@ -34,7 +34,7 @@ CREATE TABLE IF NOT EXISTS d1.kappale (
   id SERIAL, -- Yksilöivä
   teos_isbn VARCHAR(20) NOT NULL,
   paino INTEGER NOT NULL CHECK(paino > 0),
-  tila INTEGER NOT NULL DEFAULT(1),
+  tila INTEGER NOT NULL DEFAULT(0), -- muutettu nollaksi 
   sisosto_hinta NUMERIC(5,2),
   hinta NUMERIC(5,2),
   myynti_pvm DATE,
