@@ -26,6 +26,7 @@ AS $$
     SELECT DISTINCT k.id, nimi, kuvaus, luokka, tyyppi
     FROM keskusdivari.kappale k
     INNER JOIN haetut_teokset ht ON k.teos_isbn = ht.isbn
+	WHERE k.tila = 1;
     ORDER BY nimi;
 
 $$ LANGUAGE SQL;
