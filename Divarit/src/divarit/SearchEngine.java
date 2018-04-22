@@ -31,7 +31,9 @@ public class SearchEngine {
     // Palauttaa tilaus_id :n tuotteiden ostoskoriin lisäämistä varten
     private final String ORDER_ID_QUERY = "SELECT * FROM keskusdivari.hae_tilaus_id(?);";
     // Palauttaa ostoskorin sisällön
-    private final String CART_CONTENT_QUERY = "SELECT * FROM keskusdivari.ostoskorin_tuotteet(?)";
+    private final String CART_CONTENT_QUERY = "SELECT * FROM keskusdivari.ostoskorin_tuotteet(?);";
+    // Palauttaa tilaus_id:tä vastaavan ostoskorin yhteis-summan
+    private final String CART_SUM_QUERY = "SELECT SUM(kplhinta) FROM keskusdivari.ostoskorin_tuotteet(?);";
     // Palauttaa tilattujen tuotteiden tilaajan ja kappalemäärän/asiakas viime vuonna
     private final String REPORT_QUERY = "SELECT * FROM keskusdivari.raportti()";
     // Palauttaa kategorioihin liittyviä hintatietoja
@@ -378,6 +380,25 @@ public class SearchEngine {
         }
         
         return content;
+    }
+    
+    public double getCartSum(int order_id) {
+        double totalSum;
+        try {
+            PreparedStatement prstmt = this.con.prepareStatement(CART_SUM_QUERY);
+            prstmt.clearParameters();
+            prstmt.setInt(1, order_id);
+            ResultSet rset = prstmt.executeQuery();
+            if (rset.next()) {
+                totalSum = rset.getDouble(1);
+                prstmt.close();
+                return totalSum;
+            } 
+            prstmt.close();  // sulkee automaattisesti myös tulosjoukon rset   
+        } catch (SQLException e) {
+            System.out.println("Error: " + e.getMessage());
+        } 
+        return -1;
     }
     
     

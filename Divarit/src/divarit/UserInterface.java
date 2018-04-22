@@ -168,22 +168,27 @@ public class UserInterface {
 
                 case CHECKOUT:
                     System.out.println("Checking out...");
-
+                    printCartContents(); // Ostoskorin sisältö ja hinnat
+                    // Tulostellaan tässä koko tilauksen yhteishinta
+                    double totalSum = this.search_engine.getCartSum(tilaus_id);
+                    printSpace(28);
+                    System.out.println("tuotteet yht: " + totalSum);
                     System.out.println("Vahvista tilaus [order] tai palaa [return]:");
-                    String command = getCommand()[0];
-
-                    if (checkUserInput(command)) {
-                        switch (command) {
-                            case ORDER:
-                                // Tehdään tietokantaan tarvittavat muutokset
+                    // Tilauksen vahvistaminen tai peruutus
+                    String command;
+                    do {
+                        command = getCommand()[0];
+                        if (checkUserInput(command)) {
+                            // Tehdään tietokantaan tarvittavat muutokset
+                            if (command.equals(ORDER)) {
                                 System.out.println("Kiitos tilauksesta!");
                                 customer();
-                                break;
-                            case RETURN:
-                                customer();
-                                break;
+                            } else {
+                                System.out.println("Try again: [order] or [return]");
+                            }
+                            break;       
                         }
-                    }
+                    } while (!command.equals(ORDER));
                     break;
 
                 case RETURN:
@@ -435,11 +440,11 @@ public class UserInterface {
             System.out.println("Ostoskorisi on tyhjä");
         } else {
             System.out.println(
-                      "                 -OSTOSKORI-                 \n"
+                    "                 -OSTOSKORI-                 \n"
                     + "tuotenro    tuotenimi                    a_hinta\n"
                     + "------------------------------------------------");
             ArrayList<String> cartContents = this.search_engine.cartContent(tilaus_id);
-            
+
             cartContents.stream().forEach(row -> {
                 String[] parts = row.split("/");
                 String limiter = "";
@@ -516,7 +521,7 @@ public class UserInterface {
                 // Rajataan näytettävän nimen ja kuvauksen koko 30 merkkiin
                 if (i == 1 || i == 2) {
                     limiter = stringLimiter(parts[i], 30);
-                } 
+                }
                 // Tulostuksen sisennys tasaus
                 switch (i) {
                     case 0: // id, välimerkit jälkeen lkm
@@ -690,7 +695,7 @@ public class UserInterface {
             this.search_engine.remove(id, username);
         }
     }
-    
+
     // Tarkistaa parametrina annetun syötteen pituuden. Jos pituus ylittyy, palauttaa
     // leikkaa ylittyvän osan tekstin lopusta ja palauttaa alkuosan
     public String stringLimiter(String text, int limit) {
@@ -704,7 +709,7 @@ public class UserInterface {
     /*
     * Syotteen muodon tarkistusmetodeita
     *
-    */
+     */
     public boolean checkUserInput(String input) {
         if (input.equals(EXIT)) {
             System.exit(0);
