@@ -18,12 +18,12 @@ DECLARE
 	tid int; -- tilauksen ID
 BEGIN
 	-- Hae aktiivista tilausta käyttäjältä.
-	SELECT id INTO tid FROM tilaus WHERE kayttaja_email = param_kayttaja_email AND tila = 1 LIMIT 1;
+	SELECT id INTO tid FROM keskusdivari.tilaus WHERE kayttaja_email = param_kayttaja_email AND tila = 1 LIMIT 1;
 	
 	-- tee toimenpiteet
 	IF tid IS NULL THEN
 		-- Jos ei aktv. luo sellainen. Palauta uusi ID
-		 INSERT INTO tilaus VALUES (DEFAULT, param_kayttaja_email, CURRENT_DATE, 1) RETURNING id INTO tid;
+		 INSERT INTO keskusdivari.tilaus VALUES (DEFAULT, param_kayttaja_email, CURRENT_DATE, 1) RETURNING id INTO tid;
 		 RETURN tid;
 	ELSE
 		-- Paluta löydetty ID, jos tulos ei NULL

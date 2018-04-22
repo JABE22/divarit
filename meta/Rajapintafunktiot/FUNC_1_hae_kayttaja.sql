@@ -1,8 +1,3 @@
-﻿/*
-	
-
-*/
-
 SET SCHEMA 'keskusdivari';
 
 -- DROP FUNCTION hae_kayttaja CASCADE;
@@ -19,6 +14,6 @@ RETURNS TABLE(
 AS $$
 	SELECT email, etunimi, sukunimi, osoite, 
 	CASE WHEN puhelin IS NULL THEN 'ei_annettu' ELSE puhelin END, div_yllapitaja
-	FROM kayttaja
+	FROM keskusdivari.kayttaja
 	WHERE email = param_user_email;
 $$ LANGUAGE SQL;

@@ -29,7 +29,7 @@ public class SearchEngine {
     // Käyttäjän tiedot
     private final String USER_QUERY = "SELECT * FROM keskusdivari.hae_kayttaja(?);"; 
     // Palauttaa tilaus_id :n tuotteiden ostoskoriin lisäämistä varten
-    private final String ORDER_ID_QUERY = "SELECT * FROM hae_tilaus_id(?);";
+    private final String ORDER_ID_QUERY = "SELECT * FROM keskusdivari.hae_tilaus_id(?);";
     // Palauttaa ostoskorin sisällön
     private final String CART_CONTENT_QUERY = "SELECT * FROM keskusdivari.ostoskorin_tuotteet(?);";
     // Palauttaa tilaus_id:tä vastaavan ostoskorin yhteis-summan

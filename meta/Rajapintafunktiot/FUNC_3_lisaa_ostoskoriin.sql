@@ -18,15 +18,15 @@ DECLARE
  	x boolean; -- onnistuiko lisäys
 BEGIN
 	-- Hae ...
-	SELECT tila INTO kpl_tila FROM kappale
+	SELECT tila INTO kpl_tila FROM keskusdivari.kappale
 	WHERE divari_nimi=p_divari_nimi AND id=p_kappale_id AND myynti_pvm IS NULL;
 	
 	-- jos vapaa, lisää koriin
 	IF kpl_tila = 0 THEN
 		-- Yritetään lisätä koriin. muuttuja x on boolean. RETURNING FOUND palauttaa lisätyn rivin tai booleanin.
 		BEGIN
-			UPDATE kappale SET tila=1 WHERE id=p_kappale_id; -- 1 = aktiivinen
-			INSERT INTO ostoskori VALUES (p_kappale_id, p_divari_nimi, p_tilaus_id) RETURNING FOUND INTO x;
+			UPDATE keskusdivari.kappale SET tila=1 WHERE id=p_kappale_id; -- 1 = aktiivinen
+			INSERT INTO keskusdivari.ostoskori VALUES (p_kappale_id, p_divari_nimi, p_tilaus_id) RETURNING FOUND INTO x;
 			RETURN x;
 		EXCEPTION WHEN unique_violation THEN
 			RETURN FALSE;

@@ -14,7 +14,7 @@
 
 CREATE OR REPLACE FUNCTION muuta_tilauksen_tila(tid int, uusi_tila int) RETURNS void AS $$
 BEGIN
-	UPDATE tilaus
+	UPDATE keskusdivari.tilaus
 	SET 
 	tila=$2
 	WHERE id=$1;
