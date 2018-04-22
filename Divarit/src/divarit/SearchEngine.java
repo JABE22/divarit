@@ -362,9 +362,10 @@ public class SearchEngine {
                 String rivi;
                 do {
                     // Teoksen kuvaus eli indeksi kolme poistettu (rset.getString(3))
-                    rivi = rset.getString(1) + ", " 
-                         + rset.getString(2) + ", "
-                         + rset.getString(3);
+                    rivi = // rset.getString(1) + "/" + // tilausnumero
+                           rset.getString(2) + "/" // tuotenumero
+                         + rset.getString(3) + "/" // tuotenimi
+                         + rset.getString(4); // kappalehinta
                     content.add(rivi);
                     
                 } while (rset.next());

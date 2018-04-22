@@ -168,9 +168,8 @@ public class UserInterface {
 
                 case CHECKOUT:
                     System.out.println("Checking out...");
-                    // Näytetään tuotteiden lisäksi postikulut 
-                    // Kysytään vahvistus tai peruutus
-                    // String command = In.readString;
+
+                    System.out.println("Vahvista tilaus [order] tai palaa [return]:");
                     String command = getCommand()[0];
 
                     if (checkUserInput(command)) {
@@ -436,12 +435,34 @@ public class UserInterface {
             System.out.println("Ostoskorisi on tyhjä");
         } else {
             System.out.println(
-                      "          -OSTOSKORI-          \n"
-                    + "_______________________________");
+                      "                 -OSTOSKORI-                 \n"
+                    + "tuotenro    tuotenimi                    a_hinta\n"
+                    + "------------------------------------------------");
             ArrayList<String> cartContents = this.search_engine.cartContent(tilaus_id);
-            cartContents.stream().forEach(row -> System.out.println(row));
+            
+            cartContents.stream().forEach(row -> {
+                String[] parts = row.split("/");
+                String limiter = "";
+                for (int i = 0; i < parts.length; i++) {
+                    // Käytetään syöte pituustarkistajassa
+                    limiter = stringLimiter(parts[i], 30);
+                    switch (i) {
+                        case 0:
+                            System.out.print(limiter);
+                            printSpace(12 - parts[i].length());
+                            break;
+                        case 1:
+                            System.out.print(limiter);
+                            printSpace(30 - parts[i].length());
+                            break;
+                        case 2:
+                            System.out.println(limiter);
+                            break;
+                    }
+                }
+            });
         }
-        System.out.println("______________________________");
+        System.out.println("------------------------------------------------");
     }
 
     // Teosten muotoiltu tulostus
@@ -453,11 +474,7 @@ public class UserInterface {
             for (int i = 0; i < parts.length; i++) {
                 // Rajataan näytettävä nimen koko 30 merkkiin
                 if (i == 1) {
-                    if (parts[i].length() > 30) {
-                        copyname = parts[i].substring(0, 30) + "...";
-                    } else {
-                        copyname = parts[i];
-                    }
+                    copyname = stringLimiter(parts[i], 30);
                 }
                 // Tulostuksen sisennys tasaus
                 switch (i) {
@@ -498,12 +515,8 @@ public class UserInterface {
             for (int i = 0; i < parts.length; i++) {
                 // Rajataan näytettävän nimen ja kuvauksen koko 30 merkkiin
                 if (i == 1 || i == 2) {
-                    if (parts[i].length() > 30) {
-                        limiter = parts[i].substring(0, 30) + "...";
-                    } else {
-                        limiter = parts[i];
-                    }
-                }
+                    limiter = stringLimiter(parts[i], 30);
+                } 
                 // Tulostuksen sisennys tasaus
                 switch (i) {
                     case 0: // id, välimerkit jälkeen lkm
@@ -677,11 +690,21 @@ public class UserInterface {
             this.search_engine.remove(id, username);
         }
     }
+    
+    // Tarkistaa parametrina annetun syötteen pituuden. Jos pituus ylittyy, palauttaa
+    // leikkaa ylittyvän osan tekstin lopusta ja palauttaa alkuosan
+    public String stringLimiter(String text, int limit) {
+        if (text.length() > limit) {
+            return text.substring(0, 30) + "...";
+        } else {
+            return text; // Palautetaan alkuperäinen
+        }
+    }
 
     /*
     * Syotteen muodon tarkistusmetodeita
     *
-     */
+    */
     public boolean checkUserInput(String input) {
         if (input.equals(EXIT)) {
             System.exit(0);
