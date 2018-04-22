@@ -13,6 +13,6 @@ AS $$
         INNER JOIN keskusdivari.ostoskori ok ON t.id = ok.tilaus_id
         INNER JOIN keskusdivari.kappale k ON ok.kappale_id = k.id
         INNER JOIN keskusdivari.teos ON k.teos_isbn = teos.isbn
-    WHERE t.id = $1
+    WHERE t.id = $1 AND t.tila <> 2
     ORDER BY k.id;
 $$ LANGUAGE SQL;
