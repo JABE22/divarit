@@ -1,4 +1,4 @@
--- CREATE-lauseet "normidivarille" (ei-keskusdivari)
+﻿-- CREATE-lauseet "normidivarille" (ei-keskusdivari)
 
 -- Poistaa vanhan ja aloittaa puhtaalta pöydältä
 -- Vaihda nimi haluamaksesi DROP ja CREATE SCHEMA -riveille 
@@ -9,9 +9,11 @@
 	-- Muutettu teos.nimi VARCHAR(45) --> 60
 
 DROP SCHEMA d1 CASCADE; -- Kommentoi rivi pois 1. ajokerralla
-CREATE SCHEMA d1; 
+CREATE SCHEMA d1;
 
-CREATE TABLE IF NOT EXISTS d1.tekija (
+SET SCHEMA 'd1';
+
+CREATE TABLE IF NOT EXISTS tekija (
   id SERIAL NOT NULL,
   etunimi VARCHAR(45) NOT NULL,
   sukunimi VARCHAR(45) NOT NULL,
@@ -20,7 +22,7 @@ CREATE TABLE IF NOT EXISTS d1.tekija (
   PRIMARY KEY(id)
 );
 
-CREATE TABLE IF NOT EXISTS d1.teos (
+CREATE TABLE IF NOT EXISTS teos (
   isbn VARCHAR(20) NOT NULL,
   nimi VARCHAR(60),
   kuvaus VARCHAR(1000),
@@ -29,7 +31,7 @@ CREATE TABLE IF NOT EXISTS d1.teos (
   PRIMARY KEY(isbn)
 );
 
-CREATE TABLE IF NOT EXISTS d1.kappale (
+CREATE TABLE IF NOT EXISTS kappale (
   divari_nimi VARCHAR(10),
   id SERIAL, -- Yksilöivä
   teos_isbn VARCHAR(20) NOT NULL,
@@ -43,7 +45,7 @@ CREATE TABLE IF NOT EXISTS d1.kappale (
   CHECK(tila <= 2 AND tila >= 0)
 );
 
-CREATE TABLE IF NOT EXISTS d1.teosten_tekijat (
+CREATE TABLE IF NOT EXISTS teosten_tekijat (
   tekija_id INTEGER NOT NULL,
   teos_isbn VARCHAR(20) NOT NULL,
   PRIMARY KEY(tekija_id, teos_isbn),

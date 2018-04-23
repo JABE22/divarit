@@ -1,4 +1,4 @@
-﻿SET SCHEMA 'keskusdivari';
+﻿SET SCHEMA 'd1';
 
 -- DROP FUNCTION hae_kayttaja CASCADE;
 
@@ -27,7 +27,7 @@ AS $$
           LOWER(nimi) LIKE hakusana OR LOWER(tyyppi) LIKE hakusana OR
           LOWER(luokka) LIKE hakusana )
     -- Näytetään hakua vastaavat varastossa olevat kappaleet
-    SELECT DISTINCT divari_nimi, k.id, nimi, luokka, sisosto_hinta, hinta, CASE WHEN myynti_pvm IS NULL THEN '-ei-' ELSE myynti_pvm END 
+    SELECT DISTINCT divari_nimi, k.id, nimi, luokka, sisosto_hinta, hinta, myynti_pvm
     FROM kappale k
     INNER JOIN haetut_teokset ht ON k.teos_isbn = ht.isbn
     ORDER BY nimi;

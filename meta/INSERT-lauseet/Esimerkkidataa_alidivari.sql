@@ -1,4 +1,4 @@
--- ESIMERKKIDATAA ALIDIVARILLE (D1).
+﻿-- ESIMERKKIDATAA ALIDIVARILLE (D1).
 -- TRUNCATE <> tyhjentää kys. taulun. Kommentoi pois rivit jos et halua tyhjentää
 -- Muista myös ajaa tietokannan luontitiedosto, jos virheitä tulee. Tod. näk. rakenne on vanhentunut.
 

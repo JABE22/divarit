@@ -169,7 +169,7 @@ public class UserInterface {
 
                 case EMPTY_CART:
                     System.out.println("Clearing shopping cart...");
-                    this.QE.setOrderStatus(order_id, 1);
+                    this.QE.setOrderStatus(order_id, 0);
                     break;
 
                 case CART:
@@ -687,7 +687,7 @@ public class UserInterface {
             }
         }
         System.out.println("Adding copy...");
-        this.QE.insertCopy(copy_details);
+        this.QE.insertCopy(copy_details, this.schema_name);
     }
     
     // Lisää uuden tekijän tiedot
@@ -709,7 +709,7 @@ public class UserInterface {
             }
         }
         System.out.println("Adding copy...");
-        this.QE.insertAuthor(author_details);
+        this.QE.insertAuthor(author_details, this.schema_name);
     }
 
     // Lisää uuden kappaleen/yksittäisen kirjan tiedot (Kysytään käyttäjältä)
@@ -749,7 +749,7 @@ public class UserInterface {
 
         }
         System.out.println("Adding book...");
-        this.QE.insertBook(book_details);
+        this.QE.insertBook(book_details, this.schema_name);
 
     }
     
@@ -772,7 +772,7 @@ public class UserInterface {
 
     // Kategoriahintatietojen tulostus
     private void printCategoryReport() {
-        ArrayList<String> data = this.QE.getCategoryReport();
+        ArrayList<String> data = this.QE.getCategoryReport(this.schema_name);
         System.out.println(
                 "      -RAPORTTI KATEGORIAHINNAT        \n"
                 + "Kategoria         hinta/yht    hinta/avg\n"

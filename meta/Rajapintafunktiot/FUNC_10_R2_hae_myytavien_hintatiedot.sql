@@ -6,7 +6,7 @@
 	luokan mukaan ryhmiteltynä yhteishinnan ja keskihinnan.
 	
 */
--- SET SCHEMA '';
+SET SCHEMA 'd1';
 
 -- DROP FUNCTION raportti_2 CASCADE;
 
@@ -23,8 +23,8 @@ BEGIN
 		RETURN QUERY SELECT COALESCE(teos.luokka, 'Luokittelematon') as luokka,
 		SUM(kappale.hinta) AS kokonaismyyntihinta, 
 		AVG(kappale.hinta) AS keskihinta 
-		FROM keskusdivari.kappale
-			INNER JOIN keskusdivari.teos ON kappale.teos_isbn=teos.isbn
+		FROM kappale
+			INNER JOIN teos ON kappale.teos_isbn=teos.isbn
 		WHERE kappale.tila=0 -- 0 = vapaa. HUOM: MYYNNISSÄ OLEVAT KAPPALEET
 		GROUP BY(teos.luokka)
 		ORDER BY luokka ASC;

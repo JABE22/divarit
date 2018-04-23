@@ -1,4 +1,4 @@
-﻿SET SCHEMA 'keskusdivari';
+﻿SET SCHEMA 'd1';
 
 -- DROP FUNCTION hae_kayttaja() CASCADE;
 -- Luonut: Matarmaa Jarno
@@ -15,9 +15,9 @@ RETURNS TABLE(
 AS $$
     -- Teokset nimen perusteella ja tekijän nimen perusteella
     SELECT t.isbn, t.nimi, kt.etunimi, kt.sukunimi, t.luokka, t.tyyppi
-    FROM keskusdivari.teos t
-        INNER JOIN keskusdivari.teosten_tekijat ktt ON t.isbn = ktt.teos_isbn
-        INNER JOIN keskusdivari.tekija kt ON ktt.tekija_id = kt.id
+    FROM teos t
+        INNER JOIN teosten_tekijat ktt ON t.isbn = ktt.teos_isbn
+        INNER JOIN tekija kt ON ktt.tekija_id = kt.id
     WHERE LOWER(kt.etunimi) LIKE hakusana OR LOWER(kt.sukunimi) LIKE hakusana OR 
           LOWER(nimi) LIKE hakusana OR LOWER(tyyppi) LIKE hakusana OR 
           LOWER(luokka) LIKE hakusana

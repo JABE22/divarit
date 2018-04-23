@@ -344,8 +344,8 @@ INSERT INTO divari VALUES ('D3', 'Keskusdivarinkatu 99');
 
 -- kayttajat
 -- Muutettu boolean arvot -> varchar ja lisätty admin D1 divarille [Matarmaa]
-INSERT INTO kayttaja VALUES ('admin@divarit.fi', 'Admin', 'Divari', 'Divarikatu 600', '050 999 999', 'D1');
-INSERT INTO kayttaja VALUES ('admin_d1@divarit.fi', 'D1Admin', 'Sivudivari', 'Sivudivarikatu 66', '040 369 369', 'D2');
+INSERT INTO kayttaja VALUES ('admin@divarit.fi', 'Admin', 'Divari', 'Divarikatu 600', '050 999 999', 'D2');
+INSERT INTO kayttaja VALUES ('admin_d1@divarit.fi', 'D1Admin', 'Sivudivari', 'Sivudivarikatu 66', '040 369 369', 'D1');
 INSERT INTO kayttaja VALUES ('kalle@divarit.fi', 'Kalle', 'Kirjala', 'Kimmontie 4 A 16', '040012345', null);
 INSERT INTO kayttaja VALUES ('liisa@divarit.fi', 'Liisa', 'Lukutoukkala', 'Kirjakuja 1', null, null);
 INSERT INTO kayttaja VALUES ('teppo@divarit.fi', 'Teppo', 'Teppola', 'Katukuja 99', '123456', null);

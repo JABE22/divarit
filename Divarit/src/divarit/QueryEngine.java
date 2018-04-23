@@ -20,10 +20,9 @@ public class QueryEngine {
     
     private final DatabaseConnection dataCon;
     private final Connection con;
+    private final String SCHEMA_KD = "keskusdivari";
     
     /*** SQL-Funktioita käyttävät kyselyt ***/
-    
-    private final String SET_SCHEMA = "SET SCHEMA 'keskusdivari'";
     // Varastossa olevien kappaleiden hakukysely
     private final String CUSTOMER_BOOK_QUERY = "SELECT * FROM keskusdivari.hae_kappaleet(?)";
     
@@ -128,6 +127,7 @@ public class QueryEngine {
         ArrayList<String> results = new ArrayList<>();
         
         try {
+            setSchema(SCHEMA_KD);
             String headword = "%" + entry + "%";
             PreparedStatement prstmt = this.con.prepareStatement(CUSTOMER_BOOK_QUERY);
             
@@ -168,7 +168,7 @@ public class QueryEngine {
         ArrayList<String> results = new ArrayList<>();
         
         try {
-            // setSchema(divari_name);
+            setSchema(divari_name);
             String headword = "%" + entry + "%";
             PreparedStatement prstmt = this.con.prepareStatement(ADMIN_BOOK_QUERY);
             
@@ -211,7 +211,7 @@ public class QueryEngine {
         String[] user_details = new String[6];
         
         try {
-            // setSchema("keskusdivari");
+            setSchema(SCHEMA_KD);
             PreparedStatement prstmt = this.con.prepareStatement(USER_DETAILS_QUERY);
             
             prstmt.clearParameters();
@@ -245,6 +245,7 @@ public class QueryEngine {
     public void addUser(ArrayList<String> user_details) {
         
         try {
+            setSchema(SCHEMA_KD);
             PreparedStatement prstmt = this.con.prepareStatement(INSERT_USER);
             
             prstmt.clearParameters();
@@ -262,9 +263,10 @@ public class QueryEngine {
     }
     
     // Lisää uuden teoksen tiedot tietokantaan
-    public void insertCopy(ArrayList<String> copyDetails) {
+    public void insertCopy(ArrayList<String> copyDetails, String div_name) {
         
         try {
+            setSchema(div_name);
             PreparedStatement prstmt = this.con.prepareStatement(INSERT_COPY);
             
             prstmt.clearParameters();
@@ -282,9 +284,10 @@ public class QueryEngine {
     }
     
     // Lisää uuden kappaleen tietokantaan. HUOM! Teoksen tiedot lisättävä ensin (isbn)
-    public void insertBook(ArrayList<String> bookDetails) {
+    public void insertBook(ArrayList<String> bookDetails, String div_name) {
         
         try {
+            setSchema(div_name);
             PreparedStatement prstmt = this.con.prepareStatement(INSERT_BOOK);
             prstmt.clearParameters();
             
@@ -308,9 +311,10 @@ public class QueryEngine {
     }
     
     // Lisää uuden tekijän tiedot tietokantaan (parametri)
-    public void insertAuthor(ArrayList<String> authorDetails) {
+    public void insertAuthor(ArrayList<String> authorDetails, String div_name) {
         
         try {
+            setSchema(div_name);
             PreparedStatement prstmt = this.con.prepareStatement(INSERT_AUTHOR);
             prstmt.clearParameters();
             
@@ -336,6 +340,7 @@ public class QueryEngine {
         ArrayList<String> details = new ArrayList<>();
      
         try {
+            setSchema(SCHEMA_KD);
             Statement stmt = this.con.createStatement();     
             ResultSet rset = stmt.executeQuery(REPORT_QUERY);
 
@@ -357,10 +362,11 @@ public class QueryEngine {
     }
     
     // Hakee kategorioihin liittyviä hintatietoja
-    public ArrayList<String> getCategoryReport() {
+    public ArrayList<String> getCategoryReport(String div_name) {
         ArrayList<String> details = new ArrayList<>();
      
         try {
+            setSchema(div_name);
             Statement stmt = this.con.createStatement();     
             ResultSet rset = stmt.executeQuery(REPORT_CATEGORY_QUERY);
 
@@ -394,6 +400,7 @@ public class QueryEngine {
         //setSchema("keskusdivari"); 
         int order_id;
         try {
+            setSchema(SCHEMA_KD);
             PreparedStatement prstmt = this.con.prepareStatement(ORDER_ID_QUERY);
             prstmt.clearParameters();        
             prstmt.setString(1, email);
@@ -415,6 +422,7 @@ public class QueryEngine {
     public void addToCart(ArrayList<String> details) {
         
         try {
+            setSchema(SCHEMA_KD);
             PreparedStatement prstmt = this.con.prepareStatement(ADD_TO_CART);
             prstmt.clearParameters();
             
@@ -443,6 +451,7 @@ public class QueryEngine {
     // Poistaa tuotteen ostoskorista
     public boolean remove(int book_id, String username) {  
         try {
+            setSchema(SCHEMA_KD);
             PreparedStatement prstmt = this.con.prepareStatement(DELETE_FROM_CART);
             prstmt.clearParameters();
             prstmt.setInt(1, book_id);
@@ -462,10 +471,10 @@ public class QueryEngine {
         ArrayList<String> content = new ArrayList<>();
 
         try {
+            setSchema(SCHEMA_KD);
             PreparedStatement prstmt = this.con.prepareStatement(CART_CONTENT_QUERY);
             prstmt.clearParameters();
-            prstmt.setInt(1, order_id);
-  
+            prstmt.setInt(1, order_id); 
             ResultSet rset = prstmt.executeQuery();
             
             if (rset.next()) {
@@ -493,10 +502,12 @@ public class QueryEngine {
     public double getCartSum(int order_id) {
         double totalSum;
         try {
+            setSchema(SCHEMA_KD);
             PreparedStatement prstmt = this.con.prepareStatement(CART_SUM_QUERY);
             prstmt.clearParameters();
             prstmt.setInt(1, order_id);
             ResultSet rset = prstmt.executeQuery();
+            
             if (rset.next()) {
                 totalSum = rset.getDouble(1);
                 prstmt.close();
@@ -512,15 +523,13 @@ public class QueryEngine {
     // Päivittää tilauksen tilan
     public void setOrderStatus(int order_id, int newStatus) {
         try {
-            PreparedStatement prstmt = con.prepareStatement(SET_ORDER_STATUS);
-            
+            setSchema(SCHEMA_KD);
+            PreparedStatement prstmt = con.prepareStatement(SET_ORDER_STATUS);           
             prstmt.clearParameters();
             prstmt.setInt(1, order_id);
-            prstmt.setInt(2, newStatus);
-            
+            prstmt.setInt(2, newStatus);            
             prstmt.executeUpdate();
-            prstmt.close(); 
-            
+            prstmt.close();            
         } catch (SQLException e) {
             System.out.println("SET_ORDER_STAT_Q: " + e.getMessage());
         }
@@ -529,11 +538,14 @@ public class QueryEngine {
     
     // Asettaa skeeman
     public void setSchema(String schema) {
+        if (schema.equals("D2")) {
+            schema = "keskusdivari";
+        }
         
         try {
             
             Statement stmt = this.con.createStatement();
-            stmt.execute(SET_SCHEMA);
+            stmt.execute("SET SCHEMA '" + schema.toLowerCase() + "';");
 //            PreparedStatement prstmt = con.prepareStatement(SET_SCHEMA);
 //            
 //            prstmt.clearParameters();
