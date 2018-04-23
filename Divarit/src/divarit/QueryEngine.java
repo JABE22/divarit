@@ -28,7 +28,7 @@ public class QueryEngine {
     // Yksittäisen divarin varastossa olevien kappaleiden hakukysely ylläpitäjän tiedoilla
     private final String ADMIN_BOOK_QUERY = "SELECT * FROM hae_kappaleet_admin(?, ?)";
     // Hakukysely teoksille ja niiden tekijöille [ hae_teokset(hakusana, divari) ]
-    private final String ADMIN_COPY_QUERY = "SELECT * FROM hae_teokset(?, ?)";
+    private final String ADMIN_COPY_QUERY = "SELECT * FROM hae_kappaleet_admin(?, ?)";
     
     // Käyttäjän tiedot
     private final String USER_DETAILS_QUERY = "SELECT * FROM keskusdivari.hae_kayttaja(?);"; 
@@ -77,24 +77,17 @@ public class QueryEngine {
         this.con = this.dataCon.getConnection();
     }
     
-    // Tämä haku kohdistuu teoksiin (ei myytäviin kappaleisiin)
-    public ArrayList<String> adminCopyQuery(String entry, int type) {
-        // Valitaan suoritettava kysely
-        String query;
-        if (type == 1) {
-            query = ADMIN_COPY_QUERY;
-        } else {
-            query = CUSTOMER_BOOK_QUERY;
-        }
-        
+    // Tämä haku kohdistuu teoksiin (ei myytäviin kappaleisiin, vain admin)
+    public ArrayList<String> adminCopyQuery(String entry, String divari_name) {   
         ArrayList<String> results = new ArrayList<>();
         
         try {
             String headword = "%" + entry + "%";
-            PreparedStatement prstmt = this.con.prepareStatement(query);
+            PreparedStatement prstmt = this.con.prepareStatement(ADMIN_COPY_QUERY);
             
             prstmt.clearParameters();
             prstmt.setString(1, headword.toLowerCase());
+            prstmt.setString(2, divari_name);
 
             ResultSet rset = prstmt.executeQuery();
             
@@ -124,6 +117,7 @@ public class QueryEngine {
         return results;
     }
     
+    // Palauttaa asiakkaalle näytettävät kappaletiedot listalla
     public ArrayList<String> customerBookQuery(String entry) {
         ArrayList<String> results = new ArrayList<>();
         
@@ -162,6 +156,7 @@ public class QueryEngine {
         return results;
     }
     
+    // Palauttaa yksittäisen divarin ylläpitäjälle näytettävät kappaletiedot listalla
     public ArrayList<String> adminBookQuery(String entry, String divari_name) {
         ArrayList<String> results = new ArrayList<>();
         

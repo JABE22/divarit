@@ -24,10 +24,6 @@ public class UserInterface {
     // Staattinen jÃ¤rjestelmÃ¤n salasana
     private final String PASSWORD = "1234";
 
-    // Hakutoimintojen apumuuttujat
-    private final int BOOK_SEARCH_TYPE = 0; // Kappalehaku (kappale_id)
-    private final int COPY_SEARCH_TYPE = 1; // Teoshaku
-
     // Aktiivisen kÃ¤yttÃ¤jÃ¤n tietoja. On nollattava kun kirjaudutaan ulos
     // ...kutsumalla metodia signOut()
     private String[] signed_user_details = null;
@@ -144,7 +140,7 @@ public class UserInterface {
                     // Haetaan myynnissä olevia kappaleita
                     System.out.println("Searching items...");
                     if (input.length > 1) {
-                        customerBookSearch(input[1], BOOK_SEARCH_TYPE);
+                        customerBookSearch(input[1]);
                     }
                     break;
 
@@ -304,7 +300,18 @@ public class UserInterface {
     }
 
     // Ylläpitäjän ja asiakkaan teos- ja kappalehaku, type 0=kappale ja 1=teos
-    public void customerBookSearch(String entry, int type) {
+    public void customerBookSearch(String entry) {
+        ArrayList<String> results = search_engine.customerBookQuery(entry);
+        // Hakutyyppiä vastaavan tulostusmetodin kutsu
+        if (type == 0) {
+            printCustomerBookDetails(results);
+        } else {
+            printCopyDetails(results);
+        }
+    }
+    
+    // Ylläpitäjän ja asiakkaan teos- ja kappalehaku, type 0=kappale ja 1=teos
+    public void adminBookSearch(String entry) {
         ArrayList<String> results = search_engine.customerBookQuery(entry);
         // Hakutyyppiä vastaavan tulostusmetodin kutsu
         if (type == 0) {
