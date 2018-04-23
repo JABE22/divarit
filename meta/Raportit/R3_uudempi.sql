@@ -19,10 +19,10 @@
 	[kayttaja_2@foo.fi] <-- LEFT JOIN --> (ei vastaavaa tuplea) = 0
 	
 */
-SELECT kayttaja.email, COALESCE(laskenta.eri_kirjojen_lkm_vuoden_sis, 0) as eri_kirjojen_lkm_vuoden_sis FROM kayttaja
+SELECT kayttaja.email, COALESCE(laskenta.eri_teosten_lkm_viime_vuonna, 0) as eri_teosten_lkm_viime_vuonna FROM kayttaja
 -- Joinaa laskentatuloksen kanssa
 LEFT JOIN (
-	SELECT kayttaja.email as k_e, COUNT(DISTINCT(kappale.teos_isbn)) as eri_kirjojen_lkm_vuoden_sis FROM tilaus
+	SELECT kayttaja.email as k_e, COUNT(DISTINCT(kappale.teos_isbn)) as eri_teosten_lkm_viime_vuonna FROM tilaus
 	INNER JOIN ostoskori ON tilaus.id=ostoskori.tilaus_id
 	INNER JOIN kappale ON ostoskori.kappale_id=kappale.id
 	RIGHT JOIN kayttaja ON tilaus.kayttaja_email=kayttaja.email
