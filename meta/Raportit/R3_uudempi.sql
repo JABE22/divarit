@@ -27,8 +27,9 @@ LEFT JOIN (
 	INNER JOIN kappale ON ostoskori.kappale_id=kappale.id
 	RIGHT JOIN kayttaja ON tilaus.kayttaja_email=kayttaja.email
 	WHERE
-	-- tilaus.tila=2 AND -- 2 = valmis tilaus
-	tilaus.pvm >= CURRENT_DATE - '1 year'::interval 
+	tilaus.tila=2 AND -- 2 = valmis tilaus
+	-- tilaus.pvm >= CURRENT_DATE - '1 year'::interval  -- VANHA
+    EXTRACT(YEAR FROM NOW()::date)-1 = EXTRACT(YEAR FROM tilaus.pvm)
 	GROUP BY(kayttaja.email)
 ) as laskenta ON kayttaja.email=laskenta.k_e
 ORDER BY kayttaja.email ASC;
