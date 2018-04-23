@@ -28,7 +28,7 @@ public class UserInterface {
     // ...kutsumalla metodia signOut()
     private String[] signed_user_details = null;
     private int tilaus_id;
-    private String div_admin; // Talletetaan ylläpitäjän divarinimi, jos ylläpitäjä. Muuten null;
+    private String div_name; // Talletetaan ylläpitäjän divarinimi, jos ylläpitäjä. Muuten null;
 
     // Ohjelman asiakas -komennot
     private final String FIND = "find"; // Myytävänä olevat kappaleet
@@ -85,13 +85,13 @@ public class UserInterface {
             + "_______________________\n";
 
     // Luokkamuuttuja Tietokannan SQL -kyselyille
-    private final QueryEngine search_engine;
+    private final QueryEngine QE;
 
     private final ArrayList<String> testikomennot;
     private int komentoIndeksi;
 
     public UserInterface() {
-        this.search_engine = new QueryEngine(new DatabaseConnection());
+        this.QE = new QueryEngine(new DatabaseConnection());
 
         // Testiajo ** lukee esivalitut komennot tiedostosta
         this.testikomennot = lueKomennotTiedostosta("src/testiajo.txt");
@@ -108,7 +108,7 @@ public class UserInterface {
             // Testausta varten
             // printUserDetails();
 
-            if (this.div_admin != null) {
+            if (this.div_name != null) {
                 System.out.println(ADMIN_PRINT);
                 admin();
             } else {
@@ -175,7 +175,7 @@ public class UserInterface {
                     System.out.println("Checking out...");
                     printCartContents(); // Ostoskorin sisältö ja hinnat
                     // Tulostellaan tässä koko tilauksen yhteishinta
-                    double totalSum = this.search_engine.getCartSum(tilaus_id);
+                    double totalSum = this.QE.getCartSum(tilaus_id);
                     printSpace(28);
                     System.out.println("tuotteet yht: " + totalSum);
                     System.out.println("Vahvista tilaus [order] tai palaa [return]:");
@@ -186,8 +186,8 @@ public class UserInterface {
                         if (checkUserInput(command)) {
                             // Tehdään tietokantaan tarvittavat muutokset
                             if (command.equals(ORDER)) {
-                                this.search_engine.setOrderStatus(tilaus_id, 2);
-                                this.search_engine.emptyCart(tilaus_id);
+                                this.QE.setOrderStatus(tilaus_id, 2);
+                                this.QE.emptyCart(tilaus_id);
                                 System.out.println("Kiitos tilauksesta!");
                                 customer();
                             } else {
@@ -238,14 +238,14 @@ public class UserInterface {
                 case FIND:
                     System.out.println("Searching copies...");
                     if (input.length > 1) {
-                        adminBookSearch(input[1], this.div_admin);
+                        adminBookSearch(input[1]);
                     }
                     break;
 
                 case FIND_BOOK:
                     System.out.println("Searching books...");
                     if (input.length > 1) {
-                        adminBookSearch(input[1], this.div_admin);
+                        adminBookSearch(input[1]);
                     }
                     break;
 
@@ -301,24 +301,17 @@ public class UserInterface {
 
     // Ylläpitäjän ja asiakkaan teos- ja kappalehaku, type 0=kappale ja 1=teos
     public void customerBookSearch(String entry) {
-        ArrayList<String> results = search_engine.customerBookQuery(entry);
+        ArrayList<String> results = QE.customerBookQuery(entry);
         // Hakutyyppiä vastaavan tulostusmetodin kutsu
-        if (type == 0) {
-            printCustomerBookDetails(results);
-        } else {
-            printCopyDetails(results);
-        }
+        printCustomerBookDetails(results);
+
     }
     
     // Ylläpitäjän ja asiakkaan teos- ja kappalehaku, type 0=kappale ja 1=teos
     public void adminBookSearch(String entry) {
-        ArrayList<String> results = search_engine.customerBookQuery(entry);
+        ArrayList<String> results = QE.adminBookQuery(entry, this.div_name);
         // Hakutyyppiä vastaavan tulostusmetodin kutsu
-        if (type == 0) {
-            printCustomerBookDetails(results);
-        } else {
-            printCopyDetails(results);
-        }
+        printAdminBookDetails(results);
     }
 
     /* Palauttaa false, jos käyttäjää ei löydy tietokannasta tai kirjautuminen
@@ -340,7 +333,7 @@ public class UserInterface {
             String password = sign_details[1];
 
             // Haetaan käyttäjätiedot tietokannasta (käyttäjänimen perusteella)
-            String[] result = this.search_engine.userDetails(username);
+            String[] result = this.QE.userDetails(username);
 
             if (result != null && result[0] != null) {
                 // Salasanan tarkistus
@@ -351,14 +344,9 @@ public class UserInterface {
                     this.signed_user_details = result;
                     System.out.println("Welcome " + this.signed_user_details[1] + "!");
                 }
-
-                if (result[5].contains("t")) {
-                    this.div_admin = true;
-                    return true;
-                } else {
-                    this.div_admin = false;
-                    return true;
-                }
+                this.div_name = result[5];
+                return true;
+                        
             } else {
                 // Jos tuloksia ei annetulla käyttäjänimellä löydetty, niin...
                 signUp();
@@ -374,7 +362,7 @@ public class UserInterface {
     // Kirjaa aktiivisen käyttäjän ulos järjestelmästä
     public void signOut() {
         System.out.println("Logging out...");
-        this.div_admin = false;
+        this.div_name = null;
         this.signed_user_details = null;
         this.tilaus_id = 0;
         run();
@@ -423,13 +411,13 @@ public class UserInterface {
     // Lisää asiakkaan tiedot tietokantaan
     public void addCustomer(ArrayList<String> user_details) {
         System.out.println("Adding customer to database...");
-        this.search_engine.addUser(user_details);
+        this.QE.addUser(user_details);
         // Ei tee vielÃ¤ mitÃ¤Ã¤n muuta
     }
 
     public boolean setTilausID() {
         String userEmail = this.signed_user_details[0];
-        int orderID = this.search_engine.getOrderID(userEmail);
+        int orderID = this.QE.getOrderID(userEmail);
         if (orderID == -1) {
             return false;
         } else {
@@ -461,7 +449,7 @@ public class UserInterface {
                     "                 -OSTOSKORI-                 \n"
                     + "tuotenro    tuotenimi                    a_hinta\n"
                     + "------------------------------------------------");
-            ArrayList<String> cartContents = this.search_engine.cartContent(tilaus_id);
+            ArrayList<String> cartContents = this.QE.cartContent(tilaus_id);
 
             cartContents.stream().forEach(row -> {
                 String[] parts = row.split("/");
@@ -529,10 +517,61 @@ public class UserInterface {
         });
     }
 
-    // Myyntikappaleiden muotoiltu tulostus
+    // Myyntikappaleiden muotoiltu tulostus (Asiakkaat)
     public void printCustomerBookDetails(ArrayList<String> results) {
         System.out.println("tnro    tuotenimi                     kuvaus"
                 + "                        luokka         tyyppi         eur\n"
+                + "-----------------------------------------------------------"
+                         + "--------------------------------------------");
+        
+        results.stream().forEach(row -> {
+            String[] parts = row.split("/");
+            String limiter = "";
+
+            for (int i = 0; i < parts.length; i++) {
+                // Rajataan näytettävän nimen ja kuvauksen koko 30 merkkiin
+                limiter = stringLimiter(parts[i], 25);
+                // Tulostuksen sisennys tasaus
+                switch (i) {
+                    case 0: // id, välimerkit jälkeen lkm
+                        System.out.print(parts[i]);
+                        printSpace(8 - parts[i].length());
+                        break;
+
+                    case 1: // teosnimi, välimerkit jälkeen lkm
+                        System.out.print(limiter);
+                        printSpace(30 - limiter.length());
+                        break;
+
+                    case 2: // kuvaus , välimerkit jälkeen lkm
+                        System.out.print(limiter);
+                        printSpace(30 - limiter.length());
+                        break;
+
+                    case 3: // luokka, välimerkit jälkeen lkm
+                        System.out.print(parts[i]);
+                        printSpace(15 - parts[i].length());
+                        break;
+
+                    case 4: // Tyyppi
+                        System.out.print(parts[i]);
+                        printSpace(15 - parts[i].length());
+                        break;
+                        
+                    case 5:
+                        System.out.println(parts[i]);
+                        break;
+                }
+            }
+        });
+        System.out.println("-----------------------------------------------------------"
+                         + "--------------------------------------------");
+    }
+    
+    // Myyntikappaleiden muotoiltu tulostus (Ylläpitäjät)
+    public void printAdminBookDetails(ArrayList<String> results) {
+        System.out.println("tnro    tuotenimi                     luokka"
+                + "                        sisosto/e         hinta/e     myyty\n"
                 + "-----------------------------------------------------------"
                          + "--------------------------------------------");
         
@@ -610,7 +649,7 @@ public class UserInterface {
             }
         }
         System.out.println("Adding copy...");
-        this.search_engine.insertCopy(copy_details);
+        this.QE.insertCopy(copy_details);
     }
 
     // Lisää uuden kappaleen/yksittäisen kirjan tiedot (Kysytään käyttäjältä)
@@ -650,12 +689,12 @@ public class UserInterface {
 
         }
         System.out.println("Adding book...");
-        this.search_engine.insertBook(book_details);
+        this.QE.insertBook(book_details);
 
     }
 
     private void printPurchaseReport() {
-        ArrayList<String> data = this.search_engine.getPurchaseReport();
+        ArrayList<String> data = this.QE.getPurchaseReport();
         System.out.println(
                 "    -RAPORTTI OSTOHISTORIA-    \n"
                 + "Asiakas             tilatut/kpl\n"
@@ -671,7 +710,7 @@ public class UserInterface {
     }
 
     private void printCategoryReport() {
-        ArrayList<String> data = this.search_engine.getCategoryReport();
+        ArrayList<String> data = this.QE.getCategoryReport();
         System.out.println(
                 "      -RAPORTTI KATEGORIAHINNAT        \n"
                 + "Kategoria         hinta/yht    hinta/avg\n"
@@ -705,7 +744,7 @@ public class UserInterface {
         String email = this.signed_user_details[0];
 
         if (this.tilaus_id == 0) {
-            this.tilaus_id = this.search_engine.getOrderID(email);
+            this.tilaus_id = this.QE.getOrderID(email);
             System.out.println("*Uusi ostoskori luotu*");
         }
 
@@ -713,7 +752,7 @@ public class UserInterface {
         details.add("D2");
         details.add(Integer.toString(this.tilaus_id));
 
-        this.search_engine.addToCart(details);
+        this.QE.addToCart(details);
     }
 
     // Poistaa tuotteen ostoskorista
@@ -721,7 +760,7 @@ public class UserInterface {
         int id = checkIntFormat(book_id);
         String username = this.signed_user_details[0];
         if (id > 0) { 
-            if (this.search_engine.remove(id, username)) {
+            if (this.QE.remove(id, username)) {
                 System.out.println("Tuote poistettiin onnistuneesti!");
             } else {
                 System.out.println("Tuote ID:tä ei löytynyt");
@@ -732,7 +771,7 @@ public class UserInterface {
     // Tyhjentää ostoskorin
     public void clearCart() {
         setTilausID();
-        int changes = this.search_engine.emptyCart(tilaus_id);
+        int changes = this.QE.emptyCart(tilaus_id);
         System.out.println(changes + " items removed.");
     }
 
@@ -756,7 +795,7 @@ public class UserInterface {
         } else if (input.equals(RETURN)) {
             if (signed_user_details == null) {
                 run();
-            } else if (this.div_admin) {
+            } else if (this.div_name != null) {
                 admin();
             } else {
                 customer();

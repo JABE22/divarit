@@ -212,17 +212,15 @@ public class QueryEngine {
             if (rset.next()) {
                 for (int i = 0; i < 6; i++) {
                     user_details[i] = rset.getString(i + 1);
-                }
-                
+                } 
             } else {
                 System.out.println("Username not found");
             }
             prstmt.close();  // sulkee automaattisesti myös tulosjoukon rset
             
         } catch (SQLException e) {
-            System.out.println("Error: [SearchEngine/userDetails()], " + e.getMessage());
+            System.out.println("Error: [QueryEngine/userDetails()], " + e.getMessage());
         }
-        
         return user_details;
     }
     
