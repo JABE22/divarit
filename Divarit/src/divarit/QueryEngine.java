@@ -22,12 +22,16 @@ public class QueryEngine {
     private final Connection con;
     
     /*** SQL-Funktioita käyttävät kyselyt ***/
-    // Hakukysely teoksille ja niiden tekijÃ¶ille
-    private final String UNI_QUERY = "SELECT * FROM keskusdivari.hae_teokset(?)";
     // Varastossa olevien kappaleiden hakukysely
-    private final String CUSTOMER_QUERY = "SELECT * FROM keskusdivari.hae_kappaleet(?)"; 
+    private final String CUSTOMER_BOOK_QUERY = "SELECT * FROM keskusdivari.hae_kappaleet(?)";
+    
+    // Yksittäisen divarin varastossa olevien kappaleiden hakukysely ylläpitäjän tiedoilla
+    private final String ADMIN_BOOK_QUERY = "SELECT * FROM hae_kappaleet_admin(?, ?)";
+    // Hakukysely teoksille ja niiden tekijöille [ hae_teokset(hakusana, divari) ]
+    private final String ADMIN_COPY_QUERY = "SELECT * FROM hae_teokset(?, ?)";
+    
     // Käyttäjän tiedot
-    private final String USER_QUERY = "SELECT * FROM keskusdivari.hae_kayttaja(?);"; 
+    private final String USER_DETAILS_QUERY = "SELECT * FROM keskusdivari.hae_kayttaja(?);"; 
     // Palauttaa tilaus_id :n tuotteiden ostoskoriin lisäämistä varten
     private final String ORDER_ID_QUERY = "SELECT * FROM keskusdivari.hae_tilaus_id(?);";
     // Palauttaa ostoskorin sisällön
@@ -78,9 +82,9 @@ public class QueryEngine {
         // Valitaan suoritettava kysely
         String query;
         if (type == 1) {
-            query = UNI_QUERY;
+            query = ADMIN_COPY_QUERY;
         } else {
-            query = CUSTOMER_QUERY;
+            query = CUSTOMER_BOOK_QUERY;
         }
         
         ArrayList<String> results = new ArrayList<>();
@@ -98,7 +102,46 @@ public class QueryEngine {
                 String rivi;
                 do {
                     // Teoksen kuvaus eli indeksi kolme poistettu (rset.getString(3))
-                    rivi = rset.getString(1) + "/" + rset.getString(2)
+                    rivi = rset.getString(1) 
+                    + "/" + rset.getString(2)
+                    + "/" + rset.getString(3)
+                    + "/" + rset.getString(4)
+                    + "/" + rset.getString(5)
+                    + "/" + rset.getString(6);
+                    results.add(rivi);
+                    
+                } while (rset.next());
+                
+            } else {
+                System.out.println("Nothing found!");
+            }
+            prstmt.close();  // sulkee automaattisesti myös tulosjoukon rset
+            
+        } catch (SQLException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+        
+        return results;
+    }
+    
+    public ArrayList<String> customerBookQuery(String entry) {
+        ArrayList<String> results = new ArrayList<>();
+        
+        try {
+            String headword = "%" + entry + "%";
+            PreparedStatement prstmt = this.con.prepareStatement(CUSTOMER_BOOK_QUERY);
+            
+            prstmt.clearParameters();
+            prstmt.setString(1, headword.toLowerCase());
+
+            ResultSet rset = prstmt.executeQuery();
+            
+            if (rset.next()) {
+                String rivi;
+                do {
+                    // Teoksen kuvaus eli indeksi kolme poistettu (rset.getString(3))
+                    rivi = rset.getString(1) 
+                    + "/" + rset.getString(2)
                     + "/" + rset.getString(3)
                     + "/" + rset.getString(4)
                     + "/" + rset.getString(5);
@@ -125,7 +168,7 @@ public class QueryEngine {
         
         try {
             // setSchema("keskusdivari");
-            PreparedStatement prstmt = this.con.prepareStatement(USER_QUERY);
+            PreparedStatement prstmt = this.con.prepareStatement(USER_DETAILS_QUERY);
             
             prstmt.clearParameters();
             prstmt.setString(1, username);
@@ -282,13 +325,13 @@ public class QueryEngine {
     // Palauttaa käyttäjänimeä vastaavan tilaus_id:n, jos ei löydy, 
     // luo uuden ja palauttaa sen
     public int getOrderID(String email) {
-        setSchema("keskusdivari"); 
+        //setSchema("keskusdivari"); 
         int order_id;
         try {
             PreparedStatement prstmt = this.con.prepareStatement(ORDER_ID_QUERY);
             prstmt.clearParameters();        
             prstmt.setString(1, email);
-            prstmt.execute("SET SCHEMA = keskusdivari");
+            // prstmt.execute("SET search_path TO keskusdivari");
             ResultSet rset = prstmt.executeQuery();
             if (rset.next()) {
                 order_id = rset.getInt(1);
@@ -326,7 +369,7 @@ public class QueryEngine {
             prstmt.close();  // sulkee automaattisesti myÃ¶s tulosjoukon rset
             
         } catch (SQLException e) {
-            System.out.println("Error: " + e.getMessage());
+            System.out.println(e.getMessage());
         }
     }
     

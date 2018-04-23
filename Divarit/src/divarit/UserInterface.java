@@ -144,7 +144,7 @@ public class UserInterface {
                     // Haetaan myynnissä olevia kappaleita
                     System.out.println("Searching items...");
                     if (input.length > 1) {
-                        uniSearch(input[1], BOOK_SEARCH_TYPE);
+                        customerBookSearch(input[1], BOOK_SEARCH_TYPE);
                     }
                     break;
 
@@ -242,14 +242,14 @@ public class UserInterface {
                 case FIND:
                     System.out.println("Searching copies...");
                     if (input.length > 1) {
-                        uniSearch(input[1], COPY_SEARCH_TYPE);
+                        customerBookSearch(input[1], COPY_SEARCH_TYPE);
                     }
                     break;
 
                 case FIND_BOOK:
                     System.out.println("Searching books...");
                     if (input.length > 1) {
-                        uniSearch(input[1], BOOK_SEARCH_TYPE);
+                        customerBookSearch(input[1], BOOK_SEARCH_TYPE);
                     }
                     break;
 
@@ -304,11 +304,11 @@ public class UserInterface {
     }
 
     // Ylläpitäjän ja asiakkaan teos- ja kappalehaku, type 0=kappale ja 1=teos
-    public void uniSearch(String entry, int type) {
-        ArrayList<String> results = search_engine.uniQuery(entry, type);
+    public void customerBookSearch(String entry, int type) {
+        ArrayList<String> results = search_engine.customerBookQuery(entry);
         // Hakutyyppiä vastaavan tulostusmetodin kutsu
         if (type == 0) {
-            printBookDetails(results);
+            printCustomerBookDetails(results);
         } else {
             printCopyDetails(results);
         }
@@ -523,7 +523,7 @@ public class UserInterface {
     }
 
     // Myyntikappaleiden muotoiltu tulostus
-    public void printBookDetails(ArrayList<String> results) {
+    public void printCustomerBookDetails(ArrayList<String> results) {
         results.stream().forEach(row -> {
             String[] parts = row.split("/");
             String limiter = "";
