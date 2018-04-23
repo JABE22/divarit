@@ -3,6 +3,11 @@ find stephen
 find_book romaani
 find romaani
 find_book tieto
+add author
+Eckhart
+Tolle
+Saksa
+1972
 signout
 kalle@divarit.fi 1234
 find Sarasvuo

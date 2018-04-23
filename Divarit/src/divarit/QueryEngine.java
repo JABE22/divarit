@@ -55,6 +55,11 @@ public class QueryEngine {
       "INSERT INTO keskusdivari.kappale "
     + "(divari_nimi, teos_isbn, paino, sisosto_hinta, hinta, myynti_pvm) "
     + "VALUES (?, ?, ?, ?, ?, null);";
+    // Tekijän lisäys
+    private final String INSERT_AUTHOR =
+      "INSERT INTO tekija "
+    + "(etunimi, sukunimi, kansallisuus, synt_vuosi) "
+    + "VALUES (?, ?, ?, ?);";
     // Käyttäjän lisäys tietokantaan
     private final String INSERT_USER = 
       "INSERT INTO keskusdivari.kayttaja "
@@ -299,6 +304,30 @@ public class QueryEngine {
             
         } catch (SQLException e) {
             System.out.println("INSERT_BOOK_Q: " + e.getMessage());
+        }
+    }
+    
+    // Lisää uuden tekijän tiedot tietokantaan (parametri)
+    public void insertAuthor(ArrayList<String> authorDetails) {
+        
+        try {
+            PreparedStatement prstmt = this.con.prepareStatement(INSERT_AUTHOR);
+            prstmt.clearParameters();
+            
+            for (int i = 1; i <= authorDetails.size(); i++) {
+                if (i < 4) {
+                    prstmt.setString(i, authorDetails.get(i - 1));
+                } else if (i == 4){
+                    int birthYear = checkIntFormat(authorDetails.get(i - 1));
+                    prstmt.setInt(i, birthYear);
+                }
+            }
+            prstmt.executeUpdate();
+            prstmt.close();  // sulkee automaattisesti myös tulosjoukon rset
+            System.out.println("Tekijätiedot lisättiin onnistuneesti!");
+            
+        } catch (SQLException e) {
+            System.out.println("INSERT_AUTHOR_Q: " + e.getMessage());
         }
     }
     

@@ -43,9 +43,12 @@ public class UserInterface {
     private final String FIND_BOOK = "find_book"; // Kappaleet (teokset "find" komennolla)
     private final String ADD_BOOK = "book"; // Lisää kirjan, jolla jo teostiedot kannassa
     private final String ADD_COPY = "copy"; // Lisää teoksen
+    private final String ADD_AUTHOR = "author";
     private final String REPORT = "report"; // Komennon jälkeen samalla rivillä täsmennys...
     private final String REPORT_PURCHASE_HISTORY = "pur_his"; // ...ostohistoria...
     private final String REPORT_CATEGORY_PRICES = "cat_pri"; // tai kategorioiden hinnat
+    // Päivittää d1 -divarin tietokannan kappaleiden tilan vastaamaan keskusdivaria
+    private final String UPDATE_BOOKS = "SELECT FROM keskusdivari.paivita_kappaletilanne(?)";
 
     // Ohjelman yleiskomennot
     private final String RETURN = "return"; // Palaa etusivulle milloin tahansa
@@ -94,7 +97,7 @@ public class UserInterface {
         this.QE = new QueryEngine(new DatabaseConnection());
 
         // Testiajo ** lukee esivalitut komennot tiedostosta
-        this.testikomennot = lueKomennotTiedostosta("src/testiajo_checkout.txt");
+        this.testikomennot = lueKomennotTiedostosta("src/testiajo.txt");
         this.komentoIndeksi = 0;
     }
 
@@ -177,9 +180,11 @@ public class UserInterface {
 
                 case CHECKOUT:
                     System.out.println("Checking out...");
-
                     printCartContents(); // Ostoskorin sisältö ja hinnat
-                    printCartSum();
+                    printCartSum(); // Ostoskorin summa (yhteishinta)
+                    
+                    // Tähän postikulumetodi
+                    
                     System.out.println("Vahvista tilaus [order] tai palaa [return]:");
                     // Tilauksen vahvistaminen tai peruutus
                     checkOut();
@@ -242,6 +247,8 @@ public class UserInterface {
                             addBook();
                         } else if (input[1].equals(ADD_COPY)) {
                             addCopy();
+                        } else if (input[1].equals(ADD_AUTHOR)) {
+                            addAuthor();
                         } else {
                             System.out.println("Command invalid!#");
                         }
@@ -682,9 +689,31 @@ public class UserInterface {
         System.out.println("Adding copy...");
         this.QE.insertCopy(copy_details);
     }
+    
+    // Lisää uuden tekijän tiedot
+    private void addAuthor() {
+        String[] columns = {"ETUNIMI: ", "SUKUNIMI: ", "KANSALLISUUS: ", "SYNT_VUOSI: "};
+        ArrayList<String> author_details = new ArrayList<>();
+
+        String userInput;
+        for (int i = 0; i < columns.length; i++) {
+            System.out.print(columns[i]);
+            // userInput = In.readString();
+            userInput = getCommandAsDetails();
+
+            if (checkUserInput(userInput)) {
+                author_details.add(userInput);
+            } else {
+                System.out.println("Invalid copy detail! Try again:");
+                i--;
+            }
+        }
+        System.out.println("Adding copy...");
+        this.QE.insertAuthor(author_details);
+    }
 
     // Lisää uuden kappaleen/yksittäisen kirjan tiedot (Kysytään käyttäjältä)
-    // LisÃ¤Ã¤ uuden kappaleen/yksittÃ¤isen kirjan tiedot (KysytÃ¤Ã¤n kÃ¤yttÃ¤jÃ¤ltÃ¤)
+    // Lisää uuden kappaleen/yksittÃ¤isen kirjan tiedot (KysytÃ¤Ã¤n kÃ¤yttÃ¤jÃ¤ltÃ¤)
     private void addBook() {
         String[] columns = {"DIVARI: ", "ISBN: ", "PAINO: ", "SISÄÄNOSTOHINTA: ", "HINTA: "};
         ArrayList<String> book_details = new ArrayList<>();
@@ -723,7 +752,8 @@ public class UserInterface {
         this.QE.insertBook(book_details);
 
     }
-
+    
+    // Ostohistorian tulostus
     private void printPurchaseReport() {
         ArrayList<String> data = this.QE.getPurchaseReport();
         System.out.println(
@@ -740,6 +770,7 @@ public class UserInterface {
         System.out.println("");
     }
 
+    // Kategoriahintatietojen tulostus
     private void printCategoryReport() {
         ArrayList<String> data = this.QE.getCategoryReport();
         System.out.println(
@@ -829,6 +860,7 @@ public class UserInterface {
         return !input.isEmpty(); // Jos tyhjÃ¤ syÃ¶te, palautetaan false
     }
 
+    // Tarkistaa, onko parametri double -muotoinen ja palauttaa muutoksen
     public double checkDoubleFormat(String input) {
         double luku;
 
@@ -840,7 +872,9 @@ public class UserInterface {
 
         return luku;
     }
-
+    
+    
+    // Tarkistaa, onko parametri int -muotoinen ja palauttaa muunnoksen.
     public int checkIntFormat(String input) {
         int luku;
         try {
