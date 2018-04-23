@@ -39,7 +39,7 @@ public class QueryEngine {
     // Palauttaa ostoskorin sisällön
     private final String CART_CONTENT_QUERY = "SELECT * FROM keskusdivari.ostoskorin_tuotteet(?);";
     // Palauttaa tilaus_id:tä vastaavan ostoskorin yhteis-summan
-    private final String CART_SUM_QUERY = "SELECT SUM(kplhinta) FROM keskusdivari.ostoskorin_tuotteet(?);";
+    private final String CART_SUM_QUERY = "SELECT SUM(hinta) FROM keskusdivari.ostoskorin_tuotteet(?);";
     // Palauttaa tilattujen tuotteiden tilaajan ja kappalemäärän/asiakas viime vuonna
     private final String REPORT_QUERY = "SELECT * FROM keskusdivari.raportti_3()";
     // Palauttaa kategorioihin liittyviä hintatietoja
@@ -70,8 +70,6 @@ public class QueryEngine {
     private final String DELETE_FROM_CART =
       "DELETE FROM keskusdivari.ostoskori "
     + "WHERE kappale_id = ? AND tilaus_id = keskusdivari.hae_tilaus_id(?)";
-    // Tyhjentää ostoskorin sisällön
-    private final String EMPTY_CART = "DELETE FROM keskusdivari.ostoskori WHERE tilaus_id = ?;";
 
     
     public QueryEngine(DatabaseConnection dataCon) {
@@ -138,11 +136,12 @@ public class QueryEngine {
                 do {
                     // Teoksen kuvaus eli indeksi kolme poistettu (rset.getString(3))
                     rivi = rset.getString(1) 
-                    + "/" + rset.getString(2)
+                    + rset.getString(2)
                     + "/" + rset.getString(3)
                     + "/" + rset.getString(4)
                     + "/" + rset.getString(5)
-                    + "/" + rset.getString(6);
+                    + "/" + rset.getString(6)
+                    + "/" + rset.getString(7);
                     results.add(rivi);
                     
                 } while (rset.next());
@@ -400,7 +399,7 @@ public class QueryEngine {
                 }
             }
             int changes = prstmt.executeUpdate();
-            if (changes == 1) {
+            if (changes > 0) {
                 System.out.println("Tuote lisättiin onnistuneesti!");
             } else {
                 System.out.println("Antamaasi tuote ID:tä ei löytynyt");
@@ -429,25 +428,6 @@ public class QueryEngine {
         return false;
     }
     
-    // Tyhjentää ostoskorin
-    public int emptyCart(int order_id) {
-        int changedRows;
-        try {
-            PreparedStatement prstmt = con.prepareStatement(EMPTY_CART);
-            
-            prstmt.clearParameters();
-            prstmt.setInt(1, order_id);
-            
-            changedRows = prstmt.executeUpdate();
-            prstmt.close();  // sulkee automaattisesti myÃ¶s tulosjoukon rset
-            return changedRows;
-            
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
-        return 0;
-    }
-    
     // Palauttaa ostoskorin sisällön listalla
     public ArrayList<String> cartContent(int order_id) {
         ArrayList<String> content = new ArrayList<>();
@@ -462,9 +442,8 @@ public class QueryEngine {
             if (rset.next()) {
                 String rivi;
                 do {
-                    // Teoksen kuvaus eli indeksi kolme poistettu (rset.getString(3))
-                    rivi = // rset.getString(1) + "/" + // tilausnumero
-                           rset.getString(2) + "/" // tuotenumero
+                    // Käytettävissä myös indeksi [1], divari_nimi
+                    rivi = rset.getString(2) + "/" // tuotenumero
                          + rset.getString(3) + "/" // tuotenimi
                          + rset.getString(4); // kappalehinta
                     content.add(rivi);
@@ -540,5 +519,17 @@ public class QueryEngine {
     // Sulkee yhteyden tietokantaan
     public void closeDatabaseConnection() {
         this.dataCon.closeConnection();
+    }
+    
+    // Tarkistaa int lukuja mahdollisesti sisältäviä merkkijonoja
+    public int checkIntFormat(String input) {
+        int luku;
+        try {
+            luku = Integer.parseInt(input);
+        } catch (NumberFormatException e) {
+            return -1;
+        }
+
+        return luku;
     }
 }

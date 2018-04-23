@@ -27,7 +27,7 @@ public class UserInterface {
     // Aktiivisen kÃ¤yttÃ¤jÃ¤n tietoja. On nollattava kun kirjaudutaan ulos
     // ...kutsumalla metodia signOut()
     private String[] signed_user_details = null;
-    private int tilaus_id;
+    private int order_id;
     private String schema_name; // Talletetaan ylläpitäjän divarinimi, jos ylläpitäjä. Muuten null;
 
     // Ohjelman asiakas -komennot
@@ -94,7 +94,7 @@ public class UserInterface {
         this.QE = new QueryEngine(new DatabaseConnection());
 
         // Testiajo ** lukee esivalitut komennot tiedostosta
-        this.testikomennot = lueKomennotTiedostosta("src/testiajo.txt");
+        this.testikomennot = lueKomennotTiedostosta("src/testiajo_checkout.txt");
         this.komentoIndeksi = 0;
     }
 
@@ -114,6 +114,7 @@ public class UserInterface {
                     this.schema_name = "keskusdivari";
                 }
                 System.out.println(ADMIN_PRINT);
+                this.order_id = 0;
                 admin();
             } else {
                 System.out.println(CUSTOMER_PRINT);
@@ -125,7 +126,6 @@ public class UserInterface {
     // Asiakas kirjautuneena ajetaan tämä metodi
     public void customer() {
         System.out.println("**ASIAKKAAN ETUSIVU**" + " " + this.signed_user_details[1]);
-        this.tilaus_id = 0;
         String[] input;
 
         do {
@@ -166,7 +166,7 @@ public class UserInterface {
 
                 case EMPTY_CART:
                     System.out.println("Clearing shopping cart...");
-                    clearCart();
+                    this.QE.setOrderStatus(order_id, 1);
                     break;
 
                 case CART:
@@ -177,29 +177,12 @@ public class UserInterface {
 
                 case CHECKOUT:
                     System.out.println("Checking out...");
+
                     printCartContents(); // Ostoskorin sisältö ja hinnat
-                    // Tulostellaan tässä koko tilauksen yhteishinta
-                    double totalSum = this.QE.getCartSum(tilaus_id);
-                    printSpace(28);
-                    System.out.println("tuotteet yht: " + totalSum);
+                    printCartSum();
                     System.out.println("Vahvista tilaus [order] tai palaa [return]:");
                     // Tilauksen vahvistaminen tai peruutus
-                    String command;
-                    do {
-                        command = getCommand()[0];
-                        if (checkUserInput(command)) {
-                            // Tehdään tietokantaan tarvittavat muutokset
-                            if (command.equals(ORDER)) {
-                                this.QE.setOrderStatus(tilaus_id, 2);
-                                this.QE.emptyCart(tilaus_id);
-                                System.out.println("Kiitos tilauksesta!");
-                                customer();
-                            } else {
-                                System.out.println("Try again: [order] or [return]");
-                            }
-                            break;
-                        }
-                    } while (!command.equals(ORDER));
+                    checkOut();
                     break;
 
                 case RETURN:
@@ -374,7 +357,7 @@ public class UserInterface {
         System.out.println("Logging out...");
         this.schema_name = null;
         this.signed_user_details = null;
-        this.tilaus_id = 0;
+        this.order_id = 0;
         run();
     }
 
@@ -425,15 +408,32 @@ public class UserInterface {
         // Ei tee vielÃ¤ mitÃ¤Ã¤n muuta
     }
 
-    public boolean setTilausID() {
+    public void setOrderID() {
         String userEmail = this.signed_user_details[0];
-        int orderID = this.QE.getOrderID(userEmail);
-        if (orderID == -1) {
-            return false;
-        } else {
-            this.tilaus_id = orderID;
-            return true;
+        this.order_id = this.QE.getOrderID(userEmail);
+
+    }
+
+    public void checkOut() {
+        if (this.order_id == 0) {
+            System.out.println("Ostoskorisi on tyhjä!");
+            return;
         }
+        String command;
+        do {
+            command = getCommand()[0];
+            if (checkUserInput(command)) {
+                // Tehdään tietokantaan tarvittavat muutokset
+                if (command.equals(ORDER)) {
+                    this.QE.setOrderStatus(order_id, 2);
+                    System.out.println("Kiitos tilauksesta!");
+                    customer();
+                } else {
+                    System.out.println("Try again: [order] or [return]");
+                }
+                break;
+            }
+        } while (!command.equals(ORDER));
     }
 
     /**
@@ -451,30 +451,29 @@ public class UserInterface {
 
     // Tulostaa ostoskorin muotoillusti
     public void printCartContents() {
-        setTilausID();
-        if (this.tilaus_id == 0) {
-            System.out.println("Ostoskorisi on tyhjä");
+        if (this.order_id == 0) {
+            System.out.println("** Ostoskorisi on tyhjä **");
         } else {
             System.out.println(
                     "                 -OSTOSKORI-                 \n"
-                    + "tuotenro    tuotenimi                    a_hinta\n"
-                    + "------------------------------------------------");
-            ArrayList<String> cartContents = this.QE.cartContent(tilaus_id);
+                    + "tnro    tuotenimi                                 a_hinta\n"
+                    + "---------------------------------------------------------");
+            ArrayList<String> cartContents = this.QE.cartContent(order_id);
 
             cartContents.stream().forEach(row -> {
                 String[] parts = row.split("/");
                 String limiter = "";
                 for (int i = 0; i < parts.length; i++) {
                     // Käytetään syöte pituustarkistajassa
-                    limiter = stringLimiter(parts[i], 30);
+                    limiter = stringLimiter(parts[i], 40);
                     switch (i) {
                         case 0:
                             System.out.print(limiter);
-                            printSpace(12 - parts[i].length());
+                            printSpace(8 - limiter.length());
                             break;
                         case 1:
                             System.out.print(limiter);
-                            printSpace(30 - parts[i].length());
+                            printSpace(42 - limiter.length());
                             break;
                         case 2:
                             System.out.println(limiter);
@@ -482,8 +481,16 @@ public class UserInterface {
                     }
                 }
             });
+            System.out.println("---------------------------------------------------------");
         }
-        System.out.println("------------------------------------------------");
+
+    }
+
+    // TUlostaa ostoskorin tuotteiden yhteishinnan
+    public void printCartSum() {
+        double totalSum = this.QE.getCartSum(order_id);
+        printSpace(36);
+        System.out.println("tuotteet yht: " + totalSum + " €");
     }
 
     // Teosten muotoiltu tulostus
@@ -538,7 +545,7 @@ public class UserInterface {
 
     // Myyntikappaleiden muotoiltu tulostus (Asiakkaat)
     public void printCustomerBookDetails(ArrayList<String> results) {
-        System.out.println("tnro    tuotenimi                     kuvaus"
+        System.out.println("tnro      tuotenimi                     kuvaus"
                 + "                        luokka         tyyppi         eur\n"
                 + "-----------------------------------------------------------"
                 + "--------------------------------------------");
@@ -554,7 +561,7 @@ public class UserInterface {
                 switch (i) {
                     case 0: // id, välimerkit jälkeen lkm
                         System.out.print(parts[i]);
-                        printSpace(8 - parts[i].length());
+                        printSpace(10 - parts[i].length());
                         break;
 
                     case 1: // teosnimi, välimerkit jälkeen lkm
@@ -568,17 +575,17 @@ public class UserInterface {
                         break;
 
                     case 3: // luokka, välimerkit jälkeen lkm
-                        System.out.print(parts[i]);
+                        System.out.print(limiter);
                         printSpace(15 - parts[i].length());
                         break;
 
                     case 4: // Tyyppi
-                        System.out.print(parts[i]);
-                        printSpace(15 - parts[i].length());
+                        System.out.print(limiter);
+                        printSpace(15 - limiter.length());
                         break;
 
                     case 5:
-                        System.out.println(parts[i]);
+                        System.out.println(limiter);
                         break;
                 }
             }
@@ -632,7 +639,7 @@ public class UserInterface {
                         System.out.print(parts[i]);
                         printSpace(12 - limiter.length());
                         break;
-                        
+
                     case 6:
                         System.out.println(limiter);
                         break;
@@ -762,19 +769,20 @@ public class UserInterface {
     *
      */
     public void addToCart(String book_id) {
-        int casted_bid = checkIntFormat(book_id);
+        String div_name = book_id.substring(0, 1);
+        String cutted_bid = book_id.substring(2);
 
         ArrayList<String> details = new ArrayList<>();
         String email = this.signed_user_details[0];
 
-        if (this.tilaus_id == 0) {
-            this.tilaus_id = this.QE.getOrderID(email);
+        if (this.order_id == 0) {
+            this.order_id = this.QE.getOrderID(email);
             System.out.println("*Uusi ostoskori luotu*");
         }
 
-        details.add(Integer.toString(casted_bid));
-        details.add("D2");
-        details.add(Integer.toString(this.tilaus_id));
+        details.add(cutted_bid);
+        details.add(div_name);
+        details.add(Integer.toString(this.order_id));
 
         this.QE.addToCart(details);
     }
@@ -790,13 +798,6 @@ public class UserInterface {
                 System.out.println("Tuote ID:tä ei löytynyt");
             }
         }
-    }
-
-    // Tyhjentää ostoskorin
-    public void clearCart() {
-        setTilausID();
-        int changes = this.QE.emptyCart(tilaus_id);
-        System.out.println(changes + " items removed.");
     }
 
     // Tarkistaa parametrina annetun syötteen pituuden. Jos pituus ylittyy, palauttaa

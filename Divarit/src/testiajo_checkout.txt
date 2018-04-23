@@ -13,8 +13,11 @@ checkout
 order
 signout
 liisa@divarit.fi 1234
-add 10101
-add 10102
+cart
+find jari
+add D110030
+add D110031
 cart
 checkout
 order
+return
