@@ -24,7 +24,7 @@ AS $$
 	kappale.divari_nimi, kappale.id as kappale_id, kappale.teos_isbn
 	FROM tilaus
 	INNER JOIN ostoskori ON tilaus.id=ostoskori.tilaus_id
-	INNER JOIN kappale ON ostoskori.kappale_id=kappale.id
+	INNER JOIN kappale ON ostoskori.kappale_id=kappale.id AND kappale.divari_nimi=ostoskori.divari_nimi
 	WHERE tilaus.id=tid
 	ORDER BY kappale.divari_nimi ASC;
 $$ LANGUAGE SQL;
