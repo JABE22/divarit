@@ -20,6 +20,6 @@ AS $$
         INNER JOIN keskusdivari.tekija kt ON ktt.tekija_id = kt.id
     WHERE LOWER(kt.etunimi) LIKE hakusana OR LOWER(kt.sukunimi) LIKE hakusana OR 
           LOWER(nimi) LIKE hakusana OR LOWER(tyyppi) LIKE hakusana OR 
-          LOWER(luokka) LIKE hakusana;
+          LOWER(luokka) LIKE hakusana
 
 $$ LANGUAGE SQL;

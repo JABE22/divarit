@@ -491,7 +491,7 @@ public class UserInterface {
         System.out.println("teos_isbn       tuotenimi                     "
                 + "tekijä                    luokka         tyyppi\n"
                 + "-----------------------------------------------------------"
-                + "--------------------------------------------");
+                + "------------------------------------------");
         results.stream().forEach(row -> {
             String[] parts = row.split("/");
             String limiter = "";
@@ -533,7 +533,7 @@ public class UserInterface {
             }
         });
         System.out.println("----------------------------------------------------"
-                + "---------------------------------------------------");
+                + "-------------------------------------------------");
     }
 
     // Myyntikappaleiden muotoiltu tulostus (Asiakkaat)
@@ -589,10 +589,10 @@ public class UserInterface {
 
     // Myyntikappaleiden muotoiltu tulostus (Ylläpitäjät)
     public void printAdminBookDetails(ArrayList<String> results) {
-        System.out.println("div  t_id    teos_nimi                     luokka"
-                + "                            sisosto/e   hinta/e   myyty\n"
+        System.out.println("div  t_id    teos_nimi                       luokka"
+                + "             sisosto/e   hinta/e     myyty\n"
                 + "-----------------------------------------------------------"
-                + "--------------------------------------------");
+                + "-----------------------------------");
 
         results.stream().forEach(row -> {
             String[] parts = row.split("/");
@@ -605,7 +605,7 @@ public class UserInterface {
                 switch (i) {
                     case 0: // id, välimerkit jälkeen lkm
                         System.out.print(parts[i]);
-                        printSpace(5 - parts[i].length());
+                        printSpace(5 - limiter.length());
                         break;
 
                     case 1: // teosnimi, välimerkit jälkeen lkm
@@ -615,27 +615,32 @@ public class UserInterface {
 
                     case 2: // kuvaus , välimerkit jälkeen lkm
                         System.out.print(limiter);
-                        printSpace(30 - limiter.length());
+                        printSpace(33 - limiter.length());
                         break;
 
                     case 3: // luokka, välimerkit jälkeen lkm
                         System.out.print(parts[i]);
-                        printSpace(15 - parts[i].length());
+                        printSpace(18 - limiter.length());
                         break;
 
                     case 4: // Tyyppi
                         System.out.print(parts[i]);
-                        printSpace(15 - parts[i].length());
+                        printSpace(12 - limiter.length());
                         break;
 
                     case 5:
-                        System.out.println(parts[i]);
+                        System.out.print(parts[i]);
+                        printSpace(12 - limiter.length());
+                        break;
+                        
+                    case 6:
+                        System.out.println(limiter);
                         break;
                 }
             }
         });
-        System.out.println("-----------------------------------------------------------"
-                + "--------------------------------------------");
+        System.out.println("---------------------------------------------------"
+                + "-------------------------------------------");
     }
 
     // Välimerkkien tulosteluun käytetty netodi

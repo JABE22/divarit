@@ -182,7 +182,9 @@ public class QueryEngine {
                     + "/" + rset.getString(3)
                     + "/" + rset.getString(4)
                     + "/" + rset.getString(5)
-                    + "/" + rset.getString(6);
+                    + "/" + rset.getString(6)
+                    + "/" + rset.getString(7);
+                    
                     results.add(rivi);
                     
                 } while (rset.next());
