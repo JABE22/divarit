@@ -1,9 +1,8 @@
-SET SCHEMA 'keskusdivari';
+﻿SET SCHEMA 'keskusdivari';
 
 -- DROP FUNCTION hae_kayttaja CASCADE;
 
 -- Korjattu tilatarkistus [Pyssysalo]
--- Korjattu -> kaikkien sarakkeiden palautus [Matarmaa]
 
 CREATE OR REPLACE FUNCTION hae_kappaleet_admin(hakusana varchar(50), d_nimi varchar(10))
 RETURNS TABLE(

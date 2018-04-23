@@ -3,19 +3,15 @@
 -- DROP FUNCTION hae_kayttaja CASCADE;
 
 -- Korjattu tilatarkistus [Pyssysalo]
--- Korjattu -> kaikkien sarakkeiden palautus [Matarmaa]
 
 CREATE OR REPLACE FUNCTION hae_kappaleet(hakusana varchar(50))
 RETURNS TABLE(
-    divari_nimi VARCHAR(10),
     id integer,
     nimi VARCHAR(60),  
     kuvaus VARCHAR(1000),
     luokka VARCHAR(20),
     tyyppi VARCHAR(20),
-    sisosto_hinta NUMERIC(5,2),
-    hinta NUMERIC(5,2),
-    myynti_pvm DATE
+    hinta NUMERIC(5,2)
 )
 AS $$
     -- Muista muuttaa kaikki parametrit (5 kpl) 'merkkijono':ksi jos ajat kyselyn
@@ -30,7 +26,7 @@ AS $$
           LOWER(nimi) LIKE hakusana OR LOWER(tyyppi) LIKE hakusana OR
           LOWER(luokka) LIKE hakusana )
     -- Näytetään hakua vastaavat varastossa olevat kappaleet
-    SELECT DISTINCT divari_nimi, k.id, nimi, kuvaus, luokka, tyyppi, sisosto_hinta, hinta, myynti_pvm
+    SELECT DISTINCT k.id, nimi, kuvaus, luokka, tyyppi
     FROM keskusdivari.kappale k
     INNER JOIN haetut_teokset ht ON k.teos_isbn = ht.isbn
 	WHERE k.tila = 0 -- Korjattu, Pyssysalo

@@ -98,7 +98,7 @@ public class UserInterface {
         this.search_engine = new QueryEngine(new DatabaseConnection());
 
         // Testiajo ** lukee esivalitut komennot tiedostosta
-        this.testikomennot = lueKomennotTiedostosta("src/testiajo_checkout.txt");
+        this.testikomennot = lueKomennotTiedostosta("src/testiajo.txt");
         this.komentoIndeksi = 0;
     }
 
