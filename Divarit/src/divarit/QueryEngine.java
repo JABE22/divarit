@@ -78,7 +78,7 @@ public class QueryEngine {
     }
     
     // Tämä haku kohdistuu teoksiin (ei myytäviin kappaleisiin)
-    public ArrayList<String> uniQuery(String entry, int type) {
+    public ArrayList<String> adminCopyQuery(String entry, int type) {
         // Valitaan suoritettava kysely
         String query;
         if (type == 1) {
@@ -144,7 +144,46 @@ public class QueryEngine {
                     + "/" + rset.getString(2)
                     + "/" + rset.getString(3)
                     + "/" + rset.getString(4)
-                    + "/" + rset.getString(5);
+                    + "/" + rset.getString(5)
+                    + "/" + rset.getString(6);
+                    results.add(rivi);
+                    
+                } while (rset.next());
+                
+            } else {
+                System.out.println("Nothing found!");
+            }
+            prstmt.close();  // sulkee automaattisesti myös tulosjoukon rset
+            
+        } catch (SQLException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+        
+        return results;
+    }
+    
+    public ArrayList<String> adminBookQuery(String entry, String divari_name) {
+        ArrayList<String> results = new ArrayList<>();
+        
+        try {
+            String headword = "%" + entry + "%";
+            PreparedStatement prstmt = this.con.prepareStatement(ADMIN_BOOK_QUERY);
+            
+            prstmt.clearParameters();
+            prstmt.setString(1, headword.toLowerCase());
+
+            ResultSet rset = prstmt.executeQuery();
+            
+            if (rset.next()) {
+                String rivi;
+                do {
+                    // Teoksen kuvaus eli indeksi kolme poistettu (rset.getString(3))
+                    rivi = rset.getString(1) 
+                    + "/" + rset.getString(2)
+                    + "/" + rset.getString(3)
+                    + "/" + rset.getString(4)
+                    + "/" + rset.getString(5)
+                    + "/" + rset.getString(6);
                     results.add(rivi);
                     
                 } while (rset.next());

@@ -32,7 +32,7 @@ public class UserInterface {
     // ...kutsumalla metodia signOut()
     private String[] signed_user_details = null;
     private int tilaus_id;
-    private boolean div_admin;
+    private String div_admin; // Talletetaan ylläpitäjän divarinimi, jos ylläpitäjä. Muuten null;
 
     // Ohjelman asiakas -komennot
     private final String FIND = "find"; // Myytävänä olevat kappaleet
@@ -112,7 +112,7 @@ public class UserInterface {
             // Testausta varten
             // printUserDetails();
 
-            if (this.div_admin) {
+            if (this.div_admin != null) {
                 System.out.println(ADMIN_PRINT);
                 admin();
             } else {
@@ -242,14 +242,14 @@ public class UserInterface {
                 case FIND:
                     System.out.println("Searching copies...");
                     if (input.length > 1) {
-                        customerBookSearch(input[1], COPY_SEARCH_TYPE);
+                        adminBookSearch(input[1], this.div_admin);
                     }
                     break;
 
                 case FIND_BOOK:
                     System.out.println("Searching books...");
                     if (input.length > 1) {
-                        customerBookSearch(input[1], BOOK_SEARCH_TYPE);
+                        adminBookSearch(input[1], this.div_admin);
                     }
                     break;
 
@@ -524,43 +524,53 @@ public class UserInterface {
 
     // Myyntikappaleiden muotoiltu tulostus
     public void printCustomerBookDetails(ArrayList<String> results) {
+        System.out.println("tnro    tuotenimi                     kuvaus"
+                + "                        luokka         tyyppi         eur\n"
+                + "-----------------------------------------------------------"
+                         + "--------------------------------------------");
+        
         results.stream().forEach(row -> {
             String[] parts = row.split("/");
             String limiter = "";
 
             for (int i = 0; i < parts.length; i++) {
                 // Rajataan näytettävän nimen ja kuvauksen koko 30 merkkiin
-                if (i == 1 || i == 2) {
-                    limiter = stringLimiter(parts[i], 30);
-                }
+                limiter = stringLimiter(parts[i], 25);
                 // Tulostuksen sisennys tasaus
                 switch (i) {
                     case 0: // id, välimerkit jälkeen lkm
                         System.out.print(parts[i]);
-                        printSpace(10 - parts[i].length());
+                        printSpace(8 - parts[i].length());
                         break;
 
                     case 1: // teosnimi, välimerkit jälkeen lkm
                         System.out.print(limiter);
-                        printSpace(37 - limiter.length());
+                        printSpace(30 - limiter.length());
                         break;
 
                     case 2: // kuvaus , välimerkit jälkeen lkm
                         System.out.print(limiter);
-                        printSpace(36 - limiter.length());
+                        printSpace(30 - limiter.length());
                         break;
 
                     case 3: // luokka, välimerkit jälkeen lkm
                         System.out.print(parts[i]);
-                        printSpace(24 - parts[i].length());
+                        printSpace(15 - parts[i].length());
                         break;
 
                     case 4: // Tyyppi
+                        System.out.print(parts[i]);
+                        printSpace(15 - parts[i].length());
+                        break;
+                        
+                    case 5:
                         System.out.println(parts[i]);
                         break;
                 }
             }
         });
+        System.out.println("-----------------------------------------------------------"
+                         + "--------------------------------------------");
     }
 
     // Välimerkkien tulosteluun käytetty netodi
@@ -723,7 +733,7 @@ public class UserInterface {
     // leikkaa ylittyvän osan tekstin lopusta ja palauttaa alkuosan
     public String stringLimiter(String text, int limit) {
         if (text.length() > limit) {
-            return text.substring(0, 30) + "...";
+            return text.substring(0, limit) + "...";
         } else {
             return text; // Palautetaan alkuperäinen
         }
