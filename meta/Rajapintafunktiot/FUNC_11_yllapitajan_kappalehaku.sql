@@ -8,10 +8,8 @@ CREATE OR REPLACE FUNCTION hae_kappaleet_admin(hakusana varchar(50))
 RETURNS TABLE(
     divari_nimi VARCHAR(10),
     id integer,
-    nimi VARCHAR(60),  
-    kuvaus VARCHAR(1000),
+    nimi VARCHAR(60),
     luokka VARCHAR(20),
-    tyyppi VARCHAR(20),
     sisosto_hinta NUMERIC(5,2),
     hinta NUMERIC(5,2),
     myynti_pvm DATE
@@ -29,7 +27,7 @@ AS $$
           LOWER(nimi) LIKE hakusana OR LOWER(tyyppi) LIKE hakusana OR
           LOWER(luokka) LIKE hakusana )
     -- Näytetään hakua vastaavat varastossa olevat kappaleet
-    SELECT DISTINCT divari_nimi, k.id, nimi, kuvaus, luokka, tyyppi, sisosto_hinta, hinta, myynti_pvm
+    SELECT DISTINCT divari_nimi, k.id, nimi, luokka, sisosto_hinta, hinta, myynti_pvm
     FROM kappale k
     INNER JOIN haetut_teokset ht ON k.teos_isbn = ht.isbn
     ORDER BY nimi;
