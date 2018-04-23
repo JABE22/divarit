@@ -1,6 +1,6 @@
 /*
 	
-	Pyssysalo -- Muokattu viimeksi: 2018-04-21
+	Pyssysalo -- Muokattu viimeksi: 2018-04-23: nimi muutettu 'raportti_2'
 	
 	Luo funktion hae_myytavien_hintatiedot(), joka hakee MYYTÄVIEN kappaleiden
 	luokan mukaan ryhmiteltynä yhteishinnan ja keskihinnan.
@@ -8,9 +8,9 @@
 */
 -- SET SCHEMA '';
 
-DROP FUNCTION hae_myytavien_hintatiedot CASCADE;
+DROP FUNCTION raportti_2 CASCADE;
 
-CREATE OR REPLACE FUNCTION hae_myytavien_hintatiedot() RETURNS
+CREATE OR REPLACE FUNCTION raportti_2() RETURNS
 TABLE(
 	luokka varchar(20),
 	kokonaismyyntihinta decimal(6,2),
