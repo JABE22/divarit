@@ -1,10 +1,9 @@
-﻿/*
+/*
 	
 	SQL-funktio hae_tilaus_id(...) -- Pyssysalo -- Muokattu viimeksi 2018-04-20
 	
 	Hakee käyttäjän aktiivisen tilauksen TAI luo sellaisen.
 	Palauttaa tilauksen ID:n [tilaus.id]
-	
 	
 	
 */
