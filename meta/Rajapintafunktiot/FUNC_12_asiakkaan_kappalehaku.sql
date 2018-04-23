@@ -24,7 +24,7 @@ AS $$
           LOWER(nimi) LIKE hakusana OR LOWER(tyyppi) LIKE hakusana OR
           LOWER(luokka) LIKE hakusana )
     -- Näytetään hakua vastaavat varastossa olevat kappaleet
-    SELECT DISTINCT k.id, nimi, kuvaus, luokka, tyyppi
+    SELECT DISTINCT k.id, nimi, kuvaus, luokka, tyyppi, hinta
     FROM keskusdivari.kappale k
     INNER JOIN haetut_teokset ht ON k.teos_isbn = ht.isbn
 	WHERE k.tila = 0 -- Korjattu, Pyssysalo

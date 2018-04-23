@@ -1,6 +1,7 @@
 ﻿SET SCHEMA 'keskusdivari';
 
 -- DROP FUNCTION hae_kayttaja() CASCADE;
+-- Luonut: Matarmaa Jarno
 
 CREATE OR REPLACE FUNCTION hae_teokset(hakusana varchar(50))
 RETURNS TABLE(

@@ -22,13 +22,15 @@ public class QueryEngine {
     private final Connection con;
     
     /*** SQL-Funktioita käyttävät kyselyt ***/
+    
+    private final String SET_SCHEMA = "SET SCHEMA ?";
     // Varastossa olevien kappaleiden hakukysely
     private final String CUSTOMER_BOOK_QUERY = "SELECT * FROM keskusdivari.hae_kappaleet(?)";
     
     // Yksittäisen divarin varastossa olevien kappaleiden hakukysely ylläpitäjän tiedoilla
     private final String ADMIN_BOOK_QUERY = "SELECT * FROM hae_kappaleet_admin(?, ?)";
     // Hakukysely teoksille ja niiden tekijöille [ hae_teokset(hakusana, divari) ]
-    private final String ADMIN_COPY_QUERY = "SELECT * FROM hae_kappaleet_admin(?, ?)";
+    private final String ADMIN_COPY_QUERY = "SELECT * FROM hae_teokset(?, ?)";
     
     // Käyttäjän tiedot
     private final String USER_DETAILS_QUERY = "SELECT * FROM keskusdivari.hae_kayttaja(?);"; 
@@ -82,6 +84,7 @@ public class QueryEngine {
         ArrayList<String> results = new ArrayList<>();
         
         try {
+            setSchema(divari_name);
             String headword = "%" + entry + "%";
             PreparedStatement prstmt = this.con.prepareStatement(ADMIN_COPY_QUERY);
             
@@ -378,6 +381,7 @@ public class QueryEngine {
         return -1;
     }
     
+    // Lisaa listalla järjestyksessä olevat tuotetiedot tietokantaan
     public void addToCart(ArrayList<String> details) {
         
         try {
@@ -406,6 +410,7 @@ public class QueryEngine {
         }
     }
     
+    // Poistaa tuotteen ostoskorista
     public boolean remove(int book_id, String username) {  
         try {
             PreparedStatement prstmt = this.con.prepareStatement(DELETE_FROM_CART);
@@ -422,6 +427,7 @@ public class QueryEngine {
         return false;
     }
     
+    // Tyhjentää ostoskorin
     public int emptyCart(int order_id) {
         int changedRows;
         try {
@@ -440,6 +446,7 @@ public class QueryEngine {
         return 0;
     }
     
+    // Palauttaa ostoskorin sisällön listalla
     public ArrayList<String> cartContent(int order_id) {
         ArrayList<String> content = new ArrayList<>();
 
@@ -472,6 +479,7 @@ public class QueryEngine {
         return content;
     }
     
+    // Palauttaa ostoskorin yhteissumman
     public double getCartSum(int order_id) {
         double totalSum;
         try {
@@ -484,13 +492,14 @@ public class QueryEngine {
                 prstmt.close();
                 return totalSum;
             } 
-            prstmt.close();  // sulkee automaattisesti myös tulosjoukon rset   
+            prstmt.close();   
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         } 
         return -1;
     }
     
+    // Päivittää tilauksen tilan
     public void setOrderStatus(int order_id, int newStatus) {
         try {
             PreparedStatement prstmt = con.prepareStatement(SET_ORDER_STATUS);
@@ -500,7 +509,7 @@ public class QueryEngine {
             prstmt.setInt(2, newStatus);
             
             prstmt.executeUpdate();
-            prstmt.close();  // sulkee automaattisesti myÃ¶s tulosjoukon rset
+            prstmt.close(); 
             
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -508,16 +517,16 @@ public class QueryEngine {
     }
     
     
-    // Asettaa oletus-skeeman
+    // Asettaa skeeman
     public void setSchema(String schema) {
         
         try {
-            PreparedStatement prstmt = con.prepareStatement("SET SCHEMA ?;");
+            PreparedStatement prstmt = con.prepareStatement(SET_SCHEMA);
+            
             prstmt.clearParameters();
             prstmt.setString(1, schema);
-            
-            prstmt.executeUpdate();
-            
+            prstmt.execute();
+
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
