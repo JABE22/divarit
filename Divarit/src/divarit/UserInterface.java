@@ -238,7 +238,7 @@ public class UserInterface {
                 case FIND:
                     System.out.println("Searching copies...");
                     if (input.length > 1) {
-                        adminBookSearch(input[1]);
+                        adminCopySearch(input[1]);
                     }
                     break;
 
@@ -312,6 +312,12 @@ public class UserInterface {
         ArrayList<String> results = QE.adminBookQuery(entry, this.div_name);
         // Hakutyyppiä vastaavan tulostusmetodin kutsu
         printAdminBookDetails(results);
+    }
+    
+    public void adminCopySearch(String entry) {
+        ArrayList<String> results = QE.adminCopyQuery(entry, this.div_name);
+        // Hakutyyppiä vastaavan tulostusmetodin kutsu
+        printAdminCopyDetails(results);
     }
 
     /* Palauttaa false, jos käyttäjää ei löydy tietokannasta tai kirjautuminen
@@ -477,7 +483,7 @@ public class UserInterface {
     }
 
     // Teosten muotoiltu tulostus
-    public void printCopyDetails(ArrayList<String> results) {
+    public void printAdminCopyDetails(ArrayList<String> results) {
         results.stream().forEach(row -> {
             String[] parts = row.split("/");
             String copyname = "";

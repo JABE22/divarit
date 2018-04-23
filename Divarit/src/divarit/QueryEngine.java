@@ -166,6 +166,7 @@ public class QueryEngine {
             
             prstmt.clearParameters();
             prstmt.setString(1, headword.toLowerCase());
+            prstmt.setString(2, divari_name);
 
             ResultSet rset = prstmt.executeQuery();
             
