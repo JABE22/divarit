@@ -14,7 +14,6 @@ RETURNS TABLE(
     myynti_pvm DATE
 )
 AS $$
-    -- Muista muuttaa kaikki parametrit (5 kpl) 'merkkijono':ksi jos ajat kyselyn
 
     WITH haetut_teokset AS (
     -- Teokset niiden nimen, tekijän nimen, luokan tai tyypin perusteella
@@ -26,7 +25,7 @@ AS $$
           LOWER(nimi) LIKE hakusana OR LOWER(tyyppi) LIKE hakusana OR
           LOWER(luokka) LIKE hakusana )
     -- Näytetään hakua vastaavat varastossa olevat kappaleet
-    SELECT DISTINCT divari_nimi, k.id, nimi, kuvaus, luokka, tyyppi, sisosto_hinta, hinta, myynti_pvm
+    SELECT DISTINCT k.id, nimi, luokka, sisosto_hinta, hinta, myynti_pvm
     FROM kappale k
     INNER JOIN haetut_teokset ht ON k.teos_isbn = ht.isbn
 	WHERE divari_nimi = d_nimi
