@@ -462,7 +462,7 @@ public class UserInterface {
 
             cartContents.stream().forEach(row -> {
                 String[] parts = row.split("/");
-                String limiter = "";
+                String limiter;
                 for (int i = 0; i < parts.length; i++) {
                     // Käytetään syöte pituustarkistajassa
                     limiter = stringLimiter(parts[i], 40);
@@ -548,7 +548,7 @@ public class UserInterface {
         System.out.println("tnro      tuotenimi                     kuvaus"
                 + "                        luokka         tyyppi         eur\n"
                 + "-----------------------------------------------------------"
-                + "--------------------------------------------");
+                + "----------------------------------------------");
 
         results.stream().forEach(row -> {
             String[] parts = row.split("/");
@@ -591,7 +591,7 @@ public class UserInterface {
             }
         });
         System.out.println("-----------------------------------------------------------"
-                + "--------------------------------------------");
+                + "----------------------------------------------");
     }
 
     // Myyntikappaleiden muotoiltu tulostus (Ylläpitäjät)
@@ -769,7 +769,7 @@ public class UserInterface {
     *
      */
     public void addToCart(String book_id) {
-        String div_name = book_id.substring(0, 1);
+        String div_name = book_id.substring(0, 2);
         String cutted_bid = book_id.substring(2);
 
         ArrayList<String> details = new ArrayList<>();

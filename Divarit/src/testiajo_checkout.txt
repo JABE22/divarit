@@ -1,16 +1,13 @@
 kalle@divarit.fi 1234
 cart
 find romaani
-add 10101
-add 10104
-add 10102
+add D210101
+add D210102
 cart
 remove 10102
 cart
 checkout
 return
-checkout
-order
 signout
 liisa@divarit.fi 1234
 cart
@@ -18,6 +15,6 @@ find jari
 add D110030
 add D110031
 cart
+remove 10031
 checkout
-order
 return

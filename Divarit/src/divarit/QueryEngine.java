@@ -61,11 +61,11 @@ public class QueryEngine {
     + "(email, etunimi, sukunimi, osoite, puhelin) "
     + "VALUES (?, ?, ?, ?, ?);";
     // Tuotteen lisäys ostoskoriin
-    private final String ADD_TO_CART = "SELECT keskusdivari.lisaa_ostoskoriin(?, ?, ?);";
+    private final String ADD_TO_CART = "SELECT * FROM keskusdivari.lisaa_ostoskoriin(?, ?, ?);";
 //      "INSERT INTO keskusdivari.ostoskori "
 //    + "(kappale_id, divari_nimi, tilaus_id) VALUES (?, ?, ?);";
     // Päivittää tilauksen tilan -> Tilattu
-    private final String SET_ORDER_STATUS = "SELECT keskusdivari.muuta_tilauksen_tila(?, ?)";
+    private final String SET_ORDER_STATUS = "SELECT * FROM keskusdivari.muuta_tilauksen_tila(?, ?)";
     // Poistaa ostoskorista tuotteen
     private final String DELETE_FROM_CART =
       "DELETE FROM keskusdivari.ostoskori "
@@ -112,7 +112,7 @@ public class QueryEngine {
             prstmt.close();  // sulkee automaattisesti myös tulosjoukon rset
             
         } catch (SQLException e) {
-            System.out.println("Error: " + e.getMessage());
+            System.out.println("AD_COPY_Q: " + e.getMessage());
         }
         
         return results;
@@ -152,7 +152,7 @@ public class QueryEngine {
             prstmt.close();  // sulkee automaattisesti myös tulosjoukon rset
             
         } catch (SQLException e) {
-            System.out.println("Error: " + e.getMessage());
+            System.out.println("CUS_COPY_Q: " + e.getMessage());
         }
         
         return results;
@@ -194,7 +194,7 @@ public class QueryEngine {
             prstmt.close();  // sulkee automaattisesti myös tulosjoukon rset
             
         } catch (SQLException e) {
-            System.out.println("Error: " + e.getMessage());
+            System.out.println("AD_BOOK_Q: " + e.getMessage());
         }
         
         return results;
@@ -224,7 +224,7 @@ public class QueryEngine {
             prstmt.close();  // sulkee automaattisesti myös tulosjoukon rset
             
         } catch (SQLException e) {
-            System.out.println("Error: [QueryEngine/userDetails()], " + e.getMessage());
+            System.out.println("USER_DET_Q: " + e.getMessage());
         }
         return user_details;
     }
@@ -252,7 +252,7 @@ public class QueryEngine {
             prstmt.close();  // sulkee automaattisesti myÃ¶s tulosjoukon rset
             
         } catch (SQLException e) {
-            System.out.println("Error: " + e.getMessage());
+            System.out.println("ADD_USER_Q: " + e.getMessage());
         }
     }
     
@@ -272,7 +272,7 @@ public class QueryEngine {
             prstmt.close();  // sulkee automaattisesti myÃ¶s tulosjoukon rset
             
         } catch (SQLException e) {
-            System.out.println("Error: " + e.getMessage());
+            System.out.println("INSERT_COPY_Q: " + e.getMessage());
         }
     }
     
@@ -298,7 +298,7 @@ public class QueryEngine {
             prstmt.close();  // sulkee automaattisesti myös tulosjoukon rset
             
         } catch (SQLException e) {
-            System.out.println("Error: " + e.getMessage());
+            System.out.println("INSERT_BOOK_Q: " + e.getMessage());
         }
     }
     
@@ -322,7 +322,7 @@ public class QueryEngine {
             }      
             stmt.close();  // sulkee automaattisesti myÃ¶s tulosjoukon rset           
         } catch (SQLException e) {
-            System.out.println("Error: " + e.getMessage());
+            System.out.println("PUR_REPORT_Q: " + e.getMessage());
         }
         return details;
     }
@@ -349,7 +349,7 @@ public class QueryEngine {
             }      
             stmt.close();  // sulkee automaattisesti myÃ¶s tulosjoukon rset           
         } catch (SQLException e) {
-            System.out.println("Error: " + e.getMessage());
+            System.out.println("CAT_REPORT_Q: " + e.getMessage());
         }
         return details;
     }    
@@ -377,7 +377,7 @@ public class QueryEngine {
             }
             prstmt.close();  // sulkee automaattisesti myös tulosjoukon rset   
         } catch (SQLException e) {
-            System.out.println("Error: " + e.getMessage());
+            System.out.println("GET_ORDER_ID_Q: " + e.getMessage());
         } 
         return -1;
     }
@@ -407,7 +407,7 @@ public class QueryEngine {
             prstmt.close();  // sulkee automaattisesti myÃ¶s tulosjoukon rset
             
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println("ADD_TO_CART_Q: " + e.getMessage());
         }
     }
     
@@ -423,7 +423,7 @@ public class QueryEngine {
             
             return true;
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println("REMOVE_CART_Q: " + e.getMessage());
         }
         return false;
     }
@@ -454,7 +454,7 @@ public class QueryEngine {
             prstmt.close();  // sulkee automaattisesti myÃ¶s tulosjoukon rset
             
         } catch (SQLException e) {
-            System.out.println("Error: " + e.getMessage());
+            System.out.println("CART_CONTENT_Q: " + e.getMessage());
         }
         
         return content;
@@ -475,7 +475,7 @@ public class QueryEngine {
             } 
             prstmt.close();   
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println("GET_CART_SUM_Q: " + e.getMessage());
         } 
         return -1;
     }
@@ -493,7 +493,7 @@ public class QueryEngine {
             prstmt.close(); 
             
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println("SET_ORDER_STAT_Q: " + e.getMessage());
         }
     }
     
@@ -512,7 +512,7 @@ public class QueryEngine {
 //            prstmt.executeUpdate();
 
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println("SET_SCHEMA_Q: " + e.getMessage());
         }
     }
     
@@ -529,7 +529,6 @@ public class QueryEngine {
         } catch (NumberFormatException e) {
             return -1;
         }
-
         return luku;
     }
 }
