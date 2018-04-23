@@ -1,12 +1,12 @@
 -- T6 :: Kun normidivariin lisätään kappale, replikoidaan sama data myös keskusdivarille
 -- Tämä funktio/triggeri lisätään "normidivarille".
--- Pyssysalo -- Muokattu viimeksi 2018-04-17
+-- Pyssysalo -- Muokattu viimeksi 2018-04-23
 
 SET SCHEMA 'd1';
 DROP FUNCTION IF EXISTS insert_kappale_divari_ja_keskusdivari CASCADE;
 
-CREATE OR REPLACE FUNCTION insert_kappale_divari_ja_keskusdivari()
-RETURNS trigger AS $$
+CREATE OR REPLACE FUNCTION insert_kappale_divari_ja_keskusdivari() RETURNS trigger
+AS $$
 -- DECLARE
 	-- teos_isbn_ varchar(20);
 BEGIN
@@ -18,19 +18,12 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql
 
+-- Triggeri
 
+DROP TRIGGER IF EXISTS trigger_insert_kappale_divari_ja_keskusdivari ON kappale CASCADE;
 
+CREATE TRIGGER trigger_insert_kappale_divari_ja_keskusdivari -- etuliite trigger_
+BEFORE INSERT ON kappale
+FOR EACH ROW -- suoritetaan funktio jokaiselle päivitetylle riville
+EXECUTE PROCEDURE insert_kappale_divari_ja_keskusdivari();
 
-
-
-
-
-/*
-
-Toteuta triggeri, joka päivittää keskusdivarin automaattisesti, kun divariin omaan 
-tietokantaan tuodaan uusi myyntikappale.
-Oletetaan, että teoksen yleiset tiedot on talletettu ennen lisäystä molempiin tietokantoihin.
-Toteuta tätä varten kolmannen divarin D3 tietokanta, 
-joka voi rakenteellisesti noudattaa divarin D1 kantaa.
-
-*/
