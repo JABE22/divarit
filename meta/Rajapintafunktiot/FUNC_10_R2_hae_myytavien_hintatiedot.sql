@@ -2,7 +2,7 @@
 	
 	Pyssysalo -- Muokattu viimeksi: 2018-04-23: nimi muutettu 'raportti_2'
 	
-	Luo funktion hae_myytavien_hintatiedot(), joka hakee MYYTÄVIEN kappaleiden
+	Luo funktion raportti_2(), joka hakee MYYTÄVIEN kappaleiden
 	luokan mukaan ryhmiteltynä yhteishinnan ja keskihinnan.
 	
 */

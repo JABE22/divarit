@@ -381,7 +381,7 @@ INSERT INTO ostoskori VALUES (10092, 'D2', 4);
 -- Postikulut
 
 INSERT INTO postikulut VALUES
-(DEFAULT, 0, 45, 0.0),  
+(DEFAULT, 0, 49, 0.0),  
 (DEFAULT, 50, 99, 1.40),
 (DEFAULT, 100, 249, 2.10),
 (DEFAULT, 250, 499, 2.80),
