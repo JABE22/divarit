@@ -1,4 +1,4 @@
-/*
+﻿/*
 	
 	Pyssysalo -- Muokattu viimeksi: 2018-04-23: nimi muutettu 'raportti_2'
 	
@@ -8,7 +8,7 @@
 */
 -- SET SCHEMA '';
 
-DROP FUNCTION raportti_2 CASCADE;
+-- DROP FUNCTION raportti_2 CASCADE;
 
 CREATE OR REPLACE FUNCTION raportti_2() RETURNS
 TABLE(
@@ -23,8 +23,8 @@ BEGIN
 		RETURN QUERY SELECT COALESCE(teos.luokka, 'Luokittelematon') as luokka,
 		SUM(kappale.hinta) AS kokonaismyyntihinta, 
 		AVG(kappale.hinta) AS keskihinta 
-		FROM kappale
-			INNER JOIN teos ON kappale.teos_isbn=teos.isbn
+		FROM keskusdivari.kappale
+			INNER JOIN keskusdivari.teos ON kappale.teos_isbn=teos.isbn
 		WHERE kappale.tila=0 -- 0 = vapaa. HUOM: MYYNNISSÄ OLEVAT KAPPALEET
 		GROUP BY(teos.luokka)
 		ORDER BY luokka ASC;

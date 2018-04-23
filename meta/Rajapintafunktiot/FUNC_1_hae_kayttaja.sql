@@ -1,4 +1,4 @@
-SET SCHEMA 'keskusdivari';
+﻿SET SCHEMA 'keskusdivari';
 
 -- DROP FUNCTION hae_kayttaja CASCADE;
 
@@ -9,7 +9,7 @@ RETURNS TABLE(
 	sukunimi varchar(60),
 	osoite varchar(100),
 	puhelin varchar(100),
-	div_yllapitaja boolean
+	div_yllapitaja varchar(10)
 )
 AS $$
 	SELECT email, etunimi, sukunimi, osoite, 

@@ -1,4 +1,4 @@
--- Esimerkkidataa
+﻿-- Esimerkkidataa
 
 -- TRUNCATE <> tyhjentää kys. taulun. Kommentoi pois rivit jos et halua tyhjentää
 
@@ -6,17 +6,17 @@
 -- KOMMENTOI TRUNCANTE-RIVIT POIS, JOTKA KUULUVAT KESKUSDIVARILLE SILLOIN KUN AJAT NORMIDIVARILLE TÄMÄN TIEDOSTON!
 -- JA ASETA search_path TO ...
 
-SET search_path TO d1;
+SET search_path TO keskusdivari;
 
 
 TRUNCATE kappale CASCADE;
 TRUNCATE tekija CASCADE;
 TRUNCATE teos CASCADE;
 TRUNCATE teosten_tekijat CASCADE;
--- TRUNCATE tilaus CASCADE;
--- TRUNCATE kayttaja CASCADE;
--- TRUNCATE ostoskori CASCADE;
--- TRUNCATE divari CASCADE;
+TRUNCATE tilaus CASCADE;
+TRUNCATE kayttaja CASCADE;
+TRUNCATE ostoskori CASCADE;
+TRUNCATE divari CASCADE;
 
 -- Juha Seppälä 1996 fiktio
 INSERT INTO teos (isbn, nimi, kuvaus, luokka, tyyppi) 
@@ -340,12 +340,12 @@ INSERT INTO divari VALUES
 INSERT INTO divari VALUES
 ('D2', 'Korpimaantie 1230, 45435 Lempäälä');
 
-INSERT INTO divari VALUES ('KD', 'Keskusdivarinkatu 99');
+INSERT INTO divari VALUES ('D3', 'Keskusdivarinkatu 99');
 
 -- kayttajat
 -- Muutettu boolean arvot -> varchar ja lisätty admin D1 divarille [Matarmaa]
-INSERT INTO kayttaja VALUES ('admin@divarit.fi', 'Admin', 'Divari', 'Divarikatu 600', '050 999 999', 'keskusdivari');
-INSERT INTO kayttaja VALUES ('admin_d1@divarit.fi', 'D1Admin', 'Sivudivari', 'Sivudivarikatu 66', '040 369 369', 'd1');
+INSERT INTO kayttaja VALUES ('admin@divarit.fi', 'Admin', 'Divari', 'Divarikatu 600', '050 999 999', 'D1');
+INSERT INTO kayttaja VALUES ('admin_d1@divarit.fi', 'D1Admin', 'Sivudivari', 'Sivudivarikatu 66', '040 369 369', 'D2');
 INSERT INTO kayttaja VALUES ('kalle@divarit.fi', 'Kalle', 'Kirjala', 'Kimmontie 4 A 16', '040012345', null);
 INSERT INTO kayttaja VALUES ('liisa@divarit.fi', 'Liisa', 'Lukutoukkala', 'Kirjakuja 1', null, null);
 INSERT INTO kayttaja VALUES ('teppo@divarit.fi', 'Teppo', 'Teppola', 'Katukuja 99', '123456', null);

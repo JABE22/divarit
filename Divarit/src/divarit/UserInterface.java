@@ -28,7 +28,7 @@ public class UserInterface {
     // ...kutsumalla metodia signOut()
     private String[] signed_user_details = null;
     private int tilaus_id;
-    private String div_name; // Talletetaan ylläpitäjän divarinimi, jos ylläpitäjä. Muuten null;
+    private String schema_name; // Talletetaan ylläpitäjän divarinimi, jos ylläpitäjä. Muuten null;
 
     // Ohjelman asiakas -komennot
     private final String FIND = "find"; // Myytävänä olevat kappaleet
@@ -108,7 +108,11 @@ public class UserInterface {
             // Testausta varten
             // printUserDetails();
 
-            if (this.div_name != null) {
+            if (this.schema_name != null) {
+                // Käsitellään skeemanimi 'keskusdivari'
+                if (this.schema_name.equals("D2")) {
+                    this.schema_name = "keskusdivari";
+                }
                 System.out.println(ADMIN_PRINT);
                 admin();
             } else {
@@ -159,7 +163,7 @@ public class UserInterface {
                         remove(input[1]);
                     }
                     break;
-                    
+
                 case EMPTY_CART:
                     System.out.println("Clearing shopping cart...");
                     clearCart();
@@ -193,7 +197,7 @@ public class UserInterface {
                             } else {
                                 System.out.println("Try again: [order] or [return]");
                             }
-                            break;       
+                            break;
                         }
                     } while (!command.equals(ORDER));
                     break;
@@ -306,16 +310,16 @@ public class UserInterface {
         printCustomerBookDetails(results);
 
     }
-    
+
     // Ylläpitäjän ja asiakkaan teos- ja kappalehaku, type 0=kappale ja 1=teos
     public void adminBookSearch(String entry) {
-        ArrayList<String> results = QE.adminBookQuery(entry, this.div_name);
+        ArrayList<String> results = QE.adminBookQuery(entry, this.schema_name);
         // Hakutyyppiä vastaavan tulostusmetodin kutsu
         printAdminBookDetails(results);
     }
-    
+
     public void adminCopySearch(String entry) {
-        ArrayList<String> results = QE.adminCopyQuery(entry, this.div_name);
+        ArrayList<String> results = QE.adminCopyQuery(entry, this.schema_name);
         // Hakutyyppiä vastaavan tulostusmetodin kutsu
         printAdminCopyDetails(results);
     }
@@ -350,9 +354,9 @@ public class UserInterface {
                     this.signed_user_details = result;
                     System.out.println("Welcome " + this.signed_user_details[1] + "!");
                 }
-                this.div_name = result[5];
+                this.schema_name = result[5];
                 return true;
-                        
+
             } else {
                 // Jos tuloksia ei annetulla käyttäjänimellä löydetty, niin...
                 signUp();
@@ -368,7 +372,7 @@ public class UserInterface {
     // Kirjaa aktiivisen käyttäjän ulos järjestelmästä
     public void signOut() {
         System.out.println("Logging out...");
-        this.div_name = null;
+        this.schema_name = null;
         this.signed_user_details = null;
         this.tilaus_id = 0;
         run();
@@ -484,43 +488,52 @@ public class UserInterface {
 
     // Teosten muotoiltu tulostus
     public void printAdminCopyDetails(ArrayList<String> results) {
+        System.out.println("teos_isbn       tuotenimi                     "
+                + "tekijä                    luokka         tyyppi\n"
+                + "-----------------------------------------------------------"
+                + "--------------------------------------------");
         results.stream().forEach(row -> {
             String[] parts = row.split("/");
-            String copyname = "";
+            String limiter = "";
 
             for (int i = 0; i < parts.length; i++) {
-                // Rajataan näytettävä nimen koko 30 merkkiin
-                if (i == 1) {
-                    copyname = stringLimiter(parts[i], 30);
-                }
+                // Rajataan näytettävä nimen koko 25 merkkiin
+                limiter = stringLimiter(parts[i], 25);
                 // Tulostuksen sisennys tasaus
                 switch (i) {
                     case 0: // isbn, välimerkit jälkeen lkm
                         System.out.print(parts[i]);
-                        printSpace(20 - parts[i].length());
+                        printSpace(16 - parts[i].length());
                         break;
 
                     case 1: // teosnimi, välimerkit jälkeen lkm
-                        System.out.print(copyname);
-                        printSpace(37 - copyname.length());
+                        System.out.print(limiter);
+                        printSpace(30 - limiter.length());
                         break;
 
                     case 2: // tekijän etunimi (etunimen ja sukunimen yhdistämien)       
-                        System.out.print(parts[i] + " ");
+                        System.out.print(limiter + " ");
                         break;
 
                     case 3: // luokka, välimerkit jälkeen lkm
                         System.out.print(parts[i]);
-                        int nameLength = parts[i].length() + parts[i - 1].length();
+                        int nameLength = limiter.length() + parts[i - 1].length();
                         printSpace(25 - nameLength);
                         break;
 
                     case 4: // Tyyppi
+                        System.out.print(parts[i]);
+                        printSpace(15 - limiter.length());
+                        break;
+
+                    case 5: // Tyyppi
                         System.out.println(parts[i]);
                         break;
                 }
             }
         });
+        System.out.println("----------------------------------------------------"
+                + "---------------------------------------------------");
     }
 
     // Myyntikappaleiden muotoiltu tulostus (Asiakkaat)
@@ -528,8 +541,8 @@ public class UserInterface {
         System.out.println("tnro    tuotenimi                     kuvaus"
                 + "                        luokka         tyyppi         eur\n"
                 + "-----------------------------------------------------------"
-                         + "--------------------------------------------");
-        
+                + "--------------------------------------------");
+
         results.stream().forEach(row -> {
             String[] parts = row.split("/");
             String limiter = "";
@@ -563,7 +576,7 @@ public class UserInterface {
                         System.out.print(parts[i]);
                         printSpace(15 - parts[i].length());
                         break;
-                        
+
                     case 5:
                         System.out.println(parts[i]);
                         break;
@@ -571,16 +584,16 @@ public class UserInterface {
             }
         });
         System.out.println("-----------------------------------------------------------"
-                         + "--------------------------------------------");
+                + "--------------------------------------------");
     }
-    
+
     // Myyntikappaleiden muotoiltu tulostus (Ylläpitäjät)
     public void printAdminBookDetails(ArrayList<String> results) {
-        System.out.println("tnro    tuotenimi                     luokka"
-                + "                        sisosto/e         hinta/e     myyty\n"
+        System.out.println("div  t_id    teos_nimi                     luokka"
+                + "                            sisosto/e   hinta/e   myyty\n"
                 + "-----------------------------------------------------------"
-                         + "--------------------------------------------");
-        
+                + "--------------------------------------------");
+
         results.stream().forEach(row -> {
             String[] parts = row.split("/");
             String limiter = "";
@@ -592,12 +605,12 @@ public class UserInterface {
                 switch (i) {
                     case 0: // id, välimerkit jälkeen lkm
                         System.out.print(parts[i]);
-                        printSpace(8 - parts[i].length());
+                        printSpace(5 - parts[i].length());
                         break;
 
                     case 1: // teosnimi, välimerkit jälkeen lkm
                         System.out.print(limiter);
-                        printSpace(30 - limiter.length());
+                        printSpace(8 - limiter.length());
                         break;
 
                     case 2: // kuvaus , välimerkit jälkeen lkm
@@ -614,7 +627,7 @@ public class UserInterface {
                         System.out.print(parts[i]);
                         printSpace(15 - parts[i].length());
                         break;
-                        
+
                     case 5:
                         System.out.println(parts[i]);
                         break;
@@ -622,7 +635,7 @@ public class UserInterface {
             }
         });
         System.out.println("-----------------------------------------------------------"
-                         + "--------------------------------------------");
+                + "--------------------------------------------");
     }
 
     // Välimerkkien tulosteluun käytetty netodi
@@ -765,7 +778,7 @@ public class UserInterface {
     public void remove(String book_id) {
         int id = checkIntFormat(book_id);
         String username = this.signed_user_details[0];
-        if (id > 0) { 
+        if (id > 0) {
             if (this.QE.remove(id, username)) {
                 System.out.println("Tuote poistettiin onnistuneesti!");
             } else {
@@ -773,7 +786,7 @@ public class UserInterface {
             }
         }
     }
-    
+
     // Tyhjentää ostoskorin
     public void clearCart() {
         setTilausID();
@@ -801,7 +814,7 @@ public class UserInterface {
         } else if (input.equals(RETURN)) {
             if (signed_user_details == null) {
                 run();
-            } else if (this.div_name != null) {
+            } else if (this.schema_name != null) {
                 admin();
             } else {
                 customer();

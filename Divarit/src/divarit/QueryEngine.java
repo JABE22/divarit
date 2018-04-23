@@ -23,14 +23,14 @@ public class QueryEngine {
     
     /*** SQL-Funktioita käyttävät kyselyt ***/
     
-    private final String SET_SCHEMA = "SET SCHEMA ?";
+    private final String SET_SCHEMA = "SET SCHEMA 'keskusdivari'";
     // Varastossa olevien kappaleiden hakukysely
     private final String CUSTOMER_BOOK_QUERY = "SELECT * FROM keskusdivari.hae_kappaleet(?)";
     
     // Yksittäisen divarin varastossa olevien kappaleiden hakukysely ylläpitäjän tiedoilla
-    private final String ADMIN_BOOK_QUERY = "SELECT * FROM hae_kappaleet_admin(?, ?)";
-    // Hakukysely teoksille ja niiden tekijöille [ hae_teokset(hakusana, divari) ]
-    private final String ADMIN_COPY_QUERY = "SELECT * FROM hae_teokset(?, ?)";
+    private final String ADMIN_BOOK_QUERY = "SELECT * FROM hae_kappaleet_admin(?)"; // Skeeman asetus
+    // Hakukysely teoksille ja niiden tekijöille [ hae_teokset(hakusana) ]
+    private final String ADMIN_COPY_QUERY = "SELECT * FROM hae_teokset(?)"; // Skeeman asetus
     
     // Käyttäjän tiedot
     private final String USER_DETAILS_QUERY = "SELECT * FROM keskusdivari.hae_kayttaja(?);"; 
@@ -41,9 +41,9 @@ public class QueryEngine {
     // Palauttaa tilaus_id:tä vastaavan ostoskorin yhteis-summan
     private final String CART_SUM_QUERY = "SELECT SUM(kplhinta) FROM keskusdivari.ostoskorin_tuotteet(?);";
     // Palauttaa tilattujen tuotteiden tilaajan ja kappalemäärän/asiakas viime vuonna
-    private final String REPORT_QUERY = "SELECT * FROM keskusdivari.raportti()";
+    private final String REPORT_QUERY = "SELECT * FROM keskusdivari.raportti_3()";
     // Palauttaa kategorioihin liittyviä hintatietoja
-    private final String REPORT_CATEGORY_QUERY = "SELECT * FROM keskusdivari.hae_myytavien_hintatiedot()";
+    private final String REPORT_CATEGORY_QUERY = "SELECT * FROM keskusdivari.raportti_2()";
     
     /*** Lisäyslauseita ***/
     // Teoksen lisäys
@@ -82,6 +82,7 @@ public class QueryEngine {
     // Tämä haku kohdistuu teoksiin (ei myytäviin kappaleisiin, vain admin)
     public ArrayList<String> adminCopyQuery(String entry, String divari_name) {   
         ArrayList<String> results = new ArrayList<>();
+        // Luodaan
         
         try {
             setSchema(divari_name);
@@ -90,7 +91,6 @@ public class QueryEngine {
             
             prstmt.clearParameters();
             prstmt.setString(1, headword.toLowerCase());
-            prstmt.setString(2, divari_name);
 
             ResultSet rset = prstmt.executeQuery();
             
@@ -164,12 +164,12 @@ public class QueryEngine {
         ArrayList<String> results = new ArrayList<>();
         
         try {
+            // setSchema(divari_name);
             String headword = "%" + entry + "%";
             PreparedStatement prstmt = this.con.prepareStatement(ADMIN_BOOK_QUERY);
             
             prstmt.clearParameters();
             prstmt.setString(1, headword.toLowerCase());
-            prstmt.setString(2, divari_name);
 
             ResultSet rset = prstmt.executeQuery();
             
@@ -521,11 +521,14 @@ public class QueryEngine {
     public void setSchema(String schema) {
         
         try {
-            PreparedStatement prstmt = con.prepareStatement(SET_SCHEMA);
             
-            prstmt.clearParameters();
-            prstmt.setString(1, schema);
-            prstmt.execute();
+            Statement stmt = this.con.createStatement();
+            stmt.execute(SET_SCHEMA);
+//            PreparedStatement prstmt = con.prepareStatement(SET_SCHEMA);
+//            
+//            prstmt.clearParameters();
+//            prstmt.setString(1, "keskusdivari");
+//            prstmt.executeUpdate();
 
         } catch (SQLException e) {
             System.out.println(e.getMessage());

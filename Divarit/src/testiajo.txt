@@ -1,6 +1,6 @@
 admin@divarit.fi 1234
 find stephen
-find_book tieto
+find_book romaani
 find romaani
 find_book tieto
 signout

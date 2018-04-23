@@ -4,7 +4,7 @@
 
 -- Korjattu tilatarkistus [Pyssysalo]
 
-CREATE OR REPLACE FUNCTION hae_kappaleet_admin(hakusana varchar(50), d_nimi varchar(10))
+CREATE OR REPLACE FUNCTION hae_kappaleet_admin(hakusana varchar(50))
 RETURNS TABLE(
     divari_nimi VARCHAR(10),
     id integer,
@@ -32,7 +32,6 @@ AS $$
     SELECT DISTINCT divari_nimi, k.id, nimi, kuvaus, luokka, tyyppi, sisosto_hinta, hinta, myynti_pvm
     FROM kappale k
     INNER JOIN haetut_teokset ht ON k.teos_isbn = ht.isbn
-	WHERE divari_nimi = d_nimi
     ORDER BY nimi;
 
 $$ LANGUAGE SQL;
