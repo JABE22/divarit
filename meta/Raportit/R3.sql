@@ -18,6 +18,8 @@
 	[kayttaja@foo.fi] <-- LEFT JOIN --> [kayttaja@foo.fi, 10]
 	[kayttaja_2@foo.fi] <-- LEFT JOIN --> (ei vastaavaa tuplea) = 0
 	
+	HUOMAUTUS :: Päivitä myös itse funktiotiedosto! Tämä on vain SQL
+	
 */
 SELECT kayttaja.email, COALESCE(laskenta.eri_teosten_lkm_viime_vuonna, 0) as eri_teosten_lkm_viime_vuonna FROM kayttaja
 -- Joinaa laskentatuloksen kanssa
@@ -33,3 +35,5 @@ LEFT JOIN (
 	GROUP BY(kayttaja.email)
 ) as laskenta ON kayttaja.email=laskenta.k_e
 ORDER BY kayttaja.email ASC;
+
+-- HUOMAUTUS :: Päivitä myös itse funktiotiedosto!
