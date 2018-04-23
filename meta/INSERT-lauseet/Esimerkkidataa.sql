@@ -340,6 +340,8 @@ INSERT INTO divari VALUES
 INSERT INTO divari VALUES
 ('D2', 'Korpimaantie 1230, 45435 Lempäälä');
 
+INSERT INTO divari VALUES ('KD', 'Keskusdivarinkatu 99');
+
 -- kayttajat
 INSERT INTO kayttaja VALUES ('admin@divarit.fi', 'Admin', 'Divari', 'Divarikatu 600', '050 999 999', true);
 INSERT INTO kayttaja VALUES ('kalle@divarit.fi', 'Kalle', 'Kirjala', 'Kimmontie 4 A 16', '040012345', false);

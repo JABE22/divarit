@@ -18,7 +18,7 @@ BEGIN
 			WHERE id IN
 			(
 				SELECT kpl.id FROM kappale as kpl
-				INNER JOIN ostoskori ON kpl.id=ostoskori.kappale_id
+				INNER JOIN ostoskori ON kpl.id=ostoskori.kappale_id AND kappale.divari_nimi=ostoskori.divari_nimi
 				INNER JOIN tilaus ON ostoskori.tilaus_id=tilaus.id
 				WHERE tilaus.id=OLD.id
 			);

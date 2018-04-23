@@ -1,0 +1,3 @@
+Tässä kansiossa on raporttien 1-3 SQL:t.
+
+SQL pitää päivittä myös vastaaviin funktioihin! 
