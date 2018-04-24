@@ -36,8 +36,7 @@ public class UserInterface {
     private final String CART = "cart"; // Näyttää ostoskorin sisällön
     private final String CHECKOUT = "checkout"; // Kassalle, nÃ¤ytetÃ¤Ã¤n tuotteet ja postikulut
     private final String ORDER = "order"; // Tilaa, komennon jÃ¤lkeen pyydetÃ¤Ã¤n vahvistus
-    private final String REMOVE = "remove"; // Poistaa tuotteen ostoskorista [remove kappale_id]
-    private final String EMPTY_CART = "empty";
+    private final String EMPTY_CART = "empty"; // Ostoskorin tyhjennys (Aktiivisen tilauksen tilamuutos)
 
     // Ohjelman ylläpitäjän -komennot
     private final String FIND_BOOK = "find_book"; // Kappaleet (teokset "find" komennolla)
@@ -160,16 +159,9 @@ public class UserInterface {
                     }
                     break;
 
-                case REMOVE:
-                    if (input.length > 1) {
-                        System.out.println("Removing book from cart...");
-                        remove(input[1]);
-                    }
-                    break;
-
                 case EMPTY_CART:
                     System.out.println("Clearing shopping cart...");
-                    this.QE.setOrderStatus(order_id, 0);
+                    this.QE.setOrderStatus(order_id, 0); // Suora metodikutsu
                     break;
 
                 case CART:
@@ -816,19 +808,6 @@ public class UserInterface {
         details.add(Integer.toString(this.order_id));
 
         this.QE.addToCart(details);
-    }
-
-    // Poistaa tuotteen ostoskorista
-    public void remove(String book_id) {
-        int id = checkIntFormat(book_id);
-        String username = this.signed_user_details[0];
-        if (id > 0) {
-            if (this.QE.remove(id, username)) {
-                System.out.println("Tuote poistettiin onnistuneesti!");
-            } else {
-                System.out.println("Tuote ID:tä ei löytynyt");
-            }
-        }
     }
 
     // Tarkistaa parametrina annetun syötteen pituuden. Jos pituus ylittyy, palauttaa

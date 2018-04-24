@@ -70,10 +70,7 @@ public class QueryEngine {
 //    + "(kappale_id, divari_nimi, tilaus_id) VALUES (?, ?, ?);";
     // Päivittää tilauksen tilan -> Tilattu
     private final String SET_ORDER_STATUS = "SELECT * FROM keskusdivari.muuta_tilauksen_tila(?, ?)";
-    // Poistaa ostoskorista tuotteen
-    private final String DELETE_FROM_CART =
-      "DELETE FROM keskusdivari.ostoskori "
-    + "WHERE kappale_id = ? AND tilaus_id = keskusdivari.hae_tilaus_id(?)";
+
 
     
     public QueryEngine(DatabaseConnection dataCon) {
@@ -439,31 +436,14 @@ public class QueryEngine {
             if (changes > 0) {
                 System.out.println("Tuote lisättiin onnistuneesti!");
             } else {
-                System.out.println("Antamaasi tuote ID:tä ei löytynyt");
+                System.out.println("Virhe lisättäessä tuotetta ostoskoriin!");
             }
             prstmt.close();  // sulkee automaattisesti myÃ¶s tulosjoukon rset
             
         } catch (SQLException e) {
-            System.out.println("ADD_TO_CART_Q: " + e.getMessage());
+            String product_id = details.get(1) + details.get(0);
+            System.out.println("ADD_TO_CART_Q: Tuotetta " + product_id + " ei lisätty!");
         }
-    }
-    
-    // Poistaa tuotteen ostoskorista
-    public boolean remove(int book_id, String username) {  
-        try {
-            setSchema(SCHEMA_KD);
-            PreparedStatement prstmt = this.con.prepareStatement(DELETE_FROM_CART);
-            prstmt.clearParameters();
-            prstmt.setInt(1, book_id);
-            prstmt.setString(2, username);
-            prstmt.executeUpdate();
-            prstmt.close(); 
-            
-            return true;
-        } catch (SQLException e) {
-            System.out.println("REMOVE_CART_Q: " + e.getMessage());
-        }
-        return false;
     }
     
     // Palauttaa ostoskorin sisällön listalla
