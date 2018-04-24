@@ -7,9 +7,6 @@ cart
 find ohjelmointi
 add D210061
 checkout
-return
-empty
-cart
 signout
 liisa@divarit.fi 1234
 find jari

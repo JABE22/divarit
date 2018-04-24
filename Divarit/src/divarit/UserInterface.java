@@ -93,8 +93,13 @@ public class UserInterface {
     public UserInterface() {
         this.QE = new QueryEngine(new DatabaseConnection());
 
-        // Testiajo ** lukee esivalitut komennot tiedostosta
-        this.testikomennot = lueKomennotTiedostosta("src/yllapitajatesti_1.txt");
+        /* Testiajo ** lukee esivalitut komennot tiedostosta
+        * Testitiedostoja:
+        * yllapitajatesti_1.txt  -testaa hakutoimintoja ja raportteja (D1 ja D2)
+        * ostoskoritesti_1.txt   -testaa checkout -> return
+        * ostoskoritesti_2.txt   -testaa checkout -> order ja empty
+        */        
+        this.testikomennot = lueKomennotTiedostosta("src/ostoskoritesti_2.txt");
         this.komentoIndeksi = 0;
     }
 
@@ -103,6 +108,8 @@ public class UserInterface {
                 "\n *****************\n"
                 + " **** DIVARIT ****\n"
                 + " *****************");
+        
+        this.QE.connectToDatabase(); // Muodostetaan yhteys tietokantaan
 
         if (signIn()) {
             // Testausta varten
@@ -165,20 +172,16 @@ public class UserInterface {
                 case CART:
                     // Näytetään aktiivisen käyttäjän ostoskorin sisältö
                     System.out.println("Viewing contents of cart...");
-                    printCartContents();
+                    printCartContents(1);
                     break;
 
                 case CHECKOUT:
                     System.out.println("Checking out...");
-                    printCartContents(); // Ostoskorin sisältö ja hinnat
+                    printCartContents(2); // Ostoskorin sisältö ja hinnat
                     printCartSum(); // Ostoskorin summa (yhteishinta)
-                    
-                    // Tähän postikulumetodi
-                    // Tilaus ID haku.
-                    
+                    printPostages(); // Postikulut ja lähetykset
                     System.out.println("Vahvista tilaus [order] tai palaa [return]:");
-                    // Tilauksen vahvistaminen tai peruutus
-                    checkOut();
+                    checkOut(); // Tilauksen vahvistaminen tai peruutus
                     break;
 
                 case RETURN:
@@ -356,6 +359,7 @@ public class UserInterface {
         this.schema_name = null;
         this.signed_user_details = null;
         this.order_id = 0;
+        this.QE.closeDatabaseConnection();
         run();
     }
 
@@ -433,6 +437,7 @@ public class UserInterface {
             }
         } while (!command.equals(ORDER));
     }
+    
 
     /**
      * * Tulostelumetodeita **
@@ -448,7 +453,7 @@ public class UserInterface {
     }
 
     // Tulostaa ostoskorin muotoillusti
-    public void printCartContents() {
+    public void printCartContents(int type) {
         ArrayList<String> cartContents = this.QE.getCartContent(order_id);
         if (cartContents.isEmpty()) {
             System.out.println(
@@ -456,9 +461,14 @@ public class UserInterface {
                   + "** Ostoskorisi on tyhjä **\n"
                   + "--------------------------");
         } else {
+            if (type == 1) { // Type 1 = cart -komento
+                System.out.println("                        -OSTOSKORI-");
+            } else if (type == 2) { // Type 2 = checkout -komento
+                System.out.println("___________________________________________________________");
+                System.out.println("                        -CHECKOUT-");
+            }
             System.out.println(
-                    "                 -OSTOSKORI-                 \n"
-                    + "tnro      tuotenimi                                 a_hinta\n"
+                      "tnro      tuotenimi                                 a_hinta\n"
                     + "-----------------------------------------------------------");
             
 
@@ -487,11 +497,49 @@ public class UserInterface {
         }
 
     }
+    
+    // Tulostaa postikulut
+    public void printPostages() {
+        int align = 20; // Määrittää sisennyksen oikeasta reunasta
+        System.out.println("");
+        printSpace(align);
+        System.out.println("Tilauksen paketit    kpl     postimaksu");
+        
+        ArrayList<String> postages = postageCalculator();
+        
+        String[] parts;
+        String limiter; // Sarakkeen pituusrajoitin
+        // Postikulurivien läpikäynti
+        for (int j = 0; j < postages.size(); j++ ) {
+            parts = postages.get(j).split("/");
+            // Voitaisiin tulostaa myös divarinimi parts[0];
+            printSpace(align);
+            System.out.print("Paketti " + parts[0] + ":  ");
+            
+            // Osien läpikäynti ja muotoiltu tulostus
+            for (int i = 0; i < parts.length; i++) {
+                limiter = stringLimiter(parts[i], 6);
+                
+                switch (i) { 
+                    case 1:
+                        printSpace(9);
+                        System.out.print(limiter);
+                        printSpace(10 - limiter.length());
+                        break;
+                    case 2:
+                        System.out.println(limiter + " €");
+                        break;
+                }
+            }
+        }
+        System.out.println("___________________________________________________________\n");
+    }
+    
 
-    // TUlostaa ostoskorin tuotteiden yhteishinnan
+    // Tulostaa ostoskorin tuotteiden yhteishinnan
     public void printCartSum() {
         double totalSum = this.QE.getCartSum(order_id);
-        printSpace(36);
+        printSpace(38);
         System.out.println("tuotteet yht: " + totalSum + " €");
     }
 
@@ -822,6 +870,39 @@ public class UserInterface {
             return text; // Palautetaan alkuperäinen
         }
     }
+    
+    
+    // Postikulujen laskentametodi, palauttaa rivit joissa divarinimi, kpl, hinta
+    public ArrayList<String> postageCalculator() {
+        ArrayList<String> packages = this.QE.getPackages(order_id);
+        
+        // Näihin talletetaan arvot riveiltä
+        ArrayList<String> postages = new ArrayList<>();
+        String[] details;
+        int weight;
+        
+        String postage_row; 
+        
+        for (String row : packages) {
+            details= row.split("/");
+            
+            weight = checkIntFormat(details[2]);
+            if (weight <= 2000 && weight > 0) {
+                postage_row = details[0] + "/" 
+                        + details[2] + "/"
+                        + "10.5"; //getPostage(weight);                  
+                postages.add(postage_row);
+            } 
+        }
+
+        return postages;
+    }
+    
+    public double getPostage(int weight) {
+        // Turvallinen operaatio
+        return this.QE.getPostage(weight);
+    }
+    
 
     /*
     * Syotteen muodon tarkistusmetodeita
