@@ -9,7 +9,7 @@ RETURNS TABLE(
         hinta NUMERIC(5, 2)
 )
 AS $$
-	SELECT divari_nimi, kappale_id, nimi, hinta
+	SELECT ok.divari_nimi, kappale_id, nimi, hinta
     FROM keskusdivari.tilaus t
         INNER JOIN keskusdivari.ostoskori ok ON t.id = ok.tilaus_id
         INNER JOIN keskusdivari.kappale k ON ok.kappale_id = k.id AND ok.divari_nimi=k.divari_nimi

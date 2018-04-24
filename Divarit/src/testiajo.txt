@@ -17,19 +17,3 @@ admin@divarit.fi 1234
 report pur_his
 report cat_pri
 signout
-kalle@divarit.fi 1234
-find romaani
-add D210102
-cart
-empty
-cart
-signout
-liisa@divarit.fi 1234
-find jari
-cart
-add D110030
-add D210102
-cart
-empty
-cart
-signout

@@ -46,8 +46,6 @@ public class UserInterface {
     private final String REPORT = "report"; // Komennon jälkeen samalla rivillä täsmennys...
     private final String REPORT_PURCHASE_HISTORY = "pur_his"; // ...ostohistoria...
     private final String REPORT_CATEGORY_PRICES = "cat_pri"; // tai kategorioiden hinnat
-    // Päivittää d1 -divarin tietokannan kappaleiden tilan vastaamaan keskusdivaria
-    private final String UPDATE_BOOKS = "SELECT FROM keskusdivari.paivita_kappaletilanne(?)";
 
     // Ohjelman yleiskomennot
     private final String RETURN = "return"; // Palaa etusivulle milloin tahansa
@@ -96,7 +94,7 @@ public class UserInterface {
         this.QE = new QueryEngine(new DatabaseConnection());
 
         // Testiajo ** lukee esivalitut komennot tiedostosta
-        this.testikomennot = lueKomennotTiedostosta("src/testiajo.txt");
+        this.testikomennot = lueKomennotTiedostosta("src/ostoskoritesti.txt");
         this.komentoIndeksi = 0;
     }
 
@@ -176,6 +174,7 @@ public class UserInterface {
                     printCartSum(); // Ostoskorin summa (yhteishinta)
                     
                     // Tähän postikulumetodi
+                    // Tilaus ID haku.
                     
                     System.out.println("Vahvista tilaus [order] tai palaa [return]:");
                     // Tilauksen vahvistaminen tai peruutus
@@ -450,14 +449,18 @@ public class UserInterface {
 
     // Tulostaa ostoskorin muotoillusti
     public void printCartContents() {
-        if (this.order_id == 0) {
-            System.out.println("** Ostoskorisi on tyhjä **");
+        ArrayList<String> cartContents = this.QE.getCartContent(order_id);
+        if (cartContents.isEmpty()) {
+            System.out.println(
+                    "--------------------------\n"
+                  + "** Ostoskorisi on tyhjä **\n"
+                  + "--------------------------");
         } else {
             System.out.println(
                     "                 -OSTOSKORI-                 \n"
-                    + "tnro    tuotenimi                                 a_hinta\n"
-                    + "---------------------------------------------------------");
-            ArrayList<String> cartContents = this.QE.cartContent(order_id);
+                    + "tnro      tuotenimi                                 a_hinta\n"
+                    + "-----------------------------------------------------------");
+            
 
             cartContents.stream().forEach(row -> {
                 String[] parts = row.split("/");
@@ -468,7 +471,7 @@ public class UserInterface {
                     switch (i) {
                         case 0:
                             System.out.print(limiter);
-                            printSpace(8 - limiter.length());
+                            printSpace(10 - limiter.length());
                             break;
                         case 1:
                             System.out.print(limiter);
@@ -480,7 +483,7 @@ public class UserInterface {
                     }
                 }
             });
-            System.out.println("---------------------------------------------------------");
+            System.out.println("-----------------------------------------------------------");
         }
 
     }

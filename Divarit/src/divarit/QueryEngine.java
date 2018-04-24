@@ -43,6 +43,8 @@ public class QueryEngine {
     private final String REPORT_QUERY = "SELECT * FROM keskusdivari.raportti_3()";
     // Palauttaa kategorioihin liittyviä hintatietoja
     private final String REPORT_CATEGORY_QUERY = "SELECT * FROM keskusdivari.raportti_2()";
+    // Päivittää d1 -divarin tietokannan kappaleiden tilan vastaamaan keskusdivaria
+    private final String UPDATE_BOOKS_STATUS = "SELECT FROM keskusdivari.paivita_kappaletilanne('D1')";
     
     /*** Lisäyslauseita ***/
     // Teoksen lisäys
@@ -431,22 +433,23 @@ public class QueryEngine {
                     prstmt.setString(i, details.get(i - 1));
                 }
             }
-            int changes = prstmt.executeUpdate();
-            if (changes > 0) {
-                System.out.println("Tuote lisättiin onnistuneesti!");
-            } else {
-                System.out.println("Virhe lisättäessä tuotetta ostoskoriin!");
-            }
-            prstmt.close();  // sulkee automaattisesti myÃ¶s tulosjoukon rset
+            prstmt.executeUpdate();
+//            if (changes > 0) {
+//                System.out.println("Tuote lisättiin onnistuneesti!");
+//            } else {
+//                System.out.println("Virhe lisättäessä tuotetta ostoskoriin!");
+//            }
+            prstmt.close();
             
-        } catch (SQLException e) {
-            String product_id = details.get(1) + details.get(0);
-            System.out.println("ADD_TO_CART_Q: Tuotetta " + product_id + " ei lisätty!");
+        } catch (SQLException e) { // Saa poikkeuksen, vaikka tuote lisättäisiin koriin
+            // Ei tulosteta mitään.
+            // String product_id = details.get(1) + details.get(0);
+            // System.out.println("ADD_TO_CART_Q: Tuotetta " + product_id + " ei lisätty!");
         }
     }
     
     // Palauttaa ostoskorin sisällön listalla
-    public ArrayList<String> cartContent(int order_id) {
+    public ArrayList<String> getCartContent(int order_id) {
         ArrayList<String> content = new ArrayList<>();
 
         try {
@@ -467,6 +470,8 @@ public class QueryEngine {
                     content.add(rivi);
                     
                 } while (rset.next());
+            } else {
+                
             }
             
             prstmt.close();  // sulkee automaattisesti myÃ¶s tulosjoukon rset
@@ -504,14 +509,27 @@ public class QueryEngine {
     public void setOrderStatus(int order_id, int newStatus) {
         try {
             setSchema(SCHEMA_KD);
-            PreparedStatement prstmt = con.prepareStatement(SET_ORDER_STATUS);           
+            PreparedStatement prstmt = con.prepareStatement(SET_ORDER_STATUS); 
             prstmt.clearParameters();
             prstmt.setInt(1, order_id);
-            prstmt.setInt(2, newStatus);            
+            prstmt.setInt(2, newStatus); 
+            // Ajetaan päivitykset
             prstmt.executeUpdate();
+            setBookStatus();
+            
             prstmt.close();            
         } catch (SQLException e) {
-            System.out.println("SET_ORDER_STAT_Q: " + e.getMessage());
+            // System.out.println("SET_ORDER_STAT_Q: " + e.getMessage());
+        }
+    }
+    
+    // Pävittää alidivarin D1 kappaleiden tilan vastaamaan keskusdivaria
+    public void setBookStatus() {
+        try {
+            Statement stmt = this.con.createStatement();
+            stmt.execute(UPDATE_BOOKS_STATUS);
+        } catch (SQLException e) {
+            System.out.println("BOOK_STAT_Q: " + e.getMessage());
         }
     }
     
@@ -522,15 +540,9 @@ public class QueryEngine {
             schema = "keskusdivari";
         }
         
-        try {
-            
+        try {           
             Statement stmt = this.con.createStatement();
             stmt.execute("SET SCHEMA '" + schema.toLowerCase() + "';");
-//            PreparedStatement prstmt = con.prepareStatement(SET_SCHEMA);
-//            
-//            prstmt.clearParameters();
-//            prstmt.setString(1, "keskusdivari");
-//            prstmt.executeUpdate();
 
         } catch (SQLException e) {
             System.out.println("SET_SCHEMA_Q: " + e.getMessage());

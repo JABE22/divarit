@@ -1,0 +1,21 @@
+kalle@divarit.fi 1234
+find romaani
+cart
+add D210101
+add D210104
+cart
+find ohjelmointi
+add D210061
+checkout
+return
+empty
+cart
+signout
+liisa@divarit.fi 1234
+find jari
+cart
+add D110032
+cart
+empty
+cart
+signout
