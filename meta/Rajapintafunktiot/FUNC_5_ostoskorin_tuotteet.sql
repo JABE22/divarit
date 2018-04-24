@@ -3,10 +3,10 @@
 
 CREATE OR REPLACE FUNCTION ostoskorin_tuotteet(tid int)
 RETURNS TABLE(
-	tilaus_id int,
+	divari_nimi int,
 	kappale_id int,
-        teosnimi varchar(60),
-        hinta NUMERIC(5, 2)
+    teosnimi varchar(60),
+    hinta NUMERIC(5, 2)
 )
 AS $$
 	SELECT t.id, kappale_id, nimi, hinta

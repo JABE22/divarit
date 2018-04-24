@@ -428,7 +428,6 @@ public class QueryEngine {
                     // Lukumuunnos onnistuu, koska muoto tarkistettu aiemmin
                     prstmt.setInt(i, Integer.parseInt(details.get(i - 1)));
                 } else {
-                    // Lukumuunnos onnistuu, koska muoto tarkistettu aiemmin
                     prstmt.setString(i, details.get(i - 1));
                 }
             }
@@ -461,7 +460,8 @@ public class QueryEngine {
                 String rivi;
                 do {
                     // Käytettävissä myös indeksi [1], divari_nimi
-                    rivi = rset.getString(2) + "/" // tuotenumero
+                    rivi = rset.getString(1)
+                         +  rset.getString(2) + "/" // tuotenumero
                          + rset.getString(3) + "/" // tuotenimi
                          + rset.getString(4); // kappalehinta
                     content.add(rivi);
