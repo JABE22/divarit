@@ -313,6 +313,8 @@ INSERT INTO kappale VALUES
 ('D2', 10093, '9521404868', 551, 0, 21.68, 15.00, null);
 INSERT INTO kappale VALUES 
 ('D2', 10094, '9521404868', 551, 0, 21.68, 7.00, null);
+INSERT INTO kappale VALUES 
+('D2', 10095, '9521404868', 551, 0, 21.68, 7.00, null);
 
 -- Tehtävänannon kappaleet
 INSERT INTO kappale VALUES 
@@ -327,6 +329,8 @@ INSERT INTO kappale VALUES
 ('D2', 10105, '9789522794111', 444, 0, 9.89, 13.00, null);
 INSERT INTO kappale VALUES 
 ('D2', 10106, '9789510396230', 321, 0, 5.00, 16.00, null);
+INSERT INTO kappale VALUES 
+('D2', 10107, '9789510396230', 321, 0, 7.00, 18.90, null);
 
 
 /* TÄSTÄ ALKAA KESKUSDIVARIIN KUULUVIEN TIETOJEN SYÖTTÖ 
@@ -356,7 +360,8 @@ INSERT INTO kayttaja VALUES ('teppo@divarit.fi', 'Teppo', 'Teppola', 'Katukuja 9
 INSERT INTO tilaus VALUES (1, 'kalle@divarit.fi', CURRENT_DATE, 1); 
 INSERT INTO tilaus VALUES (2, 'kalle@divarit.fi', CURRENT_DATE, 2);
 INSERT INTO tilaus VALUES (3, 'liisa@divarit.fi', CURRENT_DATE - '100 days'::interval, 1); 
-INSERT INTO tilaus VALUES (4, 'teppo@divarit.fi', CURRENT_DATE - '1 day'::interval, 2); 
+INSERT INTO tilaus VALUES (4, 'teppo@divarit.fi', CURRENT_DATE - '1 year'::interval, 2); 
+INSERT INTO tilaus VALUES (5, 'liisa@divarit.fi', CURRENT_DATE - '250 days'::interval, 2);
 
 -- ostoskori
 -- Juokseva numerointi (!!) kappaleissa
@@ -377,6 +382,10 @@ INSERT INTO ostoskori VALUES (10070, 'D2', 4);
 INSERT INTO ostoskori VALUES (10090, 'D2', 4);
 INSERT INTO ostoskori VALUES (10091, 'D2', 4);
 INSERT INTO ostoskori VALUES (10092, 'D2', 4);
+
+-- Liisan tilauksia
+INSERT INTO ostoskori VALUES (10095, 'D2', 5);
+INSERT INTO ostoskori VALUES (10107, 'D2', 5);
 
 
 

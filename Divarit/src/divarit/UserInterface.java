@@ -94,7 +94,7 @@ public class UserInterface {
         this.QE = new QueryEngine(new DatabaseConnection());
 
         // Testiajo ** lukee esivalitut komennot tiedostosta
-        this.testikomennot = lueKomennotTiedostosta("src/ostoskoritesti.txt");
+        this.testikomennot = lueKomennotTiedostosta("src/yllapitajatesti_1.txt");
         this.komentoIndeksi = 0;
     }
 
