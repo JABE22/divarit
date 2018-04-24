@@ -50,7 +50,7 @@ public class QueryEngine {
     // Palauttaa postikuluasteikon (alaraja, yläraja, hinta)
     private final String POSTAGE_QUERY
             = "SELECT hinta FROM keskusdivari.postikulut "
-            + "WHERE alaraja_g < ? AND ylaraja_g > ? LIMIT 1";
+            + "WHERE alaraja_g < ? AND ylaraja_g > ?;";
 
     /**
      * * Lisäyslauseita **
@@ -441,14 +441,9 @@ public class QueryEngine {
                 }
             }
             prstmt.executeUpdate();
-//            if (changes > 0) {
-//                System.out.println("Tuote lisättiin onnistuneesti!");
-//            } else {
-//                System.out.println("Virhe lisättäessä tuotetta ostoskoriin!");
-//            }
             prstmt.close();
 
-        } catch (SQLException e) { // Saa poikkeuksen, vaikka tuote lisättäisiin koriin
+        } catch (SQLException e) {
             // Ei tulosteta mitään.
             // String product_id = details.get(1) + details.get(0);
             // System.out.println("ADD_TO_CART_Q: Tuotetta " + product_id + " ei lisätty!");
@@ -526,7 +521,7 @@ public class QueryEngine {
 
             if (rset.next()) {
                 do {// indeksi [1]=tilaus_id
-                    row = rset.getString(2) + "/" // divari_nimi
+                    row = rset.getString(2) + "/"     // divari_nimi
                             + rset.getString(3) + "/" // paino
                             + rset.getString(4);      // kappale_lkm
                     packages.add(row);
@@ -541,8 +536,8 @@ public class QueryEngine {
     }
 
     // Palauttaa tilauksen postikulujen laskemiseen tarvittavan taulukon
-    public double getPostage(int weight) {
-        double postage;
+    public String getPostage(int weight) {
+        String postage;
         try {
             setSchema(SCHEMA_KD);
             PreparedStatement prstmt = this.con.prepareStatement(POSTAGE_QUERY);
@@ -553,7 +548,7 @@ public class QueryEngine {
             ResultSet rset = prstmt.executeQuery();
 
             if (rset.next()) {
-                postage = rset.getDouble(1);
+                postage = rset.getString(1);
                 prstmt.close();
                 return postage;
             }
@@ -561,7 +556,7 @@ public class QueryEngine {
         } catch (SQLException e) {
             System.out.println("GET_POSTAGE_Q: " + e.getMessage());
         }
-        return -1;
+        return "-1";
     }
 
     // Päivittää tilauksen tilan

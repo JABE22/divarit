@@ -540,7 +540,7 @@ public class UserInterface {
     public void printCartSum() {
         double totalSum = this.QE.getCartSum(order_id);
         printSpace(38);
-        System.out.println("tuotteet yht: " + totalSum + " €");
+        System.out.println("tuotteet yht: " + String.format("%.2f", totalSum) + " €");
     }
 
     // Teosten muotoiltu tulostus
@@ -886,11 +886,11 @@ public class UserInterface {
         for (String row : packages) {
             details= row.split("/");
             
-            weight = checkIntFormat(details[2]);
+            weight = checkIntFormat(details[1]);
             if (weight <= 2000 && weight > 0) {
                 postage_row = details[0] + "/" 
                         + details[2] + "/"
-                        + "10.5"; //getPostage(weight);                  
+                        + String.format("%.2f", getPostage(weight));                  
                 postages.add(postage_row);
             } 
         }
@@ -900,7 +900,9 @@ public class UserInterface {
     
     public double getPostage(int weight) {
         // Turvallinen operaatio
-        return this.QE.getPostage(weight);
+        String postage = this.QE.getPostage(weight);
+        double decimal_postage = checkDoubleFormat(postage);
+        return decimal_postage;
     }
     
 
