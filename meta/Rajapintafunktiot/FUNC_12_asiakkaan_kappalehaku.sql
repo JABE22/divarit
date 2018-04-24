@@ -13,23 +13,16 @@ RETURNS TABLE(
     hinta NUMERIC(5,2)
 )
 AS $$
-    -- Muista muuttaa kaikki parametrit (5 kpl) 'merkkijono':ksi jos ajat kyselyn
-
-    WITH haetut_teokset AS (
-    -- Teokset niiden nimen, tekijän nimen, luokan tai tyypin perusteella
-    SELECT isbn, nimi, id, kuvaus, luokka, tyyppi
+    -- Teokset niiden nimen, tekijän nimen, luokan, tyypin tai kuvauksen perusteella
+    SELECT divari_nimi, id, nimi, kuvaus, luokka, tyyppi, hinta
     FROM keskusdivari.teos t
     INNER JOIN keskusdivari.teosten_tekijat ktt ON t.isbn = ktt.teos_isbn
     INNER JOIN keskusdivari.tekija kt ON ktt.tekija_id = kt.id
+    INNER JOIN keskusdivari.kappale kp ON t.isbn = kp.teos_isbn
     WHERE LOWER(etunimi) LIKE hakusana OR LOWER(sukunimi) LIKE hakusana OR
           LOWER(nimi) LIKE hakusana OR LOWER(tyyppi) LIKE hakusana OR
-          LOWER(luokka) LIKE hakusana )
-    -- Näytetään hakua vastaavat varastossa olevat kappaleet
-    SELECT divari_nimi, k.id, nimi, kuvaus, luokka, tyyppi, hinta
-    FROM keskusdivari.kappale k
-    INNER JOIN haetut_teokset ht ON k.teos_isbn = ht.isbn
-	WHERE k.tila = 0 -- Korjattu, Pyssysalo
-    ORDER BY nimi;
+          LOWER(luokka) LIKE hakusana) OR LOWER(kuvaus) LIKE hakusana 
+          AND k.tila = 0;
 
 $$ LANGUAGE SQL;
 
