@@ -1,4 +1,4 @@
-SET SCHEMA 'keskusdivari';
+﻿SET SCHEMA 'keskusdivari';
 
 -- Korjattu tilatarkistus [Pyssysalo]
 
@@ -14,7 +14,7 @@ RETURNS TABLE(
 )
 AS $$
     -- Teokset niiden nimen, tekijän nimen, luokan, tyypin tai kuvauksen perusteella
-    SELECT divari_nimi, id, nimi, kuvaus, luokka, tyyppi, hinta
+    SELECT divari_nimi, kp.id, nimi, kuvaus, luokka, tyyppi, hinta
     FROM keskusdivari.teos t
     INNER JOIN keskusdivari.teosten_tekijat ktt ON t.isbn = ktt.teos_isbn
     INNER JOIN keskusdivari.tekija kt ON ktt.tekija_id = kt.id
@@ -22,7 +22,7 @@ AS $$
     WHERE LOWER(etunimi) LIKE hakusana OR LOWER(sukunimi) LIKE hakusana OR
           LOWER(nimi) LIKE hakusana OR LOWER(tyyppi) LIKE hakusana OR
           LOWER(luokka) LIKE hakusana OR LOWER(kuvaus) LIKE hakusana 
-          AND k.tila = 0;
+          AND kp.tila = 0;
 
 $$ LANGUAGE SQL;
 
