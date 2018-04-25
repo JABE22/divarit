@@ -21,10 +21,10 @@ import java.util.Scanner;
  */
 public class UserInterface {
 
-    // Staattinen jÃ¤rjestelmÃ¤n salasana
+    // Staattinen järjestelmän salasana
     private final String PASSWORD = "1234";
 
-    // Aktiivisen kÃ¤yttÃ¤jÃ¤n tietoja. On nollattava kun kirjaudutaan ulos
+    // Aktiivisen käyttäjän tietoja. On nollattava kun kirjaudutaan ulos
     // ...kutsumalla metodia signOut()
     private String[] signed_user_details = null;
     private int order_id;
@@ -32,10 +32,10 @@ public class UserInterface {
 
     // Ohjelman asiakas -komennot
     private final String FIND = "find"; // Myytävänä olevat kappaleet
-    private final String ADD = "add"; // LisÃ¤Ã¤ ostoskoriin [add kappale_id]
+    private final String ADD = "add"; // Lisää ostoskoriin [add kappale_id]
     private final String CART = "cart"; // Näyttää ostoskorin sisällön
-    private final String CHECKOUT = "checkout"; // Kassalle, nÃ¤ytetÃ¤Ã¤n tuotteet ja postikulut
-    private final String ORDER = "order"; // Tilaa, komennon jÃ¤lkeen pyydetÃ¤Ã¤n vahvistus
+    private final String CHECKOUT = "checkout"; // Kassalle, näytetään tuotteet ja postikulut
+    private final String ORDER = "order"; // Tilaa, komennon jälkeen pyydetään vahvistus
     private final String EMPTY_CART = "empty"; // Ostoskorin tyhjennys (Aktiivisen tilauksen tilamuutos)
 
     // Ohjelman ylläpitäjän -komennot
@@ -52,22 +52,20 @@ public class UserInterface {
     private final String EXIT = "exit"; // Sulkee sovelluksen
     private final String SIGN_OUT = "signout"; // Kirjaa ulos käyttäjän
 
-    // YllÃ¤pitÃ¤jÃ¤: Komennon jÃ¤lkeen tÃ¤smennys [add book] tai [add abstract]
-    // Tulosteet kÃ¤yttÃ¤jÃ¤n mukaan (2 kpl)
+    // Tulosteet käyttäjän mukaan (2 kpl)
     private final String CUSTOMER_PRINT
             = "_______________________\n"
             + "-Ohjelman komennot-\n"
             + "*1 find [hakusana]\n"
             + "*2 add [book_id]\n"
-            + "*3 remove [book_id]\n"
-            + "*4 empty\n"
-            + "*5 cart [kappale_id]\n"
-            + "*6 checkout\n"
-            + "   *6.1 order\n"
-            + "   *6.2 return\n"
-            + "*7 return\n"
-            + "*8 signout\n"
-            + "*9 exit\n"
+            + "*3 empty\n"
+            + "*4 cart\n"
+            + "*5 checkout\n"
+            + "   *5.1 order\n"
+            + "   *5.2 return\n"
+            + "*6 return\n"
+            + "*7 signout\n"
+            + "*8 exit\n"
             + "_______________________\n";
 
     private final String ADMIN_PRINT
@@ -87,20 +85,21 @@ public class UserInterface {
     // Luokkamuuttuja Tietokannan SQL -kyselyille
     private final QueryEngine QE;
 
-    private final ArrayList<String> testikomennot;
-    private int komentoIndeksi;
+    private final ArrayList<String> testCommands;
+    private int commandIndex;
 
     public UserInterface() {
         this.QE = new QueryEngine(new DatabaseConnection());
-
-        /* Testiajo ** lukee esivalitut komennot tiedostosta
+        this.testCommands = null;
+        
+        /* ** Testiajo ** lukee esivalitut komennot tiedostosta
         * Testitiedostoja:
         * yllapitajatesti_1.txt  -testaa hakutoimintoja ja raportteja (D1 ja D2)
         * ostoskoritesti_1.txt   -testaa checkout -> return
         * ostoskoritesti_2.txt   -testaa checkout -> order ja empty
-        */        
-        this.testikomennot = lueKomennotTiedostosta("src/ostoskoritesti_2.txt");
-        this.komentoIndeksi = 0;
+         */
+        // this.testCommands = readCommandsFromFile("src/yllapitajatesti_1.txt");
+        // this.commandIndex = 0;
     }
 
     public void run() {
@@ -108,7 +107,7 @@ public class UserInterface {
                 "\n *****************\n"
                 + " **** DIVARIT ****\n"
                 + " *****************");
-        
+
         this.QE.connectToDatabase(); // Muodostetaan yhteys tietokantaan
 
         if (signIn()) {
@@ -137,9 +136,9 @@ public class UserInterface {
 
         do {
 
-            // input = commandline();
+            input = commandline();
             // Testiajon komentolistan läpikäynti
-            input = getCommand();
+            // input = getCommand();
 
             if (input == null || input.length < 1) {
                 System.out.println("Error! Command invalid");
@@ -209,9 +208,9 @@ public class UserInterface {
         String[] input;
 
         do {
-            // input = commandline();
+            input = commandline();
             // Testiajon komentolistan läpikäynti
-            input = getCommand();
+            // input = getCommand();
 
             if (input == null || input.length < 1) {
                 System.out.println("Error! Command invalid");
@@ -314,8 +313,8 @@ public class UserInterface {
     public boolean signIn() {
         System.out.println("Type username and password\n"
                 + "[username password]: ");
-        // String[] sign_details = commandline();
-        String[] sign_details = getCommand();
+        String[] sign_details = commandline();
+        // String[] sign_details = getCommand();
 
         // Exit lopettaa heti
         if (sign_details.length > 0 && sign_details[0].equals(EXIT)) {
@@ -372,15 +371,15 @@ public class UserInterface {
         String[] columns = {"EMAIL: ", "ETUNIMI: ", "SUKUNIMI: ", "OSOITE: ", "PUH: "};
 
         while (true) {
-            // input = In.readString();
-            input = getCommand()[0];
+            input = In.readString();
+            // input = getCommand()[0];
 
             if (input.equals("y")) {
                 String userInput;
                 for (int i = 0; i < columns.length; i++) {
                     System.out.print(columns[i]);
-                    // userInput = In.readString();
-                    userInput = getCommand()[0];
+                    userInput = In.readString();
+                    // userInput = getCommand()[0];
 
                     if (checkUserInput(userInput)) {
                         user_details.add(userInput);
@@ -423,7 +422,7 @@ public class UserInterface {
         }
         String command;
         do {
-            command = getCommand()[0];
+            command = In.readString(); //getCommand()[0];
             if (checkUserInput(command)) {
                 // Tehdään tietokantaan tarvittavat muutokset
                 if (command.equals(ORDER)) {
@@ -437,7 +436,6 @@ public class UserInterface {
             }
         } while (!command.equals(ORDER));
     }
-    
 
     /**
      * * Tulostelumetodeita **
@@ -453,13 +451,14 @@ public class UserInterface {
     }
 
     // Tulostaa ostoskorin muotoillusti
-    public void printCartContents(int type) {
+    public void printCartContents(int type) {            // [0] = email
+        this.order_id = this.QE.getOrderID(this.signed_user_details[0]);
         ArrayList<String> cartContents = this.QE.getCartContent(order_id);
         if (cartContents.isEmpty()) {
             System.out.println(
                     "--------------------------\n"
-                  + "** Ostoskorisi on tyhjä **\n"
-                  + "--------------------------");
+                    + "** Ostoskorisi on tyhjä **\n"
+                    + "--------------------------");
         } else {
             if (type == 1) { // Type 1 = cart -komento
                 System.out.println("                        -OSTOSKORI-");
@@ -468,9 +467,8 @@ public class UserInterface {
                 System.out.println("                        -CHECKOUT-");
             }
             System.out.println(
-                      "tnro      tuotenimi                                 a_hinta\n"
+                    "tnro      tuotenimi                                 a_hinta\n"
                     + "-----------------------------------------------------------");
-            
 
             cartContents.stream().forEach(row -> {
                 String[] parts = row.split("/");
@@ -497,36 +495,36 @@ public class UserInterface {
         }
 
     }
-    
+
     // Tulostaa postikulut
     public void printPostages() {
         int align = 20; // Määrittää sisennyksen oikeasta reunasta
         System.out.println("");
         printSpace(align);
         System.out.println("Tilauksen paketit    kpl     postimaksu");
-        
+
         ArrayList<String> postages = postageCalculator();
-        
+
         String[] parts;
         String limiter; // Sarakkeen pituusrajoitin
         // Postikulurivien läpikäynti
-        for (int j = 0; j < postages.size(); j++ ) {
+        for (int j = 0; j < postages.size(); j++) {
             parts = postages.get(j).split("/");
             // Voitaisiin tulostaa myös divarinimi parts[0];
             printSpace(align);
             System.out.print("Paketti " + parts[0] + ":  ");
-            
+
             // Osien läpikäynti ja muotoiltu tulostus
             for (int i = 0; i < parts.length; i++) {
                 limiter = stringLimiter(parts[i], 6);
-                
-                switch (i) { 
-                    case 1:
+
+                switch (i) {
+                    case 1: // paketin kappale/lkm
                         printSpace(9);
                         System.out.print(limiter);
                         printSpace(10 - limiter.length());
                         break;
-                    case 2:
+                    case 2: // postikulut paketille
                         System.out.println(limiter + " €");
                         break;
                 }
@@ -534,7 +532,6 @@ public class UserInterface {
         }
         System.out.println("___________________________________________________________\n");
     }
-    
 
     // Tulostaa ostoskorin tuotteiden yhteishinnan
     public void printCartSum() {
@@ -563,7 +560,7 @@ public class UserInterface {
                         printSpace(16 - parts[i].length());
                         break;
 
-                    case 1: // teosnimi, välimerkit jälkeen lkm
+                    case 1: // tuotenimi, välimerkit jälkeen lkm
                         System.out.print(limiter);
                         printSpace(30 - limiter.length());
                         break;
@@ -572,13 +569,13 @@ public class UserInterface {
                         System.out.print(limiter + " ");
                         break;
 
-                    case 3: // luokka, välimerkit jälkeen lkm
+                    case 3: // tekijän sukunimi, liitetään edellisen perään
                         System.out.print(parts[i]);
                         int nameLength = limiter.length() + parts[i - 1].length();
                         printSpace(25 - nameLength);
                         break;
 
-                    case 4: // Tyyppi
+                    case 4: // luokka, välimerkit jälkeen lkm
                         System.out.print(parts[i]);
                         printSpace(15 - limiter.length());
                         break;
@@ -660,37 +657,37 @@ public class UserInterface {
                 limiter = stringLimiter(parts[i], 25);
                 // Tulostuksen sisennys tasaus
                 switch (i) {
-                    case 0: // id, välimerkit jälkeen lkm
+                    case 0: // divari_nimi
                         System.out.print(parts[i]);
                         printSpace(5 - limiter.length());
                         break;
 
-                    case 1: // teosnimi, välimerkit jälkeen lkm
+                    case 1: // tuote_id
                         System.out.print(limiter);
                         printSpace(8 - limiter.length());
                         break;
 
-                    case 2: // kuvaus , välimerkit jälkeen lkm
+                    case 2: // teosnimi
                         System.out.print(limiter);
                         printSpace(33 - limiter.length());
                         break;
 
-                    case 3: // luokka, välimerkit jälkeen lkm
+                    case 3: // luokka
                         System.out.print(parts[i]);
                         printSpace(18 - limiter.length());
                         break;
 
-                    case 4: // Tyyppi
+                    case 4: // sisosto/e
                         System.out.print(parts[i]);
                         printSpace(12 - limiter.length());
                         break;
 
-                    case 5:
+                    case 5: // hinta/e
                         System.out.print(parts[i]);
                         printSpace(12 - limiter.length());
                         break;
 
-                    case 6:
+                    case 6: // myynti_pvm
                         System.out.println(limiter);
                         break;
                 }
@@ -719,8 +716,8 @@ public class UserInterface {
         String userInput;
         for (int i = 0; i < columns.length; i++) {
             System.out.print(columns[i]);
-            // userInput = In.readString();
-            userInput = getCommandAsDetails();
+            userInput = In.readString();
+            // userInput = getCommandAsDetails();
 
             if (checkUserInput(userInput)) {
                 copy_details.add(userInput);
@@ -732,7 +729,7 @@ public class UserInterface {
         System.out.println("Adding copy...");
         this.QE.insertCopy(copy_details, this.schema_name);
     }
-    
+
     // Lisää uuden tekijän tiedot
     private void addAuthor() {
         String[] columns = {"ETUNIMI: ", "SUKUNIMI: ", "KANSALLISUUS: ", "SYNT_VUOSI: "};
@@ -741,8 +738,8 @@ public class UserInterface {
         String userInput;
         for (int i = 0; i < columns.length; i++) {
             System.out.print(columns[i]);
-            // userInput = In.readString();
-            userInput = getCommandAsDetails();
+            userInput = In.readString();
+            // userInput = getCommandAsDetails();
 
             if (checkUserInput(userInput)) {
                 author_details.add(userInput);
@@ -756,7 +753,6 @@ public class UserInterface {
     }
 
     // Lisää uuden kappaleen/yksittäisen kirjan tiedot (Kysytään käyttäjältä)
-    // Lisää uuden kappaleen/yksittÃ¤isen kirjan tiedot (KysytÃ¤Ã¤n kÃ¤yttÃ¤jÃ¤ltÃ¤)
     private void addBook() {
         String[] columns = {"DIVARI: ", "ISBN: ", "PAINO: ", "SISÄÄNOSTOHINTA: ", "HINTA: "};
         ArrayList<String> book_details = new ArrayList<>();
@@ -765,8 +761,8 @@ public class UserInterface {
 
         for (int i = 0; i < columns.length; i++) {
             System.out.print(columns[i]);
-            // userInput = In.readString();
-            userInput = getCommandAsDetails();
+            userInput = In.readString();
+            // userInput = getCommandAsDetails();
 
             if (checkUserInput(userInput)) {
                 if (i > 2) {
@@ -795,7 +791,7 @@ public class UserInterface {
         this.QE.insertBook(book_details, this.schema_name);
 
     }
-    
+
     // Ostohistorian tulostus
     private void printPurchaseReport() {
         ArrayList<String> data = this.QE.getPurchaseReport();
@@ -870,41 +866,36 @@ public class UserInterface {
             return text; // Palautetaan alkuperäinen
         }
     }
-    
-    
+
     // Postikulujen laskentametodi, palauttaa rivit joissa divarinimi, kpl, hinta
     public ArrayList<String> postageCalculator() {
         ArrayList<String> packages = this.QE.getPackages(order_id);
-        
+
         // Näihin talletetaan arvot riveiltä
         ArrayList<String> postages = new ArrayList<>();
         String[] details;
         int weight;
-        
-        String postage_row; 
-        
-        for (String row : packages) {
-            details= row.split("/");
-            
-            weight = checkIntFormat(details[1]);
-            if (weight <= 2000 && weight > 0) {
-                postage_row = details[0] + "/" 
-                        + details[2] + "/"
-                        + String.format("%.2f", getPostage(weight));                  
-                postages.add(postage_row);
-            } 
-        }
 
+        String postage_row;
+
+        for (String row : packages) {
+            details = row.split("/");
+
+            weight = checkIntFormat(details[1]);
+            postage_row = details[0] + "/"
+                    + details[2] + "/"
+                    // Hinnan muotoilu, inline
+                    + String.format("%.2f", getPostage(weight));
+            postages.add(postage_row);
+        }
         return postages;
     }
-    
+
     public double getPostage(int weight) {
-        // Turvallinen operaatio
         String postage = this.QE.getPostage(weight);
-        double decimal_postage = checkDoubleFormat(postage);
-        return decimal_postage;
+        return checkDoubleFormat(postage);
     }
-    
+
 
     /*
     * Syotteen muodon tarkistusmetodeita
@@ -922,7 +913,7 @@ public class UserInterface {
                 customer();
             }
         }
-        return !input.isEmpty(); // Jos tyhjÃ¤ syÃ¶te, palautetaan false
+        return !input.isEmpty(); // Jos tyhjä syöte, palautetaan false
     }
 
     // Tarkistaa, onko parametri double -muotoinen ja palauttaa muutoksen
@@ -937,8 +928,7 @@ public class UserInterface {
 
         return luku;
     }
-    
-    
+
     // Tarkistaa, onko parametri int -muotoinen ja palauttaa muunnoksen.
     public int checkIntFormat(String input) {
         int luku;
@@ -953,7 +943,7 @@ public class UserInterface {
 
     // Ohjelman testiajossa käytettävä metodi
     // Lukee komennot "filename" -tiedostosta listalle
-    public static ArrayList<String> lueKomennotTiedostosta(String filename) {
+    public static ArrayList<String> readCommandsFromFile(String filename) {
         // Lista jonne komennot lisätään
         ArrayList<String> komennot = new ArrayList<>();
 
@@ -973,23 +963,23 @@ public class UserInterface {
     }
 
     public String[] getCommand() {
-        if (this.komentoIndeksi > this.testikomennot.size() - 1) {
+        if (this.commandIndex > this.testCommands.size() - 1) {
             System.out.println("Ei enempää komentoja.");
             System.exit(0);
         }
-        String[] komentorivi = this.testikomennot.get(this.komentoIndeksi).split(" ", 2);
-        this.komentoIndeksi++;
-
+        String[] komentorivi = this.testCommands.get(this.commandIndex).split(" ", 2);
+        this.commandIndex++;
         return komentorivi;
+
     }
 
     public String getCommandAsDetails() {
-        if (this.komentoIndeksi > this.testikomennot.size() - 1) {
+        if (this.commandIndex > this.testCommands.size() - 1) {
             System.out.println("Ei enempää komentoja.");
             System.exit(0);
         }
-        String komentorivi = this.testikomennot.get(this.komentoIndeksi);
-        this.komentoIndeksi++;
+        String komentorivi = this.testCommands.get(this.commandIndex);
+        this.commandIndex++;
 
         return komentorivi;
     }
