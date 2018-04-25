@@ -17,12 +17,12 @@ RETURNS TABLE(
 AS $$
 
    SELECT divari_nimi, kp.id, nimi, luokka, sisosto_hinta, hinta, myynti_pvm
-    FROM teos t
-    INNER JOIN teosten_tekijat ktt ON t.isbn = ktt.teos_isbn
-    INNER JOIN tekija kt ON ktt.tekija_id = kt.id
-    INNER JOIN kappale kp ON t.isbn = kp.teos_isbn
-    WHERE LOWER(etunimi) LIKE hakusana OR LOWER(sukunimi) LIKE hakusana OR
-          LOWER(nimi) LIKE hakusana OR LOWER(tyyppi) LIKE hakusana OR
-          LOWER(luokka) LIKE hakusana OR LOWER(kuvaus) LIKE hakusana;
+   FROM teos t
+      INNER JOIN kappale kp ON t.isbn = kp.teos_isbn
+      LEFT JOIN teosten_tekijat ktt ON t.isbn = ktt.teos_isbn
+      LEFT JOIN tekija kt ON ktt.tekija_id = kt.id
+      WHERE LOWER(etunimi) LIKE hakusana OR LOWER(sukunimi) LIKE hakusana OR
+            LOWER(nimi) LIKE hakusana OR LOWER(tyyppi) LIKE hakusana OR
+            LOWER(luokka) LIKE hakusana OR LOWER(kuvaus) LIKE hakusana;
 
 $$ LANGUAGE SQL;

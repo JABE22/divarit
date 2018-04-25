@@ -57,11 +57,11 @@ public class QueryEngine {
      */
     // Teoksen lisäys
     private final String INSERT_COPY
-            = "INSERT INTO keskusdivari.teos (isbn, nimi, kuvaus, luokka, tyyppi) "
+            = "INSERT INTO teos (isbn, nimi, kuvaus, luokka, tyyppi) "
             + "VALUES (?, ?, ?, ?, ?);";
     // Myytävän yksittäiskappaleen lisäys
     private final String INSERT_BOOK
-            = "INSERT INTO keskusdivari.kappale "
+            = "INSERT INTO kappale "
             + "(divari_nimi, teos_isbn, paino, sisosto_hinta, hinta, myynti_pvm) "
             + "VALUES (?, ?, ?, ?, ?, null);";
     // Tekijän lisäys
