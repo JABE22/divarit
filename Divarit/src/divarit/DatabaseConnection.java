@@ -5,8 +5,6 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 /**
- *
- * @author Okko Pyssysalo (# 428467)
  * 
  * Protokollana toimii TIETA7-kurssilla annettu 'postgresql-42.2.1.jar'
  * 
