@@ -1,4 +1,4 @@
-﻿SET SCHEMA 'keskusdivari';
+SET SCHEMA 'keskusdivari';
 
 -- DROP FUNCTION hae_kayttaja CASCADE;
 
@@ -21,6 +21,7 @@ AS $$
 			EXTRACT(YEAR FROM NOW()::date)-1 = EXTRACT(YEAR FROM tilaus.pvm)
 			GROUP BY(kayttaja.email)
 	) as laskenta ON kayttaja.email=laskenta.k_e
+	WHERE div_yllapitaja IS NULL
 	ORDER BY kayttaja.email ASC;
 $$ LANGUAGE SQL;
 
