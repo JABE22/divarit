@@ -1,4 +1,4 @@
-﻿/*
+/*
 	
 	Pyssysalo -- Muokattu viimeksi: 2018-04-23: nimi muutettu 'raportti_2'
 	
@@ -6,7 +6,7 @@
 	luokan mukaan ryhmiteltynä yhteishinnan ja keskihinnan.
 	
 */
-SET SCHEMA 'd1';
+SET SCHEMA 'keskusdivari';
 
 -- DROP FUNCTION raportti_2 CASCADE;
 

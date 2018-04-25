@@ -1,4 +1,4 @@
-﻿SET SCHEMA 'd1';
+﻿SET SCHEMA 'keskusdivari';
 
 -- DROP FUNCTION hae_kayttaja() CASCADE;
 -- Luonut: Matarmaa Jarno

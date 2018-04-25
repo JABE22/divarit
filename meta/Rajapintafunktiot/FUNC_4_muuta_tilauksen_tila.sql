@@ -1,6 +1,4 @@
-﻿/*
-
-	Pyssysalo :: Muokattu viimeksi 2018-04-22
+/*Pyssysalo :: Muokattu viimeksi 2018-04-22
 	
 	Funktio, joka päivittää tilauksen tilan (0, 1 tai 2).
 	
@@ -10,6 +8,8 @@
 	tilaukseen kuuluville teoksille!
 
 */
+
+SET SCHEMA 'keskusdivari';
 -- DROP FUNCTION muuta_tilauksen_tila CASCADE;
 
 CREATE OR REPLACE FUNCTION muuta_tilauksen_tila(tid int, uusi_tila int) RETURNS void AS $$

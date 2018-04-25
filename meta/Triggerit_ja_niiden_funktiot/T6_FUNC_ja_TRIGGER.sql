@@ -16,7 +16,7 @@ BEGIN
 	VALUES (NEW.divari_nimi, NEW.id, NEW.teos_isbn, NEW.paino, NEW.tila, NEW.sisosto_hinta, NEW.hinta, NEW.myynti_pvm);	-- täsmälleen sama rakenne
 	RETURN NEW; -- palauta päivitetty tuple. Tosin eipä sitä missään kai käytetä.
 END;
-$$ LANGUAGE plpgsql
+$$ LANGUAGE plpgsql;
 
 -- Triggeri
 
