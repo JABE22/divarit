@@ -10,6 +10,10 @@
 */
 -- DROP FUNCTION paivita_kappaletilanne CASCADE;
 
+SET SCHEMA 'keskusdivari';
+
+-- HUOM :: KOHDESKEEMA PITÄÄ LAITTAA MANUAALIESTI
+
 CREATE OR REPLACE FUNCTION paivita_kappaletilanne(divari_nimi varchar(10)) RETURNS void AS $$
 DECLARE
 	tmprow keskusdivari.kappale%ROWTYPE;
