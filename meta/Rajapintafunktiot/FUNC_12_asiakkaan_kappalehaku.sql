@@ -1,4 +1,4 @@
-﻿SET SCHEMA 'keskusdivari';
+SET SCHEMA 'keskusdivari';
 
 -- Korjattu tilatarkistus [Pyssysalo]
 
@@ -22,7 +22,11 @@ AS $$
     WHERE LOWER(etunimi) LIKE hakusana OR LOWER(sukunimi) LIKE hakusana OR
           LOWER(nimi) LIKE hakusana OR LOWER(tyyppi) LIKE hakusana OR
           LOWER(luokka) LIKE hakusana OR LOWER(kuvaus) LIKE hakusana 
+<<<<<<< HEAD
           AND kp.tila = 0;
+=======
+          AND k.tila = 0;
+>>>>>>> a1f07ba0519be351a68d9045c4889aa58d065fe2
 
 $$ LANGUAGE SQL;
 
