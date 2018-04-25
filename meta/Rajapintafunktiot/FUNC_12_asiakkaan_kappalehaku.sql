@@ -1,4 +1,4 @@
-﻿SET SCHEMA 'keskusdivari';
+SET SCHEMA 'keskusdivari';
 
 -- Korjattu tilatarkistus [Pyssysalo]
 
@@ -21,7 +21,7 @@ AS $$
     INNER JOIN keskusdivari.kappale kp ON t.isbn = kp.teos_isbn
     WHERE LOWER(etunimi) LIKE hakusana OR LOWER(sukunimi) LIKE hakusana OR
           LOWER(nimi) LIKE hakusana OR LOWER(tyyppi) LIKE hakusana OR
-          LOWER(luokka) LIKE hakusana) OR LOWER(kuvaus) LIKE hakusana 
+          LOWER(luokka) LIKE hakusana OR LOWER(kuvaus) LIKE hakusana 
           AND k.tila = 0;
 
 $$ LANGUAGE SQL;
