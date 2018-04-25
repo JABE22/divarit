@@ -3,6 +3,7 @@ find stephen
 find_book romaani
 find romaani
 find_book tieto
+report pur_his
 signout
 admin@divarit.fi 1234
 find stephen

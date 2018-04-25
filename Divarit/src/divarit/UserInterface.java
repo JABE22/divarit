@@ -251,7 +251,11 @@ public class UserInterface {
                 case REPORT:
                     if (input.length > 1) {
                         if (input[1].equals(REPORT_PURCHASE_HISTORY)) {
-                            printPurchaseReport();
+                            if (this.schema_name.equals("keskusdivari")) {
+                                printPurchaseReport();
+                            } else {
+                                System.out.println("Toiminto ei käytössä.");
+                            }
                         } else if (input[1].equals(REPORT_CATEGORY_PRICES)) {
                             printCategoryReport();
                         } else {
@@ -391,7 +395,7 @@ public class UserInterface {
                 break;
 
             } else if (input.equals("n")) {
-                return;
+                run();
             } else {
                 System.out.println("Invalid commad! [y] = yes, [n] = no");
             }
