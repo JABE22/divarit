@@ -51,6 +51,9 @@ public class QueryEngine {
     private final String POSTAGE_QUERY
             = "SELECT hinta FROM keskusdivari.postikulut "
             + "WHERE alaraja_g < ? AND ylaraja_g > ?;";
+    // Tekijä id kysely nimen perusteella
+    private final String AUTHOR_ID_QUERY
+            = "SELECT id FROM tekija WHERE etunimi = ? AND sukunimi = ? LIMIT 1";
 
     /**
      * * Lisäyslauseita **
@@ -69,6 +72,9 @@ public class QueryEngine {
             = "INSERT INTO tekija "
             + "(etunimi, sukunimi, kansallisuus, synt_vuosi) "
             + "VALUES (?, ?, ?, ?);";
+    // Tekijän ja teoksen yhdistäminen
+    private final String INSERT_AUT_TO_ISBN
+            = "INSERT INTO teosten_tekijat (tekija_id, teos_isbn) VALUES (?, ?)";
     // Käyttäjän lisäys tietokantaan
     private final String INSERT_USER
             = "INSERT INTO keskusdivari.kayttaja "
@@ -341,6 +347,54 @@ public class QueryEngine {
             System.out.println("INSERT_AUTHOR_Q: " + e.getMessage());
         }
     }
+    
+
+    public void insertAuthortToISBN(ArrayList<String> firstLastName, String div_name) {
+        String firstname = firstLastName.get(0);
+        String  lastname = firstLastName.get(1);
+        
+        int authotID = getAuthorID(firstname, lastname, div_name);
+        
+        try {
+            setSchema(div_name);
+            PreparedStatement prstmt = this.con.prepareStatement(INSERT_AUT_TO_ISBN);
+            prstmt.clearParameters();
+            prstmt.setInt(1, authotID);
+            prstmt.setString(2, firstLastName.get(2));
+            
+            prstmt.executeUpdate();
+            prstmt.close();  
+            System.out.println("Tekijä-Teostiedot lisättiin onnistuneesti!");
+
+        } catch (SQLException e) {
+            System.out.println("INSERT_AUT_TO_ISBN_Q: " + e.getMessage());
+        }
+    }
+    
+    // Palautta tekijän ID tunnuksen
+    public int getAuthorID(String firstname, String lastname, String div_name) {
+        
+        int author_id;
+        try {
+            setSchema(div_name);
+            PreparedStatement prstmt = this.con.prepareStatement(AUTHOR_ID_QUERY);
+            prstmt.clearParameters();
+            prstmt.setString(1, firstname);
+            prstmt.setString(2, lastname);
+
+            ResultSet rset = prstmt.executeQuery();
+            if (rset.next()) {
+                author_id = rset.getInt(1);
+                prstmt.close();
+                return author_id;
+            }
+            prstmt.close();  // sulkee automaattisesti myös tulosjoukon rset   
+        } catch (SQLException e) {
+            System.out.println("GET_AUTHOR_ID_Q: " + e.getMessage());
+        }
+        return -1;
+    }
+    
 
     // Hakee tilaustietoja viime vuonna
     public ArrayList<String> getPurchaseReport() {
@@ -403,14 +457,13 @@ public class QueryEngine {
     // Palauttaa käyttäjänimeä vastaavan tilaus_id:n, jos ei löydy, 
     // luo uuden ja palauttaa sen
     public int getOrderID(String email) {
-        //setSchema("keskusdivari"); 
         int order_id;
         try {
             setSchema(SCHEMA_KD);
             PreparedStatement prstmt = this.con.prepareStatement(ORDER_ID_QUERY);
             prstmt.clearParameters();
             prstmt.setString(1, email);
-            // prstmt.execute("SET search_path TO keskusdivari");
+
             ResultSet rset = prstmt.executeQuery();
             if (rset.next()) {
                 order_id = rset.getInt(1);
@@ -476,7 +529,7 @@ public class QueryEngine {
 
             }
 
-            prstmt.close();  // sulkee automaattisesti myÃ¶s tulosjoukon rset
+            prstmt.close();  
 
         } catch (SQLException e) {
             System.out.println("CART_CONTENT_Q: " + e.getMessage());

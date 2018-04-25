@@ -736,8 +736,10 @@ public class UserInterface {
 
     // Lisää uuden tekijän tiedot
     private void addAuthor() {
-        String[] columns = {"ETUNIMI: ", "SUKUNIMI: ", "KANSALLISUUS: ", "SYNT_VUOSI: "};
+        String[] columns = {"ETUNIMI: ", "SUKUNIMI: ", "TEOS_ISBN: ", 
+                                          "KANSALLISUUS: ", "SYNT_VUOSI: "};
         ArrayList<String> author_details = new ArrayList<>();
+        ArrayList<String> aut_isbn_details = new ArrayList<>();
 
         String userInput;
         for (int i = 0; i < columns.length; i++) {
@@ -746,14 +748,20 @@ public class UserInterface {
             // userInput = getCommandAsDetails();
 
             if (checkUserInput(userInput)) {
-                author_details.add(userInput);
+                if ( i < 3) {
+                    aut_isbn_details.add(userInput);
+                }
+                if ( i != 3 ) {
+                    author_details.add(userInput);
+                }
             } else {
                 System.out.println("Invalid copy detail! Try again:");
                 i--;
             }
         }
-        System.out.println("Adding copy...");
+        System.out.println("Adding author...");
         this.QE.insertAuthor(author_details, this.schema_name);
+        this.QE.insertAuthortToISBN(aut_isbn_details, schema_name);
     }
 
     // Lisää uuden kappaleen/yksittäisen kirjan tiedot (Kysytään käyttäjältä)
@@ -769,22 +777,24 @@ public class UserInterface {
             // userInput = getCommandAsDetails();
 
             if (checkUserInput(userInput)) {
-                if (i > 2) {
-                    if (checkDoubleFormat(userInput) == -1) {
-                        System.out.println("Invalid argument! Try again!");
-                        i--;
-                    } else {
-                        book_details.add(userInput);
-                    }
-                } else if (i == 2) {
+                if (1 < 2) { // String arvot hyväksytään syötteen perustarkastuksen jälkeen
+                    book_details.add(userInput);
+                } else if (i == 2) { // Kolmanteen indeksiin halutaan paino (int)
                     if (checkIntFormat(userInput) == -1) {
                         System.out.println("Invalid argument! Try again!");
                         i--;
                     } else {
                         book_details.add(userInput);
                     }
+                } else if (i > 2) { // Lopuksi kysytään double -arvoja. Siksi tämä
+                    if (checkDoubleFormat(userInput) == -1) {
+                        System.out.println("Invalid argument! Try again!");
+                        i--;
+                    } else { // String arvot työnnetään suoraan listalle
+                        book_details.add(userInput);
+                    }
                 }
-                book_details.add(userInput);
+                
             } else {
                 System.out.println("Invalid book detail! Try again:");
                 i--;
