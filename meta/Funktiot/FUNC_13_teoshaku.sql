@@ -14,12 +14,13 @@ RETURNS TABLE(
 )
 AS $$
     -- Teokset nimen perusteella ja tekijän nimen perusteella
-    SELECT t.isbn, t.nimi, kt.etunimi, kt.sukunimi, t.luokka, t.tyyppi
+    SELECT isbn, nimi, etunimi, sukunimi, luokka, tyyppi
     FROM teos t
-        INNER JOIN teosten_tekijat ktt ON t.isbn = ktt.teos_isbn
-        INNER JOIN tekija kt ON ktt.tekija_id = kt.id
-    WHERE LOWER(kt.etunimi) LIKE hakusana OR LOWER(kt.sukunimi) LIKE hakusana OR 
-          LOWER(nimi) LIKE hakusana OR LOWER(tyyppi) LIKE hakusana OR 
-          LOWER(luokka) LIKE hakusana
+    INNER JOIN teosten_tekijat ktt ON t.isbn = ktt.teos_isbn
+    INNER JOIN tekija kt ON ktt.tekija_id = kt.id
+    INNER JOIN kappale kp ON t.isbn = kp.teos_isbn
+    WHERE LOWER(etunimi) LIKE hakusana OR LOWER(sukunimi) LIKE hakusana OR
+          LOWER(nimi) LIKE hakusana OR LOWER(tyyppi) LIKE hakusana OR
+          LOWER(luokka) LIKE hakusana OR LOWER(kuvaus) LIKE hakusana;
 
 $$ LANGUAGE SQL;
