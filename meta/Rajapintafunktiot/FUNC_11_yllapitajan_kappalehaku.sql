@@ -15,7 +15,6 @@ RETURNS TABLE(
     myynti_pvm DATE
 )
 AS $$
-    -- Muista muuttaa kaikki parametrit (5 kpl) 'merkkijono':ksi jos ajat kyselyn
 
    SELECT divari_nimi, kp.id, nimi, luokka, sisosto_hinta, hinta, myynti_pvm
     FROM teos t
