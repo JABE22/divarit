@@ -363,6 +363,9 @@ INSERT INTO tilaus VALUES (3, 'liisa@divarit.fi', CURRENT_DATE - '100 days'::int
 INSERT INTO tilaus VALUES (4, 'teppo@divarit.fi', CURRENT_DATE - '1 year'::interval, 2); 
 INSERT INTO tilaus VALUES (5, 'liisa@divarit.fi', CURRENT_DATE - '250 days'::interval, 2);
 
+-- Laitetaan tilausten SERIAL juoksemaan 10 eteenpäin jotta vältetään konflikti. (pitäisi löytää parempi ratkaisu tähänkin [Pyssysalo])
+ALTER SEQUENCE tilaus_id_seq RESTART WITH 10;
+
 -- ostoskori
 -- Juokseva numerointi (!!) kappaleissa
 INSERT INTO ostoskori VALUES (10000, 'D1', 1);
