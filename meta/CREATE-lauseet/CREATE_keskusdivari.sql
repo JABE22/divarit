@@ -1,4 +1,4 @@
--- Keskusdivari :: Kaikille samankaltaiset taulut
+﻿-- Keskusdivari :: Kaikille samankaltaiset taulut
 -- Aloittaa kaiken alusta - Tuhoaa scheeman ja luo kokonaan uudestaan
 -- Tietokannan pitäisi olla 'divarit'
 

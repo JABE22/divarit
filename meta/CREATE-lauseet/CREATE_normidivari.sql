@@ -32,7 +32,7 @@ CREATE TABLE IF NOT EXISTS teos (
 );
 
 CREATE TABLE IF NOT EXISTS kappale (
-  divari_nimi VARCHAR(10),
+  divari_nimi VARCHAR(10) CHECK(divari_nimi = 'D1'), -- EDIT: Matarmaa, Tulee tarkistaa, ei voi olla muuta kuin 'D1'
   id SERIAL, -- Yksilöivä
   teos_isbn VARCHAR(20) NOT NULL,
   paino INTEGER NOT NULL CHECK(paino > 0),

@@ -1,19 +1,30 @@
-﻿-- ESIMERKKIDATAA ALIDIVARILLE (D1).
--- TRUNCATE <> tyhjentää kys. taulun. Kommentoi pois rivit jos et halua tyhjentää
--- Muista myös ajaa tietokannan luontitiedosto, jos virheitä tulee. Tod. näk. rakenne on vanhentunut.
+﻿-- Esimerkkidataa
 
--- Aseta search_path TO ...
-SET search_path TO d1;
+-- TRUNCATE <> tyhjentää kys. taulun. Kommentoi pois rivit jos et halua tyhjentää
+
+
+-- KOMMENTOI TRUNCANTE-RIVIT POIS, JOTKA KUULUVAT KESKUSDIVARILLE SILLOIN KUN AJAT NORMIDIVARILLE TÄMÄN TIEDOSTON!
+-- JA ASETA search_path TO ...
+
+-- EDIT 1: HUOM! Täällä voidaan lisätä vain keskusdivarille. 
+-- KAPPALEIDEN DIVARINIMI OLTAVA AINA 'D2'
+
+-- EDIT 2: Ostoskorin sisältö on parhaan testiympäristön luomiseksi asetettava 
+-- vasta alidivarin esimerkkidatan lisäämisen jälkeen. (Edellyttäen, että triggerit
+-- päivittävät alidivariin lisätyt kappaleet keskusdivariin). 
+-- OSTOSKORIN SISÄLTÖ ASETETAAN ERI TIEDOSTOSSA.
+
+SET search_path TO keskusdivari; -- Ei saa muuttaa!
 
 
 TRUNCATE kappale CASCADE;
 TRUNCATE tekija CASCADE;
 TRUNCATE teos CASCADE;
 TRUNCATE teosten_tekijat CASCADE;
--- TRUNCATE tilaus CASCADE;
--- TRUNCATE kayttaja CASCADE;
--- TRUNCATE ostoskori CASCADE;
--- TRUNCATE divari CASCADE;
+TRUNCATE tilaus CASCADE;
+TRUNCATE kayttaja CASCADE;
+TRUNCATE ostoskori CASCADE;
+TRUNCATE divari CASCADE;
 
 -- Juha Seppälä 1996 fiktio
 INSERT INTO teos (isbn, nimi, kuvaus, luokka, tyyppi) 
@@ -255,35 +266,35 @@ VALUES (521, '9789510396230');
 -- Kappaleet, Jarnon lisäämät
 -- Maailma Albert Einsteinin silmin
 INSERT INTO kappale (divari_nimi, id, teos_isbn, paino, tila, sisosto_hinta, hinta, myynti_pvm)
-VALUES ('D1', 10000, '9789522642608', 146, 0, 5.85, 7.80, null);
+VALUES ('D2', 10000, '9789522642608', 146, 0, 5.85, 7.80, null);
 
 -- Mustat Aukot
 INSERT INTO kappale VALUES 
-('D1', 10010, '9789510423660', 150, 0, 18.68, 24.90, null);
+('D2', 10010, '9789510423660', 150, 0, 18.68, 24.90, null);
 INSERT INTO kappale VALUES 
-('D1', 10011, '9789510423660', 150, 0, 18.68, 20.00, null);
+('D2', 10011, '9789510423660', 150, 0, 18.68, 20.00, null);
 
 -- Ajan lyhyt historia
 INSERT INTO kappale VALUES 
-('D1', 10020, '9789510393741', 160, 0, 5.93, 7.90, null);
+('D2', 10020, '9789510393741', 160, 0, 5.93, 7.90, null);
 INSERT INTO kappale VALUES 
-('D1', 10021, '9789510393741', 160, 0, 5.93, 10.00, null);
+('D2', 10021, '9789510393741', 160, 0, 5.93, 10.00, null);
 
 -- Sisäinen sankari
 INSERT INTO kappale VALUES 
-('D1', 10030, '951021244X', 570, 0, 11.63, 15.50, null);
+('D2', 10030, '951021244X', 570, 0, 11.63, 15.50, null);
 INSERT INTO kappale VALUES 
-('D1', 10031, '951021244X', 570, 0, 11.63, 20.00, null);
+('D2', 10031, '951021244X', 570, 0, 11.63, 20.00, null);
 INSERT INTO kappale VALUES 
-('D1', 10032, '951021244X', 570, 0, 11.63, 9.00, null);
+('D2', 10032, '951021244X', 570, 0, 11.63, 9.00, null);
 
 -- Sapiens
 INSERT INTO kappale VALUES 
-('D1', 10040, '9789522794703', 566, 0, 9.68, 12.90, null);
+('D2', 10040, '9789522794703', 566, 0, 9.68, 12.90, null);
 
 -- Kvanttifysiikasta energiahoitoihin
 INSERT INTO kappale VALUES 
-('D1', 10050, '9789522606563', 298, 0, 15.38, 20.50, null);
+('D2', 10050, '9789522606563', 298, 0, 15.38, 20.50, null);
 
 -- Java -ohjelmointi
 INSERT INTO kappale VALUES 
@@ -310,6 +321,8 @@ INSERT INTO kappale VALUES
 ('D2', 10093, '9521404868', 551, 0, 21.68, 15.00, null);
 INSERT INTO kappale VALUES 
 ('D2', 10094, '9521404868', 551, 0, 21.68, 7.00, null);
+INSERT INTO kappale VALUES 
+('D2', 10095, '9521404868', 551, 0, 21.68, 7.00, null);
 
 -- Tehtävänannon kappaleet
 INSERT INTO kappale VALUES 
@@ -324,13 +337,59 @@ INSERT INTO kappale VALUES
 ('D2', 10105, '9789522794111', 444, 0, 9.89, 13.00, null);
 INSERT INTO kappale VALUES 
 ('D2', 10106, '9789510396230', 321, 0, 5.00, 16.00, null);
+INSERT INTO kappale VALUES 
+('D2', 10107, '9789510396230', 321, 0, 7.00, 18.90, null);
 
 
-/*
-    TÄSTÄ ALKAA KESKUSDIVARIIN KUULUVIEN TIETOJEN SYÖTTÖ 
+/* TÄSTÄ ALKAA KESKUSDIVARIIN KUULUVIEN TIETOJEN SYÖTTÖ 
 	AIHEUTTAA VIRHEEN KUN DATAA AJETAAN NORMIDIVARIIN
 */
 
--- Poistettu tätä tiedostoa varten!
+-- Divarit
+INSERT INTO divari VALUES
+('D1', 'Tiitisenkatu 25 C, 12345 Turku');
+
+INSERT INTO divari VALUES
+('D2', 'Korpimaantie 1230, 45435 Lempäälä');
+
+INSERT INTO divari VALUES ('D3', 'Keskusdivarinkatu 99');
+
+-- kayttajat
+-- Muutettu boolean arvot -> varchar ja lisätty admin D1 divarille [Matarmaa]
+INSERT INTO kayttaja VALUES ('admin@divarit.fi', 'Admin', 'Divari', 'Divarikatu 600', '050 999 999', 'D2');
+INSERT INTO kayttaja VALUES ('admin_d1@divarit.fi', 'D1Admin', 'Sivudivari', 'Sivudivarikatu 66', '040 369 369', 'D1');
+INSERT INTO kayttaja VALUES ('kalle@divarit.fi', 'Kalle', 'Kirjala', 'Kimmontie 4 A 16', '040012345', null);
+INSERT INTO kayttaja VALUES ('liisa@divarit.fi', 'Liisa', 'Lukutoukkala', 'Kirjakuja 1', null, null);
+INSERT INTO kayttaja VALUES ('teppo@divarit.fi', 'Teppo', 'Teppola', 'Katukuja 99', '123456', null);
+
+-- Tilaus
+-- 0 rauennut/peruutttu, 1 aktiivinen, 2 tehty tilaus
+-- Kallella yksi akt. ja valmis tilaus, liisalla 1 aktiivisena oleva
+INSERT INTO tilaus VALUES (1, 'kalle@divarit.fi', CURRENT_DATE, 1); 
+INSERT INTO tilaus VALUES (2, 'kalle@divarit.fi', CURRENT_DATE, 2);
+INSERT INTO tilaus VALUES (3, 'liisa@divarit.fi', CURRENT_DATE - '100 days'::interval, 1); 
+INSERT INTO tilaus VALUES (4, 'teppo@divarit.fi', CURRENT_DATE - '1 year'::interval, 2); 
+INSERT INTO tilaus VALUES (5, 'liisa@divarit.fi', CURRENT_DATE - '250 days'::interval, 2);
+
+-- Laitetaan tilausten SERIAL juoksemaan 10 eteenpäin jotta vältetään konflikti. (pitäisi löytää parempi ratkaisu tähänkin [Pyssysalo])
+ALTER SEQUENCE tilaus_id_seq RESTART WITH 10;
+
+
+-- OSTOSKORIN LISÄYSLAUSEET SIIRRETTY ERI TIEDOSTOON [Matarmaa]. 
+-- Ostoskorin sisältö tulee lisätä vasta alidivarin esimerkkidatan 
+-- lisäämisen jälkeen, joka taas edellyttää, että triggerit on 
+-- asennettu ennen alidivarin datan lisäämistä
+
+
+-- Postikulut
+
+INSERT INTO postikulut VALUES
+(DEFAULT, 0, 49, 0.0),  
+(DEFAULT, 50, 99, 1.40),
+(DEFAULT, 100, 249, 2.10),
+(DEFAULT, 250, 499, 2.80),
+(DEFAULT, 500, 999, 5.60),
+(DEFAULT, 1000, 1999, 8.40),
+(DEFAULT, 2000, 99999999, 14.0);
 
 

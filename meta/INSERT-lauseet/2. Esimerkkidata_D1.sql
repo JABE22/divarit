@@ -1,22 +1,22 @@
-﻿-- Esimerkkidataa
-
+﻿-- ESIMERKKIDATAA ALIDIVARILLE (D1).
 -- TRUNCATE <> tyhjentää kys. taulun. Kommentoi pois rivit jos et halua tyhjentää
+-- Muista myös ajaa tietokannan luontitiedosto, jos virheitä tulee. Tod. näk. rakenne on vanhentunut.
 
+-- MATARMAA EDIT: Korjattu virhe. Kappaleiden lisäyslauseissa virheellsesti divari_nimi D2
+-- Pitäisi lisätä taulujen luontilauseisiin CHECK(divari_nimi = 'D1')
 
--- KOMMENTOI TRUNCANTE-RIVIT POIS, JOTKA KUULUVAT KESKUSDIVARILLE SILLOIN KUN AJAT NORMIDIVARILLE TÄMÄN TIEDOSTON!
--- JA ASETA search_path TO ...
-
-SET search_path TO keskusdivari;
+-- Aseta search_path TO ...
+SET search_path TO d1;
 
 
 TRUNCATE kappale CASCADE;
 TRUNCATE tekija CASCADE;
 TRUNCATE teos CASCADE;
 TRUNCATE teosten_tekijat CASCADE;
-TRUNCATE tilaus CASCADE;
-TRUNCATE kayttaja CASCADE;
-TRUNCATE ostoskori CASCADE;
-TRUNCATE divari CASCADE;
+-- TRUNCATE tilaus CASCADE;
+-- TRUNCATE kayttaja CASCADE;
+-- TRUNCATE ostoskori CASCADE;
+-- TRUNCATE divari CASCADE;
 
 -- Juha Seppälä 1996 fiktio
 INSERT INTO teos (isbn, nimi, kuvaus, luokka, tyyppi) 
@@ -290,117 +290,50 @@ INSERT INTO kappale VALUES
 
 -- Java -ohjelmointi
 INSERT INTO kappale VALUES 
-('D2', 10060, '9525592758', 606, 0, 28.35, 37.80, null);
+('D1', 10060, '9525592758', 606, 0, 28.35, 37.80, null);
 INSERT INTO kappale VALUES 
-('D2', 10061, '9525592758', 606, 0, 28.35, 25.00, null);
+('D1', 10061, '9525592758', 606, 0, 28.35, 25.00, null);
 
 -- Halut, arvot ja valta
 INSERT INTO kappale VALUES 
-('D2', 10070, '9517961022', 435, 0, 13.50, 18.00, null);
+('D1', 10070, '9517961022', 435, 0, 13.50, 18.00, null);
 
 -- Liiketoiminta ja johtaminen
 INSERT INTO kappale VALUES 
-('D2', 10080, '9529906006', 473, 0, 24.00, 32.00, null);
+('D1', 10080, '9529906006', 473, 0, 24.00, 32.00, null);
 
 -- Ohjelmistotuotanto
 INSERT INTO kappale VALUES 
-('D2', 10090, '9521404868', 551, 0, 21.68, 28.90, null);
+('D1', 10090, '9521404868', 551, 0, 21.68, 28.90, null);
 INSERT INTO kappale VALUES 
-('D2', 10091, '9521404868', 551, 0, 21.68, 12.00, null);
+('D1', 10091, '9521404868', 551, 0, 21.68, 12.00, null);
 INSERT INTO kappale VALUES 
-('D2', 10092, '9521404868', 551, 0, 21.68, 15.00, null);
+('D1', 10092, '9521404868', 551, 0, 21.68, 15.00, null);
 INSERT INTO kappale VALUES 
-('D2', 10093, '9521404868', 551, 0, 21.68, 15.00, null);
+('D1', 10093, '9521404868', 551, 0, 21.68, 15.00, null);
 INSERT INTO kappale VALUES 
-('D2', 10094, '9521404868', 551, 0, 21.68, 7.00, null);
-INSERT INTO kappale VALUES 
-('D2', 10095, '9521404868', 551, 0, 21.68, 7.00, null);
+('D1', 10094, '9521404868', 551, 0, 21.68, 7.00, null);
 
 -- Tehtävänannon kappaleet
 INSERT INTO kappale VALUES 
-('D2', 10101, '9155430674', 234, 0, 8.68, 15.90, null);
+('D1', 10101, '9155430674', 234, 0, 8.68, 15.90, null);
 INSERT INTO kappale VALUES 
-('D2', 10102, '9156381451', 532, 0, 8.99, 15.90, null);
+('D1', 10102, '9156381451', 532, 0, 8.99, 15.90, null);
 INSERT INTO kappale VALUES
-('D2', 10103, '9789510393444', 121, 0, 10.20, 17.00, null);
+('D1', 10103, '9789510393444', 121, 0, 10.20, 17.00, null);
 INSERT INTO kappale VALUES 
-('D2', 10104, '9510212333', 376, 0, 10.35, 17.00, null);
+('D1', 10104, '9510212333', 376, 0, 10.35, 17.00, null);
 INSERT INTO kappale VALUES 
-('D2', 10105, '9789522794111', 444, 0, 9.89, 13.00, null);
+('D1', 10105, '9789522794111', 444, 0, 9.89, 13.00, null);
 INSERT INTO kappale VALUES 
-('D2', 10106, '9789510396230', 321, 0, 5.00, 16.00, null);
-INSERT INTO kappale VALUES 
-('D2', 10107, '9789510396230', 321, 0, 7.00, 18.90, null);
+('D1', 10106, '9789510396230', 321, 0, 5.00, 16.00, null);
 
 
-/* TÄSTÄ ALKAA KESKUSDIVARIIN KUULUVIEN TIETOJEN SYÖTTÖ 
+/*
+    TÄSTÄ ALKAA KESKUSDIVARIIN KUULUVIEN TIETOJEN SYÖTTÖ 
 	AIHEUTTAA VIRHEEN KUN DATAA AJETAAN NORMIDIVARIIN
 */
 
--- Divarit
-INSERT INTO divari VALUES
-('D1', 'Tiitisenkatu 25 C, 12345 Turku');
-
-INSERT INTO divari VALUES
-('D2', 'Korpimaantie 1230, 45435 Lempäälä');
-
-INSERT INTO divari VALUES ('D3', 'Keskusdivarinkatu 99');
-
--- kayttajat
--- Muutettu boolean arvot -> varchar ja lisätty admin D1 divarille [Matarmaa]
-INSERT INTO kayttaja VALUES ('admin@divarit.fi', 'Admin', 'Divari', 'Divarikatu 600', '050 999 999', 'D2');
-INSERT INTO kayttaja VALUES ('admin_d1@divarit.fi', 'D1Admin', 'Sivudivari', 'Sivudivarikatu 66', '040 369 369', 'D1');
-INSERT INTO kayttaja VALUES ('kalle@divarit.fi', 'Kalle', 'Kirjala', 'Kimmontie 4 A 16', '040012345', null);
-INSERT INTO kayttaja VALUES ('liisa@divarit.fi', 'Liisa', 'Lukutoukkala', 'Kirjakuja 1', null, null);
-INSERT INTO kayttaja VALUES ('teppo@divarit.fi', 'Teppo', 'Teppola', 'Katukuja 99', '123456', null);
-
--- Tilaus
--- 0 rauennut/peruutttu, 1 aktiivinen, 2 tehty tilaus
--- Kallella yksi akt. ja valmis tilaus, liisalla 1 aktiivisena oleva
-INSERT INTO tilaus VALUES (1, 'kalle@divarit.fi', CURRENT_DATE, 1); 
-INSERT INTO tilaus VALUES (2, 'kalle@divarit.fi', CURRENT_DATE, 2);
-INSERT INTO tilaus VALUES (3, 'liisa@divarit.fi', CURRENT_DATE - '100 days'::interval, 1); 
-INSERT INTO tilaus VALUES (4, 'teppo@divarit.fi', CURRENT_DATE - '1 year'::interval, 2); 
-INSERT INTO tilaus VALUES (5, 'liisa@divarit.fi', CURRENT_DATE - '250 days'::interval, 2);
-
--- Laitetaan tilausten SERIAL juoksemaan 10 eteenpäin jotta vältetään konflikti. (pitäisi löytää parempi ratkaisu tähänkin [Pyssysalo])
-ALTER SEQUENCE tilaus_id_seq RESTART WITH 10;
-
--- ostoskori
--- Juokseva numerointi (!!) kappaleissa
-INSERT INTO ostoskori VALUES (10000, 'D1', 1);
-INSERT INTO ostoskori VALUES (10010, 'D1', 1);
-INSERT INTO ostoskori VALUES (10020, 'D1', 1);
-INSERT INTO ostoskori VALUES (10070, 'D2', 1);
-
-INSERT INTO ostoskori VALUES (10011, 'D1', 2);
-
-INSERT INTO ostoskori VALUES (10050, 'D1', 3);
-INSERT INTO ostoskori VALUES (10060, 'D2', 3);
-
--- Tepon tilaukset (tilaus ID:t 4,)
-INSERT INTO ostoskori VALUES (10060, 'D2', 4);
-INSERT INTO ostoskori VALUES (10061, 'D2', 4);
-INSERT INTO ostoskori VALUES (10070, 'D2', 4);
-INSERT INTO ostoskori VALUES (10090, 'D2', 4);
-INSERT INTO ostoskori VALUES (10091, 'D2', 4);
-INSERT INTO ostoskori VALUES (10092, 'D2', 4);
-
--- Liisan tilauksia
-INSERT INTO ostoskori VALUES (10095, 'D2', 5);
-INSERT INTO ostoskori VALUES (10107, 'D2', 5);
-
-
-
--- Postikulut
-
-INSERT INTO postikulut VALUES
-(DEFAULT, 0, 49, 0.0),  
-(DEFAULT, 50, 99, 1.40),
-(DEFAULT, 100, 249, 2.10),
-(DEFAULT, 250, 499, 2.80),
-(DEFAULT, 500, 999, 5.60),
-(DEFAULT, 1000, 1999, 8.40),
-(DEFAULT, 2000, 99999999, 14.0);
+-- Poistettu tätä tiedostoa varten!
 
 
