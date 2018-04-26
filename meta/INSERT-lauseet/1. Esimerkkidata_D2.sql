@@ -23,7 +23,6 @@ TRUNCATE teos CASCADE;
 TRUNCATE teosten_tekijat CASCADE;
 TRUNCATE tilaus CASCADE;
 TRUNCATE kayttaja CASCADE;
-TRUNCATE ostoskori CASCADE;
 TRUNCATE divari CASCADE;
 
 -- Juha Seppälä 1996 fiktio

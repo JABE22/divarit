@@ -10,6 +10,8 @@
 
 SET SCHEMA 'keskusdivari';
 
+TRUNCATE ostoskori CASCADE;
+
 INSERT INTO ostoskori VALUES (10000, 'D1', 1);
 INSERT INTO ostoskori VALUES (10010, 'D1', 1);
 INSERT INTO ostoskori VALUES (10020, 'D1', 1);
