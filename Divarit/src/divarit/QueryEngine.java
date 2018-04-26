@@ -81,7 +81,7 @@ public class QueryEngine {
             + "(email, etunimi, sukunimi, osoite, puhelin) "
             + "VALUES (?, ?, ?, ?, ?);";
     // Tuotteen lisäys ostoskoriin
-    private final String ADD_TO_CART = "SELECT * FROM keskusdivari.lisaa_ostoskoriin(?, ?, ?);";
+    private final String ADD_TO_CART = "SELECT keskusdivari.lisaa_ostoskoriin(?, ?, ?);";
 
     /**
      * * Muita päivityslauseita **
@@ -131,7 +131,7 @@ public class QueryEngine {
             prstmt.close();  // sulkee automaattisesti myös tulosjoukon rset
 
         } catch (SQLException e) {
-            System.out.println("AD_COPY_Q: " + e.getMessage());
+            System.out.println("ADD_COPY_Q: " + e.getMessage());
         }
 
         return results;
@@ -497,9 +497,8 @@ public class QueryEngine {
             prstmt.close();
 
         } catch (SQLException e) {
-            // Ei tulosteta mitään.
-            // String product_id = details.get(1) + details.get(0);
-            // System.out.println("ADD_TO_CART_Q: Tuotetta " + product_id + " ei lisätty!");
+            String product_id = details.get(1) + details.get(0);
+            System.out.println("ADD_TO_CART_Q: Tuotetta " + product_id + " ei lisätty!\n" + e.getMessage());
         }
     }
 

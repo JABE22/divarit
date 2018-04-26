@@ -91,7 +91,7 @@ public class UserInterface {
     public UserInterface() {
         this.QE = new QueryEngine(new DatabaseConnection());
         this.testCommands = null;
-        
+
         /* ** Testiajo ** lukee esivalitut komennot tiedostosta
         * Testitiedostoja:
         * yllapitajatesti_1.txt  -testaa hakutoimintoja ja raportteja (D1 ja D2)
@@ -103,28 +103,33 @@ public class UserInterface {
     }
 
     public void run() {
-        System.out.println(
-                "\n *****************\n"
-                + " **** DIVARIT ****\n"
-                + " *****************");
 
-        this.QE.connectToDatabase(); // Muodostetaan yhteys tietokantaan
+        this.QE.connectToDatabase();
 
-        if (signIn()) {
-            // Testausta varten
-            // printUserDetails();
+        while (true) { // Komento exit lopettaa sovelluksen
+            System.out.println(
+                    "\n *****************\n"
+                    + " **** DIVARIT ****\n"
+                    + " *****************");
 
-            if (this.schema_name != null) {
-                // Käsitellään skeemanimi 'keskusdivari'
-                if (this.schema_name.equals("D2")) {
-                    this.schema_name = "keskusdivari";
+            if (signIn()) { // Jos kirjautuminen epäonnistuu...
+                // Testausta varten
+                // printUserDetails();
+
+                if (this.schema_name != null) {
+                    // Käsitellään skeemanimi 'keskusdivari'
+                    if (this.schema_name.equals("D2")) {
+                        this.schema_name = "keskusdivari";
+                    }
+                    System.out.println(ADMIN_PRINT);
+                    this.order_id = 0;
+                    admin();
+                } else {
+                    System.out.println(CUSTOMER_PRINT);
+                    customer();
                 }
-                System.out.println(ADMIN_PRINT);
-                this.order_id = 0;
-                admin();
-            } else {
-                System.out.println(CUSTOMER_PRINT);
-                customer();
+            } else { // ...siirrytään rekisteröitymissivulle
+                signUp();
             }
         }
     }
@@ -315,45 +320,44 @@ public class UserInterface {
      *  epäonnistuu
      */
     public boolean signIn() {
-        System.out.println("Type username and password\n"
-                + "[username password]: ");
-        String[] sign_details = commandline();
-        // String[] sign_details = getCommand();
 
-        // Exit lopettaa heti
-        if (sign_details.length > 0 && sign_details[0].equals(EXIT)) {
-            System.exit(0);
-        }
+        String[] sign_details;
+        
+        while (true) {
+            System.out.println("\n*** SIGN IN *** [username password]: ");
+             sign_details = commandline();
+            // String[] sign_details = getCommand();
 
-        if (sign_details.length == 2) {
-            String username = sign_details[0];
-            String password = sign_details[1];
-
-            // Haetaan käyttäjätiedot tietokannasta (käyttäjänimen perusteella)
-            String[] result = this.QE.userDetails(username);
-
-            if (result != null && result[0] != null) {
-                // Salasanan tarkistus
-                if (!password.equals(PASSWORD)) {
-                    System.out.println("Invalid password!");
-                    signIn();
-                } else {
-                    this.signed_user_details = result;
-                    System.out.println("Welcome " + this.signed_user_details[1] + "!");
-                }
-                this.schema_name = result[5];
-                return true;
-
-            } else {
-                // Jos tuloksia ei annetulla käyttäjänimellä löydetty, niin...
-                signUp();
+            // Exit lopettaa heti
+            if (sign_details.length > 0 && sign_details[0].equals(EXIT)) {
+                System.exit(0);
             }
 
-        } else {
-            System.out.println("Invalid sign arguments!");
-            signIn();
+            if (sign_details.length == 2) {
+                String username = sign_details[0];
+                String password = sign_details[1];
+
+                // Haetaan käyttäjätiedot tietokannasta (käyttäjänimen perusteella)
+                String[] result = this.QE.userDetails(username);
+
+                if (result != null && result[0] != null) {
+                    // Salasanan tarkistus
+                    if (!password.equals(PASSWORD)) {
+                        System.out.println("Invalid password!");
+                    } else {
+                        this.signed_user_details = result;
+                        this.schema_name = result[5];
+                        System.out.println("Welcome " + this.signed_user_details[1] + "!");
+                        return true;
+                    }
+
+                } else {
+                    signUp();
+                }
+            } else {
+                System.out.println("Invalid sign arguments!");
+            }
         }
-        return false;
     }
 
     // Kirjaa aktiivisen käyttäjän ulos järjestelmästä
@@ -368,7 +372,7 @@ public class UserInterface {
 
     // Rekisteröityminen järjestelmään, esim. tilauksen yhteydessä.
     public void signUp() {
-        System.out.println("User not found! Create new? [y] = yes, [n] = no");
+        System.out.println("Create new? [y] = yes, [n] = no");
         String input;
 
         ArrayList<String> user_details = new ArrayList<>();
@@ -736,8 +740,8 @@ public class UserInterface {
 
     // Lisää uuden tekijän tiedot
     private void addAuthor() {
-        String[] columns = {"ETUNIMI: ", "SUKUNIMI: ", "TEOS_ISBN: ", 
-                                          "KANSALLISUUS: ", "SYNT_VUOSI: "};
+        String[] columns = {"ETUNIMI: ", "SUKUNIMI: ", "TEOS_ISBN: ",
+            "KANSALLISUUS: ", "SYNT_VUOSI: "};
         ArrayList<String> author_details = new ArrayList<>();
         ArrayList<String> aut_isbn_details = new ArrayList<>();
 
@@ -748,10 +752,10 @@ public class UserInterface {
             // userInput = getCommandAsDetails();
 
             if (checkUserInput(userInput)) {
-                if ( i < 3) {
+                if (i < 3) {
                     aut_isbn_details.add(userInput);
                 }
-                if ( i != 3 ) {
+                if (i != 3) {
                     author_details.add(userInput);
                 }
             } else {
@@ -794,7 +798,7 @@ public class UserInterface {
                         book_details.add(userInput);
                     }
                 }
-                
+
             } else {
                 System.out.println("Invalid book detail! Try again:");
                 i--;
