@@ -16,7 +16,6 @@ AS $$
 
    SELECT isbn, nimi, etunimi, sukunimi, luokka, tyyppi
    FROM teos t
-      INNER JOIN kappale kp ON t.isbn = kp.teos_isbn
       LEFT JOIN teosten_tekijat ktt ON t.isbn = ktt.teos_isbn
       LEFT JOIN tekija kt ON ktt.tekija_id = kt.id
       WHERE LOWER(etunimi) LIKE hakusana OR LOWER(sukunimi) LIKE hakusana OR

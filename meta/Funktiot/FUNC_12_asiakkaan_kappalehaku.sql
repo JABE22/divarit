@@ -21,7 +21,8 @@ AS $$
       LEFT JOIN tekija kt ON ktt.tekija_id = kt.id
       WHERE LOWER(etunimi) LIKE hakusana OR LOWER(sukunimi) LIKE hakusana OR
             LOWER(nimi) LIKE hakusana OR LOWER(tyyppi) LIKE hakusana OR
-            LOWER(luokka) LIKE hakusana OR LOWER(kuvaus) LIKE hakusana;
+            LOWER(luokka) LIKE hakusana OR LOWER(kuvaus) LIKE hakusana
+            AND tila = 0;
 
 $$ LANGUAGE SQL;
 
