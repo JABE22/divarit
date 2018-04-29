@@ -91,6 +91,9 @@ public class QueryEngine {
     // Päivittää d1 -divarin tietokannan kappaleiden tilan vastaamaan keskusdivaria
     private final String UPDATE_BOOKS_STATUS = "SELECT FROM keskusdivari.paivita_kappaletilanne('D1')";
 
+    
+    
+    
     public QueryEngine(DatabaseConnection dataCon) {
         this.dataCon = dataCon;
         this.con = this.dataCon.getConnection();
