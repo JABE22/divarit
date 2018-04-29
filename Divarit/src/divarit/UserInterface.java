@@ -81,23 +81,34 @@ public class UserInterface {
             + "*8 signout\n"
             + "*9 exit\n"
             + "_______________________\n";
+    
+    private final String CHECKOUT_LINE = "___________________________________________________________";
+    private final String CART_LINE = "-----------------------------------------------------------";
 
     /**
      * Luokkamuuttuja tietokannan SQL -kyselyille
      */
     private final QueryEngine QE;
 
-    /* ** TESTIAJO ** Lukee esivalitut komennot tiedostosta
-     * Testitiedostoja:
-     * yllapitajatesti_1.txt  -testaa hakutoimintoja ja raportteja (D1 ja D2)
-     * ostoskoritesti_1.txt   -testaa checkout -> return
-     * ostoskoritesti_2.txt   -testaa checkout -> order ja empty
-     * 
+    // ** TESTIAJO ** Lukee esivalitut komennot tiedostosta
+    
+    /* -Testitiedostoja-
      *
+     * ADMIN_KD.txt     -testaa hakutoimintoja ja raportteja (D1 ja D2)
+     * CHECKOUT_1.txt   -testaa checkout -> return ja empty
+     * CHECKOUT_2.txt   -testaa checkout -> order ja empty
+     * CHECKOUT_3.txt   -testaa tilattujen tuotteiden tilan päivittymistä
+     * INSERT_1_teos.txt     -testaa teoksen lisäämista
+     * INSERT_2_tekija.txt   -testaa tekijan lisaamista
+     * INSERT_3_kirja.txt    -testaa myyntikappaleen lisaamista
+     */ 
+    
+    /*
      * Seuraavissa metodeissa tehtävä muutoksia testiajoa varten;
      * commandline(), addCopy(), addAuthor(), addBook()
-      */
-    private final String FILE = "test/INSERT_3_kirja.txt"; // Testiajon komennot
+     */
+    
+    private final String FILE = "test/CHECKOUT_3.txt"; // Testiajon komennot
     private final ArrayList<String> testCommands;
     private int commandIndex;
 
@@ -216,10 +227,11 @@ public class UserInterface {
                     signOut();
                     System.exit(0);
                     break;
+                    
                 default:
                     System.out.println("Command invalid!");
             }
-
+            
         } while (!input[0].equals(EXIT));
     }
 
@@ -540,14 +552,19 @@ public class UserInterface {
                     + "--------------------------");
         } else {
             if (type == 1) { // Type 1 = cart -komento
-                System.out.println("                        -OSTOSKORI-");
+                printSpace(24);
+                System.out.println("-OSTOSKORI-");
             } else if (type == 2) { // Type 2 = checkout -komento
-                System.out.println("___________________________________________________________");
-                System.out.println("                        -CHECKOUT-");
+                System.out.println(CHECKOUT_LINE);
+                printSpace(24);
+                System.out.println("-CHECKOUT-");
             }
-            System.out.println(
-                    "tnro      tuotenimi                                 a_hinta\n"
-                    + "-----------------------------------------------------------");
+            System.out.print("tnro");
+            printSpace(6);
+            System.out.print("tuotenimi");
+            printSpace(33);
+            System.out.println("a_hinta");
+            System.out.println(CART_LINE);
 
             cartContents.stream().forEach(row -> {
                 String[] parts = row.split("/");
@@ -570,7 +587,7 @@ public class UserInterface {
                     }
                 }
             });
-            System.out.println("-----------------------------------------------------------");
+            System.out.println(CART_LINE);
         }
 
     }
@@ -612,7 +629,7 @@ public class UserInterface {
                 }
             }
         }
-        System.out.println("___________________________________________________________\n");
+        System.out.println(CHECKOUT_LINE + "\n");
     }
 
     /**
@@ -899,16 +916,13 @@ public class UserInterface {
                         book_details.add(userInput);
                     }
                 }
-
             } else {
                 System.out.println("Invalid book detail! Try again:");
                 i--;
             }
-
         }
         System.out.println("Adding book...");
         this.QE.insertBook(book_details, this.schema_name);
-
     }
 
     /**
@@ -1029,6 +1043,12 @@ public class UserInterface {
         return postages;
     }
 
+    /**
+     * Hakee postikulut parametrina annetulle painolle.
+     * 
+     * @param weight Paino, jolle postikulut haetaan tietokannasta.
+     * @return Postikulut desimaalilukuna.
+     */
     public double getPostage(int weight) {
         String postage = this.QE.getPostage(weight);
         return checkDoubleFormat(postage);

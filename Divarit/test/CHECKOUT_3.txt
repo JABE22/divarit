@@ -1,0 +1,19 @@
+kalle@divarit.fi 1234
+cart
+empty
+cart
+find java
+add D110060
+cart
+find romaani
+add D110101
+cart
+checkout
+order
+find java
+find romaani
+signout
+admin@divarit.fi 1234
+find_book java
+find_book romaani
+signout
