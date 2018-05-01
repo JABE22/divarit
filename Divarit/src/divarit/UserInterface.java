@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package divarit;
 
 import divarit.helpers.In;
@@ -101,7 +97,7 @@ public class UserInterface {
      */
     public UserInterface() {
         this.QE = new QueryEngine(new DatabaseConnection());
-        // this.testCommands = null;
+        this.testCommands = null;
 
         /* ** Testiajo ** lukee esivalitut komennot tiedostosta
         * Testitiedostoja:
@@ -112,8 +108,8 @@ public class UserInterface {
         * Seuraavissa metodeissa tehtävä muutoksia testiajoa varten;
         * customer(), admin(), signIn(), signUp(), checkOut()
          */
-        this.testCommands = readCommandsFromFile(FILE);
-        this.commandIndex = 0;
+        // this.testCommands = readCommandsFromFile(FILE);
+        // this.commandIndex = 0;
     }
 
     /**
@@ -161,9 +157,9 @@ public class UserInterface {
 
         do {
 
-            // input = commandline();
+            input = commandline();
             // Testiajon komentolistan läpikäynti
-            input = getCommand();
+            // input = getCommand();
 
             if (input == null || input.length < 1) {
                 System.out.println("Error! Command invalid");
@@ -237,9 +233,9 @@ public class UserInterface {
         String[] input;
 
         do {
-            // input = commandline();
+            input = commandline();
             // Testiajon komentolistan läpikäynti
-            input = getCommand();
+            // input = getCommand();
 
             if (input == null || input.length < 1) {
                 System.out.println("Error! Command invalid");
@@ -374,8 +370,8 @@ public class UserInterface {
         
         while (true) {
             System.out.println("\n*** SIGN IN *** [username password]: ");
-            // sign_details = commandline();
-            sign_details = getCommand();
+            sign_details = commandline();
+            // sign_details = getCommand();
 
             // Exit lopettaa heti
             if (sign_details.length > 0 && sign_details[0].equals(EXIT)) {
@@ -434,8 +430,8 @@ public class UserInterface {
         String[] columns = {"EMAIL: ", "ETUNIMI: ", "SUKUNIMI: ", "OSOITE: ", "PUH: "};
 
         while (true) {
-            // input = In.readString();
-            input = getCommand()[0];
+            input = In.readString();
+            // input = getCommand()[0];
 
             if (input.equals("y")) {
                 String userInput;
@@ -495,8 +491,8 @@ public class UserInterface {
         }
         String command;
         do {
-            // command = In.readString(); 
-            command = getCommand()[0];
+            command = In.readString(); 
+            // command = getCommand()[0];
             if (checkUserInput(command)) {
                 // Tehdään tietokantaan tarvittavat muutokset
                 if (command.equals(ORDER)) {
