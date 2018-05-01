@@ -15,6 +15,10 @@ import java.util.Scanner;
  *
  * @author Jarno Matarmaa
  *
+ * Komentorivi -tyyppinen käyttöliittymä ohjelmalle. Kysyy komennot käyttäjältä,
+ * käsitelee ne ja suorittaa niitä vastaavan toiminnalisuuden käyttäen luokka-
+ * muuttujana olevaa QueryEngine() -oliota. Vastaa myös tulostuksesta.
+ * 
  * HUOM! EXIT ja RETURN -syötteet on varattu ohjelmalle. Älä käytä näitä muutoin
  * kuin ohjelman sulkeaksesi (EXIT) tai palataksesi käyttäjän etusivulle
  * (RETURN).
@@ -82,26 +86,40 @@ public class UserInterface {
             + "*9 exit\n"
             + "_______________________\n";
 
-    // Luokkamuuttuja Tietokannan SQL -kyselyille
+    /**
+     * Luokkamuuttuja tietokannan SQL -kyselyille
+     */
     private final QueryEngine QE;
 
+    /** testikomponentit */
+    private final String FILE = "src/yllapitajatesti_1.txt"; // Testiajon komennot
     private final ArrayList<String> testCommands;
     private int commandIndex;
 
+    /**
+     * Alustaa QueryEngine -luokan ja testaukseen liittyvät komponentit
+     */
     public UserInterface() {
         this.QE = new QueryEngine(new DatabaseConnection());
-        this.testCommands = null;
+        // this.testCommands = null;
 
         /* ** Testiajo ** lukee esivalitut komennot tiedostosta
         * Testitiedostoja:
         * yllapitajatesti_1.txt  -testaa hakutoimintoja ja raportteja (D1 ja D2)
         * ostoskoritesti_1.txt   -testaa checkout -> return
         * ostoskoritesti_2.txt   -testaa checkout -> order ja empty
+        *
+        * Seuraavissa metodeissa tehtävä muutoksia testiajoa varten;
+        * customer(), admin(), signIn(), signUp(), checkOut()
          */
-        // this.testCommands = readCommandsFromFile("src/yllapitajatesti_1.txt");
-        // this.commandIndex = 0;
+        this.testCommands = readCommandsFromFile(FILE);
+        this.commandIndex = 0;
     }
 
+    /**
+     * Muodostaa yhteyden tietokantaan, ohjaa sisäänkirjautumista ja kutsuu 
+     * kirjautumistietoja vastaavaa metodia (customer(), admin())
+     */
     public void run() {
 
         this.QE.connectToDatabase();
@@ -113,8 +131,6 @@ public class UserInterface {
                     + " *****************");
 
             if (signIn()) { // Jos kirjautuminen epäonnistuu...
-                // Testausta varten
-                // printUserDetails();
 
                 if (this.schema_name != null) {
                     // Käsitellään skeemanimi 'keskusdivari'
@@ -134,19 +150,24 @@ public class UserInterface {
         }
     }
 
-    // Asiakas kirjautuneena ajetaan tämä metodi
+
+    /**
+     * Asiakkaan komentojen käsittely. Täältä ohjataan asiakkaan käyttöliittymän
+     * toiminnot.
+     */
     public void customer() {
         System.out.println("**ASIAKKAAN ETUSIVU**" + " " + this.signed_user_details[1]);
         String[] input;
 
         do {
 
-            input = commandline();
+            // input = commandline();
             // Testiajon komentolistan läpikäynti
-            // input = getCommand();
+            input = getCommand();
 
             if (input == null || input.length < 1) {
                 System.out.println("Error! Command invalid");
+                continue;
             }
 
             switch (input[0]) {
@@ -207,15 +228,18 @@ public class UserInterface {
         } while (!input[0].equals(EXIT));
     }
 
-    // Ylläpitäjä kirjautuneena ajetaan tämä metodi
+    /**
+     * Ylläpitäjän komentojen käsittely ja toimtojen ohjaus. Ylläpitäjä 
+     * kirjautuneena ajetaan tämä metodi.
+     */
     public void admin() {
         System.out.println("**YLLÄPITÄJÄN ETUSIVU**" + " " + this.signed_user_details[1]);
         String[] input;
 
         do {
-            input = commandline();
+            // input = commandline();
             // Testiajon komentolistan läpikäynti
-            // input = getCommand();
+            input = getCommand();
 
             if (input == null || input.length < 1) {
                 System.out.println("Error! Command invalid");
@@ -287,6 +311,14 @@ public class UserInterface {
         } while (!input[0].equals(EXIT));
     }
 
+    /**
+     * Lukee rivin käyttäjältä. Käyttää lukemiseen In -luokkaa (readString()), 
+     * joka käsittelee mahdolliset virheet. Pilkkoo käyttäjän syötteen kahteen 
+     * osaan ensimmäisen välimerkin kohdalta.
+     * 
+     * @return 1-2 alkioinen taulukko, joista ensimmäinen sisältää mahdollisen 
+     * komennon, jälkiosa siihen liittyvän parametrin.
+     */
     public String[] commandline() {
         System.out.print(">");
         String input = In.readString();
@@ -295,29 +327,46 @@ public class UserInterface {
         return parts;
     }
 
-    // Ylläpitäjän ja asiakkaan teos- ja kappalehaku, type 0=kappale ja 1=teos
+    /**
+     * Asiakkaan teos- ja kappalehaku. Kutsuu lopuksi tulostusmetodia.
+     * 
+     * @param entry Hakusana, jonka perusteella haetaan kirjoja.
+     */
     public void customerBookSearch(String entry) {
         ArrayList<String> results = QE.customerBookQuery(entry);
         // Hakutyyppiä vastaavan tulostusmetodin kutsu
         printCustomerBookDetails(results);
 
     }
-
-    // Ylläpitäjän ja asiakkaan teos- ja kappalehaku, type 0=kappale ja 1=teos
+    
+    /**
+     * Ylläpitäjän kappalehaku. Kutsuu lopuksi tulostusmetodia.
+     * 
+     * @param entry Hakusana, jonka perusteella haetaan kirjoja.
+     */
     public void adminBookSearch(String entry) {
         ArrayList<String> results = QE.adminBookQuery(entry, this.schema_name);
         // Hakutyyppiä vastaavan tulostusmetodin kutsu
         printAdminBookDetails(results);
     }
 
+    /**
+     * Ylläpitäjän teoshaku. Kutsuu lopuksi tulostusmetodia.
+     * 
+     * @param entry Hakusana, jonka perusteella haetaan teoksia.
+     */
     public void adminCopySearch(String entry) {
         ArrayList<String> results = QE.adminCopyQuery(entry, this.schema_name);
         // Hakutyyppiä vastaavan tulostusmetodin kutsu
         printAdminCopyDetails(results);
     }
 
-    /* Palauttaa false, jos käyttäjää ei löydy tietokannasta tai kirjautuminen
-     *  epäonnistuu
+    /**
+     * Sisäänkirjautuminen järjestelmään. Jos käyttäjänimeä ei löydy tietokannasta
+     * ohjaa rekisteröitymissivulle (signUp()).
+     * 
+     * @return false, jos käyttäjää ei löydy tietokannasta tai kirjautuminen
+     * epäonnistuu
      */
     public boolean signIn() {
 
@@ -325,8 +374,8 @@ public class UserInterface {
         
         while (true) {
             System.out.println("\n*** SIGN IN *** [username password]: ");
-             sign_details = commandline();
-            // String[] sign_details = getCommand();
+            // sign_details = commandline();
+            sign_details = getCommand();
 
             // Exit lopettaa heti
             if (sign_details.length > 0 && sign_details[0].equals(EXIT)) {
@@ -360,7 +409,10 @@ public class UserInterface {
         }
     }
 
-    // Kirjaa aktiivisen käyttäjän ulos järjestelmästä
+    /**
+     * Kirjaa aktiivisen käyttäjän ulos järjestelmästä. Sulkee tietokantayhteyden
+     * ja resetoi käyttäjään liittyvät luokkamuuttujat.
+     */
     public void signOut() {
         System.out.println("Logging out...");
         this.schema_name = null;
@@ -370,7 +422,10 @@ public class UserInterface {
         run();
     }
 
-    // Rekisteröityminen järjestelmään, esim. tilauksen yhteydessä.
+    /**
+     * Rekisteröityminen järjestelmään. Sovellukseen kirjautumisyrityksen 
+     * epäonnistumisen jälkeen.
+     */
     public void signUp() {
         System.out.println("Create new? [y] = yes, [n] = no");
         String input;
@@ -379,8 +434,8 @@ public class UserInterface {
         String[] columns = {"EMAIL: ", "ETUNIMI: ", "SUKUNIMI: ", "OSOITE: ", "PUH: "};
 
         while (true) {
-            input = In.readString();
-            // input = getCommand()[0];
+            // input = In.readString();
+            input = getCommand()[0];
 
             if (input.equals("y")) {
                 String userInput;
@@ -410,19 +465,29 @@ public class UserInterface {
         signIn();
     }
 
-    // Lisää asiakkaan tiedot tietokantaan
+    /**
+     * Lisää asiakkaan tiedot tietokantaan. (Ylläpitäjää ei voi lisätä käyttöliittymässä)
+     * 
+     * @param user_details Lisättävän uuden asiakkaan tiedot oikeassa järjestyksessä
+     */
     public void addCustomer(ArrayList<String> user_details) {
         System.out.println("Adding customer to database...");
         this.QE.addUser(user_details);
-        // Ei tee vielÃ¤ mitÃ¤Ã¤n muuta
     }
 
+    /**
+     * Asettaa tilaus ID:n käyttäjälle. (Ostoskorin luontivaiheessa). Hakee
+     * tietokannasta mahdollisen aiemman avoimeksi jääneen ostoskorin (tilaus ID).
+     */
     public void setOrderID() {
         String userEmail = this.signed_user_details[0];
         this.order_id = this.QE.getOrderID(userEmail);
 
     }
 
+    /**
+     * Tilauksen viimeistely. Ostoskorissa olevien tuotteiden tilaaminen.
+     */
     public void checkOut() {
         if (this.order_id == 0) {
             System.out.println("Ostoskorisi on tyhjä!");
@@ -430,7 +495,8 @@ public class UserInterface {
         }
         String command;
         do {
-            command = In.readString(); //getCommand()[0];
+            // command = In.readString(); 
+            command = getCommand()[0];
             if (checkUserInput(command)) {
                 // Tehdään tietokantaan tarvittavat muutokset
                 if (command.equals(ORDER)) {
@@ -445,10 +511,13 @@ public class UserInterface {
         } while (!command.equals(ORDER));
     }
 
+
+    
+    // *** TULOSTUSMETODEITA ***
+    
     /**
-     * * Tulostelumetodeita **
+     * Tulostaa kirjautuneena olevan käyttäjän tiedot. (mm. testejä varten)
      */
-    // Tulostaa kirjautuneena olevan käyttäjän tiedot, Testiajoja varten
     public void printUserDetails() {
         System.out.println("-User details-");
         if (this.signed_user_details != null) {
@@ -458,7 +527,12 @@ public class UserInterface {
         }
     }
 
-    // Tulostaa ostoskorin muotoillusti
+    /**
+     * Tulostaa ostoskorin muotoillusti.
+     * 
+     * @param type Parametri, jolla kerrotaan, minkä tyyppinen tulostus halutaan
+     * (1 = pelkkä ostoskori / 2 = checkout muotoilu)
+     */
     public void printCartContents(int type) {            // [0] = email
         this.order_id = this.QE.getOrderID(this.signed_user_details[0]);
         ArrayList<String> cartContents = this.QE.getCartContent(order_id);
@@ -504,7 +578,10 @@ public class UserInterface {
 
     }
 
-    // Tulostaa postikulut
+    /**
+     * Laskee apumetodeita käyttäen tilauksen mahdollisten useiden lähetysten
+     * postikulut ja tulostaa ne muotoillusti.
+     */
     public void printPostages() {
         int align = 20; // Määrittää sisennyksen oikeasta reunasta
         System.out.println("");
@@ -541,14 +618,21 @@ public class UserInterface {
         System.out.println("___________________________________________________________\n");
     }
 
-    // Tulostaa ostoskorin tuotteiden yhteishinnan
+    /**
+     * Tulostaa ostoskorin tuotteiden yhteishinnan.
+     */
     public void printCartSum() {
         double totalSum = this.QE.getCartSum(order_id);
         printSpace(38);
         System.out.println("tuotteet yht: " + String.format("%.2f", totalSum) + " €");
     }
 
-    // Teosten muotoiltu tulostus
+    /**
+     * Ylläpitäjän teosten muotoiltu tulostus.
+     * 
+     * @param results Teostiedot sisältävä lista (teos/rivi). Tiedot eroteltuna
+     * '/' -merkillä.
+     */
     public void printAdminCopyDetails(ArrayList<String> results) {
         System.out.println("teos_isbn       tuotenimi                     "
                 + "tekijä                    luokka         tyyppi\n"
@@ -598,7 +682,12 @@ public class UserInterface {
                 + "-------------------------------------------------");
     }
 
-    // Myyntikappaleiden muotoiltu tulostus (Asiakkaat)
+    /**
+     * Myyntikappaleiden muotoiltu tulostus. (Asiakkaat)
+     * 
+     * @param results Kirjan tiedot sisältävä lista (kirja/rivi). Tiedot eroteltuna
+     * '/' -merkillä.
+     */
     public void printCustomerBookDetails(ArrayList<String> results) {
         System.out.println("tnro      tuotenimi                     kuvaus"
                 + "                        luokka         tyyppi         eur\n"
@@ -649,7 +738,12 @@ public class UserInterface {
                 + "----------------------------------------------");
     }
 
-    // Myyntikappaleiden muotoiltu tulostus (Ylläpitäjät)
+    /**
+     * Myyntikappaleiden muotoiltu tulostus (Ylläpitäjät).
+     * 
+     * @param results Kirjan tiedot sisältävä lista (kirja/rivi). Tiedot eroteltuna
+     * '/' -merkillä.
+     */
     public void printAdminBookDetails(ArrayList<String> results) {
         System.out.println("div  t_id    teos_nimi                       luokka"
                 + "             sisosto/e   hinta/e     myyty\n"
@@ -705,18 +799,24 @@ public class UserInterface {
                 + "-------------------------------------------");
     }
 
-    // Välimerkkien tulosteluun käytetty netodi
+    /**
+     * Välimerkkien (sisennyksen) tulosteluun käytetty netodi.
+     * 
+     * @param count Tulostettavien välimerkkien määrä.
+     */
     public void printSpace(int count) {
         for (int i = 0; i < count; i++) {
             System.out.print(" ");
         }
     }
 
-    /*
-    * Ylläpitäjän toimintoja ja funktioita
-    *
+    
+    
+    //*** YLLAPITAJAN TOIMINTOJA JA FUNKTIOITA ***
+
+    /**
+     * Lisää uuden painoksen/teoksen tiedot. (Kysytään käyttäjältä)
      */
-    // Lisää uuden painoksen/teoksen tiedot (Kysytään käyttäjältä)
     private void addCopy() {
         String[] columns = {"ISBN: ", "NIMI: ", "KUVAUS: ", "LUOKKA: ", "TYYPPI: "};
         ArrayList<String> copy_details = new ArrayList<>();
@@ -738,7 +838,9 @@ public class UserInterface {
         this.QE.insertCopy(copy_details, this.schema_name);
     }
 
-    // Lisää uuden tekijän tiedot
+    /**
+     * Lisää uuden teoksen tekijän tiedot. (Kysytään käyttäjältä)
+     */
     private void addAuthor() {
         String[] columns = {"ETUNIMI: ", "SUKUNIMI: ", "TEOS_ISBN: ",
             "KANSALLISUUS: ", "SYNT_VUOSI: "};
@@ -768,7 +870,9 @@ public class UserInterface {
         this.QE.insertAuthortToISBN(aut_isbn_details, schema_name);
     }
 
-    // Lisää uuden kappaleen/yksittäisen kirjan tiedot (Kysytään käyttäjältä)
+    /**
+     * Lisää uuden kappaleen/yksittäisen kirjan tiedot. (Kysytään käyttäjältä)
+     */
     private void addBook() {
         String[] columns = {"DIVARI: ", "ISBN: ", "PAINO: ", "SISÄÄNOSTOHINTA: ", "HINTA: "};
         ArrayList<String> book_details = new ArrayList<>();
@@ -810,7 +914,9 @@ public class UserInterface {
 
     }
 
-    // Ostohistorian tulostus
+    /**
+     * Ostohistorian tulostus.
+     */
     private void printPurchaseReport() {
         ArrayList<String> data = this.QE.getPurchaseReport();
         System.out.println(
@@ -827,7 +933,9 @@ public class UserInterface {
         System.out.println("");
     }
 
-    // Kategoriahintatietojen tulostus
+    /**
+     * Kategoriahintatietojen tulostus
+     */
     private void printCategoryReport() {
         ArrayList<String> data = this.QE.getCategoryReport(this.schema_name);
         System.out.println(
@@ -851,10 +959,13 @@ public class UserInterface {
     }
 
 
-    /*
-    *Asiakkaan toimintoja ja funktioita
-    *
-    *
+    //*** ASIAKKAAN TOIMINTOJA JA FUNKTIOITA ***
+
+    /**
+     * Lisää kirjan ostoskoriin. Luo tarvittaessa uuden ostoskorin tai hakee 
+     * vanhan avoimeksi jääneen (Tilauksen tila = 1).
+     * 
+     * @param book_id Lisättävän kirjan tunniste.
      */
     public void addToCart(String book_id) {
         String div_name = book_id.substring(0, 2);
@@ -875,8 +986,14 @@ public class UserInterface {
         this.QE.addToCart(details);
     }
 
-    // Tarkistaa parametrina annetun syötteen pituuden. Jos pituus ylittyy, palauttaa
-    // leikkaa ylittyvän osan tekstin lopusta ja palauttaa alkuosan
+    /**
+     * Tarkistaa parametrina annetun syötteen pituuden. Jos pituus ylittyy,
+     * leikkaa ylittyvän osan tekstin lopusta ja palauttaa alkuosan.
+     * 
+     * @param text Rajoitettava teksti/merkkijono.
+     * @param limit Pituus, johon ensimmäinen parametri rajoitetaan
+     * @return Annettuun mittaan rajoitettu merkkijono (alkuosa)
+     */
     public String stringLimiter(String text, int limit) {
         if (text.length() > limit) {
             return text.substring(0, limit) + "...";
@@ -885,7 +1002,13 @@ public class UserInterface {
         }
     }
 
-    // Postikulujen laskentametodi, palauttaa rivit joissa divarinimi, kpl, hinta
+    /**
+     * Postikulujen laskentametodi. Käytännössä ei laske mitään, vaan hakee
+     * tietokannasta paketin painoa vastaavan postikulun. Pakettien yhteispainojen
+     * saamiseksi käytetään SQL-funktiota.
+     * 
+     * @return Palauttaa listan jossa rivit joissa divarinimi, kpl, hinta
+     */
     public ArrayList<String> postageCalculator() {
         ArrayList<String> packages = this.QE.getPackages(order_id);
 
@@ -915,9 +1038,16 @@ public class UserInterface {
     }
 
 
-    /*
-    * Syotteen muodon tarkistusmetodeita
-    *
+    //*** SYOTTEEN MUODON TARKISTUSMETODEITA ***
+    
+    /**
+     * Tarkistaa onko parametrina annettu merkkijono tyhjä tai sisältääkö se 
+     * "exit" tai "return" komennon. Kutsuu kirjautuneen käyttäjän perusteella 
+     * sopivaa metodia, jos parametri "return". Jos exit, sulkee ohjelman. 
+     * (System.exit(0)). 
+     * 
+     * @param input Merkkijono, jonka sisältö tarkistetaan.
+     * @return Tyhjästä merkkijonosta palautetaan false, muuten true.
      */
     public boolean checkUserInput(String input) {
         if (input.equals(EXIT)) {
@@ -934,7 +1064,13 @@ public class UserInterface {
         return !input.isEmpty(); // Jos tyhjä syöte, palautetaan false
     }
 
-    // Tarkistaa, onko parametri double -muotoinen ja palauttaa muutoksen
+    /**
+     * Tarkistaa, onko parametri double -muotoinen ja palauttaa muutoksen.
+     * 
+     * @param input Muutettava desimaaliluku String -muotoisena.
+     * @return Parametrina annettu merkkijonomuotoinen desimaaliluku double 
+     * muotoisena, tai muunnoksen epäonnistuessa -1.
+     */
     public double checkDoubleFormat(String input) {
         double luku;
 
@@ -947,7 +1083,13 @@ public class UserInterface {
         return luku;
     }
 
-    // Tarkistaa, onko parametri int -muotoinen ja palauttaa muunnoksen.
+    /**
+     * Tarkistaa, onko parametri int -muotoinen ja palauttaa muunnoksen.
+     * 
+     * @param input Muutettava kokonaisluku String -muotoisena.
+     * @return Parametrina annettu merkkijonomuotoinen koknaisluku int 
+     * muotoisena, tai muunnoksen epäonnistuessa -1.
+     */
     public int checkIntFormat(String input) {
         int luku;
         try {
@@ -959,8 +1101,17 @@ public class UserInterface {
         return luku;
     }
 
-    // Ohjelman testiajossa käytettävä metodi
-    // Lukee komennot "filename" -tiedostosta listalle
+    
+    
+    // *** OHJELMAN TESTAUKSEEN LIITTYVÄT METODIT ***
+    
+    /**
+     * Ohjelman testiajossa käytettävä metodi. Lukee komennot "filename" 
+     * -tiedostosta listalle.
+     * 
+     * @param filename Luettavan tiedoston nimi ja tiedostopolku.
+     * @return Lista, joka sisältää luetun tiedoston rivit.
+     */
     public static ArrayList<String> readCommandsFromFile(String filename) {
         // Lista jonne komennot lisätään
         ArrayList<String> komennot = new ArrayList<>();
@@ -980,6 +1131,16 @@ public class UserInterface {
         return komennot;
     }
 
+    /**
+     * Ottaa luokkamuuttujan testCommands -listalta yhden alkion. 
+     * (sijainnista commandIndex). Kasvattaa commandIndex -muuttujaa yhdellä, 
+     * jos komennon ottaminen indeksistä onnistui. Lopettaa ohjelman, jos lista
+     * luettu loppuun.
+     * 
+     * @return Palauttaa komennon osat 1-2 alkioisessa taulukossa, jossa 
+     * ensimmäinen alkio on komento ja toinen alkio mahdollinen komentoa seuraava
+     * parametri.
+     */
     public String[] getCommand() {
         if (this.commandIndex > this.testCommands.size() - 1) {
             System.out.println("Ei enempää komentoja.");
@@ -990,7 +1151,15 @@ public class UserInterface {
         return komentorivi;
 
     }
+    
 
+    /**
+     * Muutoin sama kuin metodi getCommand, mutta palauttaa rivin String 
+     * muotoisena. Kun käyttäjältä, eli tekstitiedostosta halutaan lukea
+     * mahdollisesti välimerkkejä sisältävää tekstiä.
+     * 
+     * @return Merkkijono testitiedostosta sellaisenaan.
+     */
     public String getCommandAsDetails() {
         if (this.commandIndex > this.testCommands.size() - 1) {
             System.out.println("Ei enempää komentoja.");

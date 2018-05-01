@@ -14,17 +14,22 @@ import java.util.ArrayList;
 
 /**
  *
- * @author jarnomata
+ * @author Jarno Matarmaa (University of Tampere)
+ * 
+ * Tämä luokka suorittaa ainoastaan SQL -kyselyitä. Luokkamuutujat sisältävät
+ * SQL-funktioita tai suoria SQL-lauseita, joita luokan metodit käyttävät
+ * tietokantakyselyiden suorittamiseen. Ohjelman ja luokan toiminta edellyttää
+ * asianmukaisesti toteutettua tietokantaa.
  */
 public class QueryEngine {
 
+    // Tietokantayhteys-oliot ja muuttuja tietokannan skeemanimelle.
     private final DatabaseConnection dataCon;
     private final Connection con;
     private final String SCHEMA_KD = "keskusdivari";
 
-    /**
-     * * SQL-Funktioita käyttävät kyselyt **
-     */
+    /* SQL-FUNKTIOITA KAYTTAVAT KYSELYT */
+    
     // Varastossa olevien kappaleiden hakukysely
     private final String CUSTOMER_BOOK_QUERY = "SELECT * FROM keskusdivari.hae_kappaleet(?)";
 
@@ -55,9 +60,8 @@ public class QueryEngine {
     private final String AUTHOR_ID_QUERY
             = "SELECT id FROM tekija WHERE etunimi = ? AND sukunimi = ? LIMIT 1";
 
-    /**
-     * * Lisäyslauseita **
-     */
+    /* LISAYSLAUSEITA */
+    
     // Teoksen lisäys
     private final String INSERT_COPY
             = "INSERT INTO teos (isbn, nimi, kuvaus, luokka, tyyppi) "
@@ -83,9 +87,8 @@ public class QueryEngine {
     // Tuotteen lisäys ostoskoriin
     private final String ADD_TO_CART = "SELECT keskusdivari.lisaa_ostoskoriin(?, ?, ?);";
 
-    /**
-     * * Muita päivityslauseita **
-     */
+    /* MUITA PAIVITYSLAUSEITA */
+    
     // Päivittää tilauksen tilan -> Tilattu
     private final String SET_ORDER_STATUS = "SELECT * FROM keskusdivari.muuta_tilauksen_tila(?, ?)";
     // Päivittää d1 -divarin tietokannan kappaleiden tilan vastaamaan keskusdivaria
@@ -93,13 +96,25 @@ public class QueryEngine {
 
     
     
-    
+    /**
+     * Konstruktori, joka luo tietokantayhteyden ja asettaa parametrina saadun
+     * DatabaseConnection -olion.
+     * 
+     * @param dataCon Tietokantayhteysolio, joka sisältää oikean tietokannan
+     * yhteystiedot
+     */
     public QueryEngine(DatabaseConnection dataCon) {
         this.dataCon = dataCon;
         this.con = this.dataCon.getConnection();
     }
 
-    // Tämä haku kohdistuu teoksiin (ei myytäviin kappaleisiin, vain admin)
+    /**
+     * Tämä haku kohdistuu teoksiin. (ei myytäviin kappaleisiin, vain admin)
+     * 
+     * @param entry Hakusana, jota vastaavia teoksia haetaan.
+     * @param divari_name Skeemanimi, josta haetaan.
+     * @return Hakutulokset teos/rivi, tiedot eroteltuna '/' -merkillä.
+     */
     public ArrayList<String> adminCopyQuery(String entry, String divari_name) {
         ArrayList<String> results = new ArrayList<>();
         // Luodaan
@@ -140,7 +155,13 @@ public class QueryEngine {
         return results;
     }
 
-    // Palauttaa asiakkaalle näytettävät kappaletiedot listalla
+    /**
+     * Palauttaa asiakkaalle näytettävät kappaletiedot listalla. (Kappaleita
+     * haetaan skeemasta joka perustuu luokkamuuttujaan 'SCHEMA_KD')
+     * 
+     * @param entry Hakusana, jolla kappaleita haetaan.
+     * @return Hakutulokset kappale/rivi, tiedot eroteltuna '/' -merkillä.
+     */
     public ArrayList<String> customerBookQuery(String entry) {
         ArrayList<String> results = new ArrayList<>();
 
@@ -181,7 +202,14 @@ public class QueryEngine {
         return results;
     }
 
-    // Palauttaa yksittäisen divarin ylläpitäjälle näytettävät kappaletiedot listalla
+    /**
+     * Palauttaa yksittäisen divarin ylläpitäjälle näytettävät kappaletiedot 
+     * listalla
+     * 
+     * @param entry Hakusana, jolla kirjoja/myyntikappaleita haetaan.
+     * @param divari_name Skeemanimi, josta haetaan.
+     * @return Hakutulokset kappale/rivi, tiedot eroteltuna '/' -merkillä.
+     */
     public ArrayList<String> adminBookQuery(String entry, String divari_name) {
         ArrayList<String> results = new ArrayList<>();
 
@@ -223,7 +251,12 @@ public class QueryEngine {
         return results;
     }
 
-    // Palauttaa käyttäjänimeä vastaavat käyttäjätiedot taulukossa
+    /**
+     * Hakee käyttäjänimeä vastaavat kayttajatiedot tietokannasta.
+     * 
+     * @param username Kayttajanimi, jonka tiedot haetaan.
+     * @return Palauttaa käyttäjänimeä vastaavat käyttäjätiedot taulukossa.
+     */
     public String[] userDetails(String username) {
 
         String[] user_details = new String[6];
@@ -251,13 +284,12 @@ public class QueryEngine {
         }
         return user_details;
     }
-
-    /*
-    * Ylläpitäjän käyttämät metodit
-    *
-    *
+    
+    /**
+     * Lisää uuden käyttäjän tiedot tietokantaan.
+     * 
+     * @param user_details Lisättävän uuden käyttäjän tiedot oikeassa järjestyksessä
      */
-    // Lisää uuden käyttäjän tiedot tietokantaan
     public void addUser(ArrayList<String> user_details) {
 
         try {
@@ -278,7 +310,12 @@ public class QueryEngine {
         }
     }
 
-    // Lisää uuden teoksen tiedot tietokantaan
+    /**
+     * Lisää uuden teoksen tiedot tietokantaan.
+     * 
+     * @param copyDetails Lisättävän teoksen tiedot oikeassa järjestyksessä.
+     * @param div_name Skeemanimi (Divari), jolle teos lisätään.
+     */
     public void insertCopy(ArrayList<String> copyDetails, String div_name) {
 
         try {
@@ -299,7 +336,12 @@ public class QueryEngine {
         }
     }
 
-    // Lisää uuden kappaleen tietokantaan. HUOM! Teoksen tiedot lisättävä ensin (isbn)
+    /**
+     * Lisää uuden kappaleen tietokantaan. HUOM! Teoksen tiedot lisättävä ensin (isbn)
+     * 
+     * @param bookDetails Lisättävän kappaleen tiedot oikeassa järjestyksessä.
+     * @param div_name Skeemanimi (Divari), jolle kappale lisätään.
+     */
     public void insertBook(ArrayList<String> bookDetails, String div_name) {
 
         try {
@@ -326,7 +368,12 @@ public class QueryEngine {
         }
     }
 
-    // Lisää uuden tekijän tiedot tietokantaan (parametri)
+    /**
+     * Lisää uuden tekijän tiedot tietokantaan. (parametri)
+     * 
+     * @param authorDetails Lisättävän tekijän (author) tiedot oikeassa järjestyksessä.
+     * @param div_name Skeemanimi (Divari), jolle tekijä lisätään.
+     */
     public void insertAuthor(ArrayList<String> authorDetails, String div_name) {
 
         try {
@@ -352,6 +399,13 @@ public class QueryEngine {
     }
     
 
+    /**
+     * Lisää teoksen_tekijät tauluun tekija_id-isbn tiedot. Apumetodi, joka toimii 
+     * automaattisesti, kun uusi tekija lisätään. (Yhdistää tekijän tiettyyn teokseen)
+     * 
+     * @param firstLastName Tekijan etu- ja sukunimi. (Haetaan vastaava tekija_id)
+     * @param div_name Skeemanimi (Divari), jolle teos_tekija tiedot lisätään.
+     */
     public void insertAuthortToISBN(ArrayList<String> firstLastName, String div_name) {
         String firstname = firstLastName.get(0);
         String  lastname = firstLastName.get(1);
@@ -374,7 +428,14 @@ public class QueryEngine {
         }
     }
     
-    // Palautta tekijän ID tunnuksen
+    /**
+     * Hakee tietokannasta tekijan etu- ja sukunimea vastaavan tekija_id:n. 
+     * 
+     * @param firstname Tekijan etunimi.
+     * @param lastname Tekijan sukunimi.
+     * @param div_name Skeema/divarinimi, josta tekijaa haetaan.
+     * @return Palautta tekijän ID tunnuksen.
+     */
     public int getAuthorID(String firstname, String lastname, String div_name) {
         
         int author_id;
@@ -399,7 +460,12 @@ public class QueryEngine {
     }
     
 
-    // Hakee tilaustietoja viime vuonna
+    /**
+     * Hakee tilaustietoja viime vuonna.
+     * 
+     * @return Lista, joka sisaltaa kutakin kayttajaa vastaavat ostohistoriatiedot
+     * (viime vuonna ostetut).
+     */
     public ArrayList<String> getPurchaseReport() {
         ArrayList<String> details = new ArrayList<>();
 
@@ -425,7 +491,13 @@ public class QueryEngine {
         return details;
     }
 
-    // Hakee kategorioihin liittyviä hintatietoja
+    /**
+     * Hakee kategorioihin liittyviä hintatietoja.
+     * 
+     * @param div_name Skeema/divarinimi, jolle kategoriatietoja haetaan.
+     * @return Kategorianimi, yhteishinta ja keskihinta. Kategoria/rivi. Tiedot
+     * eroteltu '/' -merkillä.
+     */
     public ArrayList<String> getCategoryReport(String div_name) {
         ArrayList<String> details = new ArrayList<>();
 
@@ -453,12 +525,12 @@ public class QueryEngine {
         return details;
     }
 
-    /*
-    * Asiakkaan metodit
-    *
+    /**
+     * Hakee kayttajanimea vastaavan tilaus ID:n.
+     * 
+     * @param email Kayttajanimi eli email-osoite, joka kayttajalle rekisteroity.
+     * @return Palauttaa kayttajanimea vastaavan tilaus_id:n.
      */
-    // Palauttaa käyttäjänimeä vastaavan tilaus_id:n, jos ei löydy, 
-    // luo uuden ja palauttaa sen
     public int getOrderID(String email) {
         int order_id;
         try {
@@ -480,7 +552,12 @@ public class QueryEngine {
         return -1;
     }
 
-    // Lisaa listalla järjestyksessä olevat tuotetiedot tietokantaan
+    /**
+     * Lisaa listalla järjestyksessä olevat tuoteen tilaustiedot tietokantaan.
+     * 
+     * @param details Listan tulee sisaltaa tiedot jarjestyksessa (tuote_id, 
+     * divari_nimi, tilaus_id)
+     */
     public void addToCart(ArrayList<String> details) {
 
         try {
@@ -505,7 +582,14 @@ public class QueryEngine {
         }
     }
 
-    // Palauttaa ostoskorin sisällön listalla
+    /**
+     * Hakee ostoskorin sisallon, eli parametrina annettua tilaustunnistetta 
+     * vastaavat tuotteet.
+     * 
+     * @param order_id Tilaustunnus, jonka tuotteet haetaan tietokannasta
+     * @return Palauttaa ostoskorin sisallon listalla. Tiedot eroteltu '/' 
+     * -merkilla, tuote/rivi
+     */
     public ArrayList<String> getCartContent(int order_id) {
         ArrayList<String> content = new ArrayList<>();
 
@@ -540,7 +624,12 @@ public class QueryEngine {
         return content;
     }
 
-    // Palauttaa ostoskorin yhteissumman
+    /**
+     * Palauttaa ostoskorin yhteissumman.
+     * 
+     * @param order_id Tilaustunniste, jonka tuotteiden yhteishinnat haetaan.
+     * @return Ostoskorin yhteishinta.
+     */
     public double getCartSum(int order_id) {
         double totalSum;
         try {
@@ -562,7 +651,12 @@ public class QueryEngine {
         return -1;
     }
 
-    // Palauttaa tilauksen mahdollisten osalähetysten painot
+    /**
+     * Palauttaa tilauksen mahdollisten osalahetysten painot.
+     * 
+     * @param order_id Tilaustunnus, jonka mahdollisten pakettien tiedot haetaan.
+     * @return Lista, joka sisaltaa rivit (divari_nimi/paino/kappale_lkm).
+     */
     public ArrayList<String> getPackages(int order_id) {
         ArrayList<String> packages = new ArrayList<>();
         String row;
@@ -590,7 +684,12 @@ public class QueryEngine {
         return packages;
     }
 
-    // Palauttaa tilauksen postikulujen laskemiseen tarvittavan taulukon
+    /**
+     * Hakee painoa vastaavan postikulun.
+     * 
+     * @param weight Paino, jota vastaavat postikulut haetaan.
+     * @return Merkkijonomuotoinen postikulu.
+     */
     public String getPostage(int weight) {
         String postage;
         try {
@@ -614,7 +713,12 @@ public class QueryEngine {
         return "-1";
     }
 
-    // Päivittää tilauksen tilan
+    /**
+     * Päivittää tilauksen tilan.
+     * 
+     * @param order_id Tilaus_id, jonka tila muutetaan.
+     * @param newStatus Tila (0-2), joka tilaukselle asetetaan.
+     */
     public void setOrderStatus(int order_id, int newStatus) {
         try {
             setSchema(SCHEMA_KD);
@@ -628,11 +732,13 @@ public class QueryEngine {
 
             prstmt.close();
         } catch (SQLException e) {
-            // System.out.println("SET_ORDER_STAT_Q: " + e.getMessage());
+            System.out.println("SET_ORDER_STAT_Q: " + e.getMessage());
         }
     }
 
-    // Pävittää alidivarin D1 kappaleiden tilan vastaamaan keskusdivaria
+    /**
+     * Pävittää alidivarin D1 kappaleiden tilan vastaamaan keskusdivaria.
+     */
     public void setBookStatus() {
         try {
             Statement stmt = this.con.createStatement();
@@ -642,7 +748,11 @@ public class QueryEngine {
         }
     }
 
-    // Asettaa skeeman
+    /**
+     * Asettaa skeeman.
+     * 
+     * @param schema Asetettavan skeeman nimi. 
+     */
     public void setSchema(String schema) {
         if (schema.equals("D2")) {
             schema = "keskusdivari";
@@ -657,7 +767,9 @@ public class QueryEngine {
         }
     }
 
-    // Sulkee yhteyden tietokantaan
+    /**
+     * Sulkee yhteyden tietokantaan.
+     */
     public void closeDatabaseConnection() {
         this.dataCon.closeConnection();
     }
@@ -666,7 +778,12 @@ public class QueryEngine {
         this.dataCon.getConnection();
     }
 
-    // Tarkistaa int lukuja mahdollisesti sisältäviä merkkijonoja
+    /**
+     * Tarkistaa int lukuja mahdollisesti sisaltavia merkkijonoja.
+     * 
+     * @param input String -muotoinen kokonaisluku
+     * @return Parametrina annettu luku int -muotoisena.
+     */
     public int checkIntFormat(String input) {
         int luku;
         try {

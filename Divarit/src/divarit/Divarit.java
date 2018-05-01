@@ -3,6 +3,8 @@ package divarit;
 /**
  *
  * @author Jarno Matarmaa
+ * 
+ * Tämä on Divarit -ohjelman ajoluokka.
  */
 public class Divarit {
 

@@ -5,9 +5,13 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 /**
+ * @author Jarno Matarmaa / Okko Pyssysalo
  * 
  * Protokollana toimii TIETA7-kurssilla annettu 'postgresql-42.2.1.jar'
  * 
+ * Tämä luokka sisältää tietokantayhteyden muodostamista varten tarvittavat
+ * komponentit ja tiedot. Jos haluat muodostaa yhteyden eri tietokantaan tai eri
+ * käyttäjätiedoilla, tee muutoksia täällä.
  */
 public class DatabaseConnection {
     
@@ -49,6 +53,9 @@ public class DatabaseConnection {
         return null;
     }
     
+    /**
+     * Sulkee tietokantayhteyden.
+     */
     public void closeConnection() {
         // Vaihe 4: yhteyden sulkeminen 
         if (con != null) {
