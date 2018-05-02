@@ -108,7 +108,7 @@ public class UserInterface {
      * commandline(), addCopy(), addAuthor(), addBook()
      */
     
-    private final String FILE = "test/CHECKOUT_3.txt"; // Testiajon komennot
+    private final String FILE = "test/CHECKOUT_1.txt"; // Testiajon komennot
     private final ArrayList<String> testCommands;
     private int commandIndex;
 
@@ -211,7 +211,6 @@ public class UserInterface {
                     printCartContents(2); // Ostoskorin sisältö ja hinnat
                     printCartSum(); // Ostoskorin summa (yhteishinta)
                     printPostages(); // Postikulut ja lähetykset
-                    System.out.println("Vahvista tilaus [order] tai palaa [return]:");
                     checkOut(); // Tilauksen vahvistaminen tai peruutus
                     break;
 
@@ -500,7 +499,7 @@ public class UserInterface {
             System.out.println("Ostoskorisi on tyhjä!");
             return;
         }
-        
+        System.out.println("Vahvista tilaus [order] tai palaa [return]:");
         String command;
         
         do {
