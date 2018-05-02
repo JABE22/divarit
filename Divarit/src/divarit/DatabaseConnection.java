@@ -17,9 +17,9 @@ import java.sql.SQLException;
 public class DatabaseConnection {
     
     /* 
-        luo tietokantasi näillä samoilla tiedoilla koneellesi,
-        tai muutoin joudut käyttämään omaa asetustiedostoasi
-    */
+     * Luo tietokantasi näillä samoilla tiedoilla koneellesi,
+     * tai muutoin joudut käyttämään omaa asetustiedostoasi
+     */
     private static final String PROTOKOLLA = "jdbc:postgresql:";
     private static final String PALVELIN = "localhost";
     private static final int PORTTI = 5432;
@@ -27,7 +27,6 @@ public class DatabaseConnection {
     private static final String KAYTTAJA = "postgres"; 
     private static final String SALASANA = "1234";
 
-    
     
     private Connection con = null;
     

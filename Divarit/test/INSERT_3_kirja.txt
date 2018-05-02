@@ -1,0 +1,16 @@
+admin_d1@divarit.fi 1234
+add book
+D1
+9789529298136
+210
+13.50
+18.90
+find_book arduino
+signout
+admin@divarit.fi 1234
+find_book arduino
+signout
+liisa@divarit.fi 1234
+find arduino
+signout
+exit

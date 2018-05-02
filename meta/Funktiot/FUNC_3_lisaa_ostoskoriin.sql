@@ -1,4 +1,4 @@
-/*
+﻿/*
 	SQL-funktio lisaa_ostoskoriin(...) -- Pyssysalo -- Muokattu viimeksi 2018-04-20
 	
 	Lisää kappaleen tilaukseen, eli ostoskori-relaatioon (kappale_id, divari_nimi, tilaus_id).
@@ -25,7 +25,7 @@ BEGIN
 	IF kpl_tila = 0 THEN
 		-- Yritetään lisätä koriin. muuttuja x on boolean. RETURNING FOUND palauttaa lisätyn rivin tai booleanin.
 		BEGIN
-			UPDATE keskusdivari.kappale SET tila=1 WHERE id=p_kappale_id; -- 1 = aktiivinen
+			UPDATE keskusdivari.kappale SET tila=1 WHERE id=p_kappale_id AND divari_nimi=p_divari_nimi; -- 1 = aktiivinen
 			INSERT INTO keskusdivari.ostoskori VALUES (p_kappale_id, p_divari_nimi, p_tilaus_id) RETURNING FOUND INTO x;
 			RETURN x;
 		EXCEPTION WHEN unique_violation THEN

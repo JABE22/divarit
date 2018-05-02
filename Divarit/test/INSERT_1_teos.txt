@@ -1,0 +1,13 @@
+admin_d1@divarit.fi 1234
+add copy
+9789529298136
+Arduino
+Perusteista hallintaan
+Ohjelmointi
+pokkari
+find arduino
+signout
+admin@divarit.fi 1234
+find ohjelmointi
+signout
+exit

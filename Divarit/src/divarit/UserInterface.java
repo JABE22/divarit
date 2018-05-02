@@ -87,8 +87,17 @@ public class UserInterface {
      */
     private final QueryEngine QE;
 
-    /** testikomponentit */
-    private final String FILE = "src/yllapitajatesti_1.txt"; // Testiajon komennot
+    /* ** TESTIAJO ** Lukee esivalitut komennot tiedostosta
+     * Testitiedostoja:
+     * yllapitajatesti_1.txt  -testaa hakutoimintoja ja raportteja (D1 ja D2)
+     * ostoskoritesti_1.txt   -testaa checkout -> return
+     * ostoskoritesti_2.txt   -testaa checkout -> order ja empty
+     * 
+     *
+     * Seuraavissa metodeissa tehtävä muutoksia testiajoa varten;
+     * commandline(), addCopy(), addAuthor(), addBook()
+      */
+    private final String FILE = "test/INSERT_3_kirja.txt"; // Testiajon komennot
     private final ArrayList<String> testCommands;
     private int commandIndex;
 
@@ -97,19 +106,11 @@ public class UserInterface {
      */
     public UserInterface() {
         this.QE = new QueryEngine(new DatabaseConnection());
-        this.testCommands = null;
+        // this.testCommands = null;
 
-        /* ** Testiajo ** lukee esivalitut komennot tiedostosta
-        * Testitiedostoja:
-        * yllapitajatesti_1.txt  -testaa hakutoimintoja ja raportteja (D1 ja D2)
-        * ostoskoritesti_1.txt   -testaa checkout -> return
-        * ostoskoritesti_2.txt   -testaa checkout -> order ja empty
-        *
-        * Seuraavissa metodeissa tehtävä muutoksia testiajoa varten;
-        * customer(), admin(), signIn(), signUp(), checkOut()
-         */
-        // this.testCommands = readCommandsFromFile(FILE);
-        // this.commandIndex = 0;
+        // Testiajon komponentit
+        this.testCommands = readCommandsFromFile(FILE);
+        this.commandIndex = 0;
     }
 
     /**
@@ -158,8 +159,6 @@ public class UserInterface {
         do {
 
             input = commandline();
-            // Testiajon komentolistan läpikäynti
-            // input = getCommand();
 
             if (input == null || input.length < 1) {
                 System.out.println("Error! Command invalid");
@@ -234,8 +233,6 @@ public class UserInterface {
 
         do {
             input = commandline();
-            // Testiajon komentolistan läpikäynti
-            // input = getCommand();
 
             if (input == null || input.length < 1) {
                 System.out.println("Error! Command invalid");
@@ -317,9 +314,13 @@ public class UserInterface {
      */
     public String[] commandline() {
         System.out.print(">");
-        String input = In.readString();
-        String[] parts = input.split(" ", 2);
+        // String input = In.readString();
+        // String[] parts = input.split(" ", 2);
+        
+        // Testiajo
+        String[] parts = getCommand();
 
+        
         return parts;
     }
 
@@ -371,7 +372,6 @@ public class UserInterface {
         while (true) {
             System.out.println("\n*** SIGN IN *** [username password]: ");
             sign_details = commandline();
-            // sign_details = getCommand();
 
             // Exit lopettaa heti
             if (sign_details.length > 0 && sign_details[0].equals(EXIT)) {
@@ -431,7 +431,6 @@ public class UserInterface {
 
         while (true) {
             input = In.readString();
-            // input = getCommand()[0];
 
             if (input.equals("y")) {
                 String userInput;
@@ -489,10 +488,12 @@ public class UserInterface {
             System.out.println("Ostoskorisi on tyhjä!");
             return;
         }
+        
         String command;
+        
         do {
-            command = In.readString(); 
-            // command = getCommand()[0];
+            command = commandline()[0];
+            
             if (checkUserInput(command)) {
                 // Tehdään tietokantaan tarvittavat muutokset
                 if (command.equals(ORDER)) {
@@ -820,8 +821,8 @@ public class UserInterface {
         String userInput;
         for (int i = 0; i < columns.length; i++) {
             System.out.print(columns[i]);
-            userInput = In.readString();
-            // userInput = getCommandAsDetails();
+            // userInput = In.readString();
+            userInput = getCommandAsDetails();
 
             if (checkUserInput(userInput)) {
                 copy_details.add(userInput);
@@ -846,8 +847,8 @@ public class UserInterface {
         String userInput;
         for (int i = 0; i < columns.length; i++) {
             System.out.print(columns[i]);
-            userInput = In.readString();
-            // userInput = getCommandAsDetails();
+            // userInput = In.readString();
+            userInput = getCommandAsDetails();
 
             if (checkUserInput(userInput)) {
                 if (i < 3) {
@@ -877,8 +878,8 @@ public class UserInterface {
 
         for (int i = 0; i < columns.length; i++) {
             System.out.print(columns[i]);
-            userInput = In.readString();
-            // userInput = getCommandAsDetails();
+            // userInput = In.readString();
+            userInput = getCommandAsDetails();
 
             if (checkUserInput(userInput)) {
                 if (1 < 2) { // String arvot hyväksytään syötteen perustarkastuksen jälkeen

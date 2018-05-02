@@ -574,7 +574,7 @@ public class QueryEngine {
 
         } catch (SQLException e) {
             String product_id = details.get(1) + details.get(0);
-            System.out.println("ADD_TO_CART_Q: Tuotetta " + product_id + " ei lisätty!\n" + e.getMessage());
+            System.out.println("ADD_TO_CART_Q: " + e.getMessage());
         }
     }
 

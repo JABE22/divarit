@@ -1,0 +1,11 @@
+admin@divarit.fi 1234
+find arduino
+add author
+Massimo
+Banzi
+9789529298136
+1968
+Italia
+find massimo
+signout
+exit
