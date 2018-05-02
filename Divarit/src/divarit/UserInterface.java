@@ -90,7 +90,7 @@ public class UserInterface {
      */
     private final QueryEngine QE;
 
-    // ** TESTIAJO ** Lukee esivalitut komennot tiedostosta
+    // -- TESTIAJO -- Lukee esivalitut komennot tiedostosta
     
     /* -Testitiedostoja-
      *
@@ -519,7 +519,7 @@ public class UserInterface {
 
 
     
-    // *** TULOSTUSMETODEITA ***
+    // --- TULOSTUSMETODEITA ---
     
     /**
      * Tulostaa kirjautuneena olevan käyttäjän tiedot. (mm. testejä varten)
@@ -819,7 +819,7 @@ public class UserInterface {
 
     
     
-    //*** YLLAPITAJAN TOIMINTOJA JA FUNKTIOITA ***
+    // --- YLLAPITAJAN TOIMINTOJA JA FUNKTIOITA ---
 
     /**
      * Lisää uuden painoksen/teoksen tiedot. (Kysytään käyttäjältä)
@@ -963,7 +963,7 @@ public class UserInterface {
     }
 
 
-    //*** ASIAKKAAN TOIMINTOJA JA FUNKTIOITA ***
+    // --- ASIAKKAAN TOIMINTOJA JA FUNKTIOITA ---
 
     /**
      * Lisää kirjan ostoskoriin. Luo tarvittaessa uuden ostoskorin tai hakee 
@@ -1111,7 +1111,7 @@ public class UserInterface {
 
     
     
-    // *** OHJELMAN TESTAUKSEEN LIITTYVÄT METODIT ***
+    // --- OHJELMAN TESTAUKSEEN LIITTYVÄT METODIT ---
     
     /**
      * Ohjelman testiajossa käytettävä metodi. Lukee komennot "filename" 
