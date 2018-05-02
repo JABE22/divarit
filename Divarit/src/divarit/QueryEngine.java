@@ -96,8 +96,7 @@ public class QueryEngine {
      * Konstruktori, joka luo tietokantayhteyden ja asettaa parametrina saadun
      * DatabaseConnection -olion.
      * 
-     * @param dataCon Tietokantayhteysolio, joka sisältää oikean tietokannan
-     * yhteystiedot
+     * @param dataCon Tietokantayhteysolio, joka sisältää oikean tietokannan yhteystiedot
      */
     public QueryEngine(DatabaseConnection dataCon) {
         this.dataCon = dataCon;
@@ -109,7 +108,7 @@ public class QueryEngine {
      * 
      * @param entry Hakusana, jota vastaavia teoksia haetaan.
      * @param divari_name Skeemanimi, josta haetaan.
-     * @return Hakutulokset teos/rivi, tiedot eroteltuna '/' -merkillä.
+     * @return Hakutulokset teos/rivi, tiedot eroteltuna kautta -merkillä.
      */
     public ArrayList<String> adminCopyQuery(String entry, String divari_name) {
         ArrayList<String> results = new ArrayList<>();
@@ -153,10 +152,10 @@ public class QueryEngine {
 
     /**
      * Palauttaa asiakkaalle näytettävät kappaletiedot listalla. (Kappaleita
-     * haetaan skeemasta joka perustuu luokkamuuttujaan 'SCHEMA_KD')
+     * haetaan skeemasta joka perustuu luokkamuuttujaan "SCHEMA_KD")
      * 
      * @param entry Hakusana, jolla kappaleita haetaan.
-     * @return Hakutulokset kappale/rivi, tiedot eroteltuna '/' -merkillä.
+     * @return Hakutulokset kappale/rivi, tiedot eroteltuna kautta -merkillä.
      */
     public ArrayList<String> customerBookQuery(String entry) {
         ArrayList<String> results = new ArrayList<>();
@@ -204,7 +203,7 @@ public class QueryEngine {
      * 
      * @param entry Hakusana, jolla kirjoja/myyntikappaleita haetaan.
      * @param divari_name Skeemanimi, josta haetaan.
-     * @return Hakutulokset kappale/rivi, tiedot eroteltuna '/' -merkillä.
+     * @return Hakutulokset kappale/rivi, tiedot eroteltuna kautta -merkillä.
      */
     public ArrayList<String> adminBookQuery(String entry, String divari_name) {
         ArrayList<String> results = new ArrayList<>();
@@ -459,8 +458,7 @@ public class QueryEngine {
     /**
      * Hakee tilaustietoja viime vuonna.
      * 
-     * @return Lista, joka sisaltaa kutakin kayttajaa vastaavat ostohistoriatiedot
-     * (viime vuonna ostetut).
+     * @return Lista, joka sisaltaa kutakin kayttajaa vastaavat ostohistoriatiedot (viime vuonna ostetut).
      */
     public ArrayList<String> getPurchaseReport() {
         ArrayList<String> details = new ArrayList<>();
@@ -491,8 +489,7 @@ public class QueryEngine {
      * Hakee kategorioihin liittyviä hintatietoja.
      * 
      * @param div_name Skeema/divarinimi, jolle kategoriatietoja haetaan.
-     * @return Kategorianimi, yhteishinta ja keskihinta. Kategoria/rivi. Tiedot
-     * eroteltu '/' -merkillä.
+     * @return Kategorianimi, yhteishinta ja keskihinta. Kategoria/rivi. Tiedot eroteltu kautta -merkillä.
      */
     public ArrayList<String> getCategoryReport(String div_name) {
         ArrayList<String> details = new ArrayList<>();
@@ -551,8 +548,7 @@ public class QueryEngine {
     /**
      * Lisaa listalla järjestyksessä olevat tuoteen tilaustiedot tietokantaan.
      * 
-     * @param details Listan tulee sisaltaa tiedot jarjestyksessa (tuote_id, 
-     * divari_nimi, tilaus_id)
+     * @param details Listan tulee sisaltaa tiedot jarjestyksessa (tuote_id, divari_nimi, tilaus_id)
      */
     public void addToCart(ArrayList<String> details) {
 
@@ -583,8 +579,7 @@ public class QueryEngine {
      * vastaavat tuotteet.
      * 
      * @param order_id Tilaustunnus, jonka tuotteet haetaan tietokannasta
-     * @return Palauttaa ostoskorin sisallon listalla. Tiedot eroteltu '/' 
-     * -merkilla, tuote/rivi
+     * @return Palauttaa ostoskorin sisallon listalla. Tiedot eroteltu kautta-merkilla, tuote/rivi
      */
     public ArrayList<String> getCartContent(int order_id) {
         ArrayList<String> content = new ArrayList<>();

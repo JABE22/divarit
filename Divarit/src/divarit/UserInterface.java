@@ -320,8 +320,7 @@ public class UserInterface {
      * joka käsittelee mahdolliset virheet. Pilkkoo käyttäjän syötteen kahteen 
      * osaan ensimmäisen välimerkin kohdalta.
      * 
-     * @return 1-2 alkioinen taulukko, joista ensimmäinen sisältää mahdollisen 
-     * komennon, jälkiosa siihen liittyvän parametrin.
+     * @return 1-2 alkioinen taulukko. [komento, parametri]
      */
     public String[] commandline() {
         System.out.print(">");
@@ -373,8 +372,7 @@ public class UserInterface {
      * Sisäänkirjautuminen järjestelmään. Jos käyttäjänimeä ei löydy tietokannasta
      * ohjaa rekisteröitymissivulle (signUp()).
      * 
-     * @return false, jos käyttäjää ei löydy tietokannasta tai kirjautuminen
-     * epäonnistuu
+     * @return False, jos käyttäjää ei löydy tietokannasta tai kirjautuminen epäonnistuu
      */
     public boolean signIn() {
 
@@ -538,8 +536,7 @@ public class UserInterface {
     /**
      * Tulostaa ostoskorin muotoillusti.
      * 
-     * @param type Parametri, jolla kerrotaan, minkä tyyppinen tulostus halutaan
-     * (1 = pelkkä ostoskori / 2 = checkout muotoilu)
+     * @param type Tulostustyyppi, (1 = pelkkä ostoskori / 2 = checkout muotoilu)
      */
     public void printCartContents(int type) {            // [0] = email
         this.order_id = this.QE.getOrderID(this.signed_user_details[0]);
@@ -643,8 +640,7 @@ public class UserInterface {
     /**
      * Ylläpitäjän teosten muotoiltu tulostus.
      * 
-     * @param results Teostiedot sisältävä lista (teos/rivi). Tiedot eroteltuna
-     * '/' -merkillä.
+     * @param results Teostiedot sisältävä lista (teos/rivi).
      */
     public void printAdminCopyDetails(ArrayList<String> results) {
         System.out.println("teos_isbn       tuotenimi                     "
@@ -698,8 +694,7 @@ public class UserInterface {
     /**
      * Myyntikappaleiden muotoiltu tulostus. (Asiakkaat)
      * 
-     * @param results Kirjan tiedot sisältävä lista (kirja/rivi). Tiedot eroteltuna
-     * '/' -merkillä.
+     * @param results Kirjan tiedot sisältävä lista (kirja/rivi).
      */
     public void printCustomerBookDetails(ArrayList<String> results) {
         System.out.println("tnro      tuotenimi                     kuvaus"
@@ -754,8 +749,7 @@ public class UserInterface {
     /**
      * Myyntikappaleiden muotoiltu tulostus (Ylläpitäjät).
      * 
-     * @param results Kirjan tiedot sisältävä lista (kirja/rivi). Tiedot eroteltuna
-     * '/' -merkillä.
+     * @param results Kirjan tiedot sisältävä lista (kirja/rivi).
      */
     public void printAdminBookDetails(ArrayList<String> results) {
         System.out.println("div  t_id    teos_nimi                       luokka"
@@ -1084,8 +1078,7 @@ public class UserInterface {
      * Tarkistaa, onko parametri double -muotoinen ja palauttaa muutoksen.
      * 
      * @param input Muutettava desimaaliluku String -muotoisena.
-     * @return Parametrina annettu merkkijonomuotoinen desimaaliluku double 
-     * muotoisena, tai muunnoksen epäonnistuessa -1.
+     * @return Parametrina annettu String input, double -muotoisena (fault, -1)
      */
     public double checkDoubleFormat(String input) {
         double luku;
@@ -1103,8 +1096,7 @@ public class UserInterface {
      * Tarkistaa, onko parametri int -muotoinen ja palauttaa muunnoksen.
      * 
      * @param input Muutettava kokonaisluku String -muotoisena.
-     * @return Parametrina annettu merkkijonomuotoinen koknaisluku int 
-     * muotoisena, tai muunnoksen epäonnistuessa -1.
+     * @return Parametrina annettu String input, int -muotoisena (fault, -1)
      */
     public int checkIntFormat(String input) {
         int luku;
@@ -1153,9 +1145,7 @@ public class UserInterface {
      * jos komennon ottaminen indeksistä onnistui. Lopettaa ohjelman, jos lista
      * luettu loppuun.
      * 
-     * @return Palauttaa komennon osat 1-2 alkioisessa taulukossa, jossa 
-     * ensimmäinen alkio on komento ja toinen alkio mahdollinen komentoa seuraava
-     * parametri.
+     * @return Palauttaa komennon osat 1-2 alkioisessa taulukossa [komento, parametri].
      */
     public String[] getCommand() {
         if (this.commandIndex > this.testCommands.size() - 1) {
