@@ -108,7 +108,7 @@ public class UserInterface {
      * commandline(), addCopy(), addAuthor(), addBook()
      */
     
-    private final String FILE = "test/CHECKOUT_1.txt"; // Testiajon komennot
+    private final String FILE = "test/INSERT_3_kirja.txt"; // Testiajon komennot
     private final ArrayList<String> testCommands;
     private int commandIndex;
 
@@ -324,8 +324,8 @@ public class UserInterface {
      */
     public String[] commandline() {
         System.out.print(">");
-        // String input = In.readString();
-        // String[] parts = input.split(" ", 2);
+        //String input = In.readString();
+        //String[] parts = input.split(" ", 2);
         
         // Testiajo
         String[] parts = getCommand();
