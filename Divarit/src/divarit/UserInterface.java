@@ -108,9 +108,15 @@ public class UserInterface {
      * commandline(), addCopy(), addAuthor(), addBook()
      */
     
+<<<<<<< HEAD
     // private final String FILE = "test/CHECKOUT_1.txt"; // Testiajon komennot
     // private final ArrayList<String> testCommands;
     // private int commandIndex;
+=======
+    private final String FILE = "test/INSERT_3_kirja.txt"; // Testiajon komennot
+    private final ArrayList<String> testCommands;
+    private int commandIndex;
+>>>>>>> a8caaff4d1f2e1488560df63740e0ae6b9c1c6f5
 
     /**
      * Alustaa QueryEngine -luokan ja testaukseen liittyvät komponentit
@@ -324,8 +330,13 @@ public class UserInterface {
      */
     public String[] commandline() {
         System.out.print(">");
+<<<<<<< HEAD
         String input = In.readString();
         String[] parts = input.split(" ", 2);
+=======
+        //String input = In.readString();
+        //String[] parts = input.split(" ", 2);
+>>>>>>> a8caaff4d1f2e1488560df63740e0ae6b9c1c6f5
         
         // Testiajo
         // String[] parts = getCommand();
