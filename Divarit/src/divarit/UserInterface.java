@@ -108,9 +108,9 @@ public class UserInterface {
      * commandline(), addCopy(), addAuthor(), addBook()
      */
     
-    private final String FILE = "test/CHECKOUT_1.txt"; // Testiajon komennot
-    private final ArrayList<String> testCommands;
-    private int commandIndex;
+    // private final String FILE = "test/CHECKOUT_1.txt"; // Testiajon komennot
+    // private final ArrayList<String> testCommands;
+    // private int commandIndex;
 
     /**
      * Alustaa QueryEngine -luokan ja testaukseen liittyvät komponentit
@@ -120,8 +120,8 @@ public class UserInterface {
         // this.testCommands = null;
 
         // Testiajon komponentit
-        this.testCommands = readCommandsFromFile(FILE);
-        this.commandIndex = 0;
+        // this.testCommands = readCommandsFromFile(FILE);
+        // this.commandIndex = 0;
     }
 
     /**
@@ -324,11 +324,11 @@ public class UserInterface {
      */
     public String[] commandline() {
         System.out.print(">");
-        // String input = In.readString();
-        // String[] parts = input.split(" ", 2);
+        String input = In.readString();
+        String[] parts = input.split(" ", 2);
         
         // Testiajo
-        String[] parts = getCommand();
+        // String[] parts = getCommand();
 
         
         return parts;
@@ -831,8 +831,8 @@ public class UserInterface {
         String userInput;
         for (int i = 0; i < columns.length; i++) {
             System.out.print(columns[i]);
-            // userInput = In.readString();
-            userInput = getCommandAsDetails();
+            userInput = In.readString();
+            // userInput = getCommandAsDetails();
 
             if (checkUserInput(userInput)) {
                 copy_details.add(userInput);
@@ -857,8 +857,8 @@ public class UserInterface {
         String userInput;
         for (int i = 0; i < columns.length; i++) {
             System.out.print(columns[i]);
-            // userInput = In.readString();
-            userInput = getCommandAsDetails();
+            userInput = In.readString();
+            // userInput = getCommandAsDetails();
 
             if (checkUserInput(userInput)) {
                 if (i < 3) {
@@ -888,8 +888,8 @@ public class UserInterface {
 
         for (int i = 0; i < columns.length; i++) {
             System.out.print(columns[i]);
-            // userInput = In.readString();
-            userInput = getCommandAsDetails();
+            userInput = In.readString();
+            // userInput = getCommandAsDetails();
 
             if (checkUserInput(userInput)) {
                 if (1 < 2) { // String arvot hyväksytään syötteen perustarkastuksen jälkeen
@@ -1147,16 +1147,16 @@ public class UserInterface {
      * 
      * @return Palauttaa komennon osat 1-2 alkioisessa taulukossa [komento, parametri].
      */
-    public String[] getCommand() {
-        if (this.commandIndex > this.testCommands.size() - 1) {
-            System.out.println("Ei enempää komentoja.");
-            System.exit(0);
-        }
-        String[] komentorivi = this.testCommands.get(this.commandIndex).split(" ", 2);
-        this.commandIndex++;
-        return komentorivi;
-
-    }
+//    public String[] getCommand() {
+//        if (this.commandIndex > this.testCommands.size() - 1) {
+//            System.out.println("Ei enempää komentoja.");
+//            System.exit(0);
+//        }
+//        String[] komentorivi = this.testCommands.get(this.commandIndex).split(" ", 2);
+//        this.commandIndex++;
+//        return komentorivi;
+//
+//    }
     
 
     /**
@@ -1166,14 +1166,14 @@ public class UserInterface {
      * 
      * @return Merkkijono testitiedostosta sellaisenaan.
      */
-    public String getCommandAsDetails() {
-        if (this.commandIndex > this.testCommands.size() - 1) {
-            System.out.println("Ei enempää komentoja.");
-            System.exit(0);
-        }
-        String komentorivi = this.testCommands.get(this.commandIndex);
-        this.commandIndex++;
-
-        return komentorivi;
-    }
+//    public String getCommandAsDetails() {
+//        if (this.commandIndex > this.testCommands.size() - 1) {
+//            System.out.println("Ei enempää komentoja.");
+//            System.exit(0);
+//        }
+//        String komentorivi = this.testCommands.get(this.commandIndex);
+//        this.commandIndex++;
+//
+//        return komentorivi;
+//    }
 }
